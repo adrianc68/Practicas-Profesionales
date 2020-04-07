@@ -11,5 +11,4 @@ public interface ICompanyDAO {
     int getIDCompany(String name, int id_course);
     List<Company> getAllCompanies();
 
-
 }

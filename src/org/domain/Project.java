@@ -139,4 +139,25 @@ public class Project {
         this.methodologies = methodologies;
     }
 
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", duration=" + duration +
+                ", name='" + name + '\'' +
+                ", generalDescription='" + generalDescription + '\'' +
+                ", generalPurpose='" + generalPurpose + '\'' +
+                ", schedule='" + schedule + '\'' +
+                ", chargeResponsable='" + chargeResponsable + '\'' +
+                ", nameResponsable='" + nameResponsable + '\'' +
+                ", emailResponsable='" + emailResponsable + '\'' +
+                ", company=" + company +
+                ", mediateObjectives=" + mediateObjectives +
+                ", resources=" + resources +
+                ", methodologies=" + methodologies +
+                ", activities=" + activities +
+                ", responsibilities=" + responsibilities +
+                '}';
+    }
+
 }

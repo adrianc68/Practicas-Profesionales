@@ -8,13 +8,7 @@ public interface IProjectDAO {
     void addProject(Project project);
     void removeProjectByID(int idProject);
 
-
-//    void assignProject(int idPracticing, int idProject);
-
-
-
+    List<Project> getAllAvailableProjects();
     List<Project> getAllProjects();
-
-
 
 }
