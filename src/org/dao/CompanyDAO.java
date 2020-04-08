@@ -122,4 +122,5 @@ public class CompanyDAO implements ICompanyDAO{
         }
         return companies;
     }
+
 }

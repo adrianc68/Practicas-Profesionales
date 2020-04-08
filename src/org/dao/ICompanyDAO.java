@@ -1,7 +1,6 @@
 package org.dao;
 
 import org.domain.Company;
-import org.domain.Course;
 
 import java.util.List;
 

@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 public class Database {
     private static String user = "anonimo";
     private static String pass = "12345";
-    private static String url = "jdbc:mysql://localhost:3306/Practices?useTimezone=true&serverTimezone=UTC";
+    private static String url = "jdbc:mysql://localhost:3306/Pruebas?useTimezone=true&serverTimezone=UTC";
     private Connection connection;
 
     public Connection getConnection() throws SQLException {

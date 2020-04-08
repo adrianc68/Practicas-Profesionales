@@ -7,7 +7,7 @@ import java.util.List;
 public interface IProjectDAO {
     void addProject(Project project);
     void removeProjectByID(int idProject);
-
+    void updateProjectInformation(Project project);
     List<Project> getAllAvailableProjects();
     List<Project> getAllProjects();
 

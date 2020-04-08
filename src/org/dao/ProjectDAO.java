@@ -6,7 +6,6 @@ import org.domain.Course;
 import org.domain.Project;
 import org.domain.Sector;
 import org.util.Database;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -82,16 +81,70 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
+    public void updateProjectInformation(Project project) {
+        try(Connection conn = database.getConnection()){
+            conn.setAutoCommit(false);
+            String statement = "UPDATE Project SET name = ?, duration = ?, schedule = ?, general_purpose = ?, general_description = ?, charge_responsable = ?, name_responsable = ?, email_responsable = ? WHERE id_project = ?";
+            PreparedStatement updateProjectInformation = conn.prepareStatement(statement);
+            updateProjectInformation.setString(1, project.getName() );
+            updateProjectInformation.setFloat(2,project.getDuration() );
+            updateProjectInformation.setString(3, project.getSchedule() );
+            updateProjectInformation.setString(4, project.getGeneralPurpose() );
+            updateProjectInformation.setString(5, project.getGeneralDescription() );
+            updateProjectInformation.setString(6, project.getChargeResponsable() );
+            updateProjectInformation.setString(7, project.getNameResponsable() );
+            updateProjectInformation.setString(8, project.getEmailResponsable() );
+            updateProjectInformation.setInt(9, project.getId() );
+            updateProjectInformation.executeUpdate();
+            int projectID = project.getId();
+            String[] statementsMultiAttributes = {"DELETE FROM Project_activities WHERE id_project = ?", "DELETE FROM Project_Responsabilities WHERE id_project = ?", "DELETE FROM Project_Mediate_Objetives WHERE id_project = ?", "DELETE FROM Project_Methodologies WHERE id_project = ?", "DELETE FROM Project_Resources WHERE id_project = ?"};
+            for ( String deleteStatment : statementsMultiAttributes) {
+                    updateProjectInformation = conn.prepareStatement(deleteStatment);
+                    updateProjectInformation.setInt(1, projectID);
+                    updateProjectInformation.executeUpdate();
+            }
+            Map<String, Iterator> multivaluedAttributes = new HashMap<>();
+            multivaluedAttributes.put("INSERT INTO Project_Activities(activity, id_project) VALUES(?, ?)", project.getActivities().iterator() );
+            multivaluedAttributes.put("INSERT INTO Project_Responsabilities(responsability, id_project) VALUES(?,?)", project.getResponsibilities().iterator() );
+            multivaluedAttributes.put("INSERT INTO Project_Mediate_Objetives(objetive, id_project) VALUES(?,?)", project.getMediateObjectives().iterator() );
+            multivaluedAttributes.put("INSERT INTO Project_Methodologies(methodology, id_project) VALUES(?,?)", project.getMethodologies().iterator() );
+            multivaluedAttributes.put("INSERT INTO Project_Resources(resource, id_project) VALUES(?,?)", project.getResources().iterator() );
+            for ( Map.Entry<String, Iterator> entry : multivaluedAttributes.entrySet() ) {
+                updateProjectInformation = conn.prepareStatement( entry.getKey() );
+                Iterator listIterator = entry.getValue();
+                while( listIterator.hasNext() ) {
+                    updateProjectInformation.setString(1, listIterator.next().toString() );
+                    updateProjectInformation.setInt(2, projectID );
+                    updateProjectInformation.executeUpdate();
+                }
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    @Override
     public List<Project> getAllAvailableProjects() {
-        List<Project> availableProjects = new ArrayList<>();
+        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and (SELECT max(id_course) FROM Course) WHERE P.id_project NOT IN (SELECT id_project FROM (SELECT count(id_project) AS counter, id_project FROM Practicing GROUP BY id_project HAVING counter = 3) AS Count)";
+        return getProjectsByStatement(statement);
+    }
+
+    @Override
+    public List<Project> getAllProjects() {
+        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number,  Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email,  CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and (SELECT max(id_course) FROM Course)";
+        return getProjectsByStatement(statement);
+    }
+
+    private List<Project> getProjectsByStatement(String statement){
+        List<Project> projects = new ArrayList<>();
         Course course;
         Coordinator coordinator;
         Company company;
         Project project;
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and (SELECT max(id_course) FROM Course) WHERE P.id_project NOT IN (SELECT id_project FROM (SELECT count(id_project) AS counter, id_project FROM Practicing GROUP BY id_project HAVING counter = 3) AS Count)";
-            PreparedStatement queryAvailableProjects = conn.prepareStatement(statement);
-            result = queryAvailableProjects.executeQuery();
+            PreparedStatement queryProjects = conn.prepareStatement(statement);
+            result = queryProjects.executeQuery();
             while( result.next() ) {
                 course = new Course();
                 course.setId(result.getInt("CS.id_course"));
@@ -154,16 +207,12 @@ public class ProjectDAO implements IProjectDAO {
                 project.setMethodologies(methodologies);
                 project.setResources(resources);
                 project.setResponsibilities(responsabilities);
-                availableProjects.add(project);
+                projects.add(project);
             }
         } catch (SQLException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return availableProjects;
+        return projects;
     }
 
-    @Override
-    public List<Project> getAllProjects() {
-        return null;
-    }
 }
