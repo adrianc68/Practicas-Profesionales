@@ -94,15 +94,13 @@ public class ProjectDAO implements IProjectDAO {
             updateProjectInformation.setString(6, project.getChargeResponsable() );
             updateProjectInformation.setString(7, project.getNameResponsable() );
             updateProjectInformation.setString(8, project.getEmailResponsable() );
-            updateProjectInformation.setInt(9, project.getId() );
-            updateProjectInformation.executeUpdate();
             int projectID = project.getId();
-            String[] statementsMultiAttributes = {"DELETE FROM Project_activities WHERE id_project = ?", "DELETE FROM Project_Responsabilities WHERE id_project = ?", "DELETE FROM Project_Mediate_Objetives WHERE id_project = ?", "DELETE FROM Project_Methodologies WHERE id_project = ?", "DELETE FROM Project_Resources WHERE id_project = ?"};
-            for ( String deleteStatment : statementsMultiAttributes) {
-                    updateProjectInformation = conn.prepareStatement(deleteStatment);
-                    updateProjectInformation.setInt(1, projectID);
-                    updateProjectInformation.executeUpdate();
-            }
+            updateProjectInformation.setInt(9, projectID);
+            updateProjectInformation.executeUpdate();
+            String statementRemoveMultivaluedAttributes = "CALL removeMultivaluedAttributesProject(?)";
+            updateProjectInformation = conn.prepareStatement(statementRemoveMultivaluedAttributes);
+            updateProjectInformation.setInt(1, projectID);
+            updateProjectInformation.executeUpdate();
             Map<String, Iterator> multivaluedAttributes = new HashMap<>();
             multivaluedAttributes.put("INSERT INTO Project_Activities(activity, id_project) VALUES(?, ?)", project.getActivities().iterator() );
             multivaluedAttributes.put("INSERT INTO Project_Responsabilities(responsability, id_project) VALUES(?,?)", project.getResponsibilities().iterator() );
@@ -125,14 +123,14 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
-    public List<Project> getAllAvailableProjects() {
-        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and (SELECT max(id_course) FROM Course) WHERE P.id_project NOT IN (SELECT id_project FROM (SELECT count(id_project) AS counter, id_project FROM Practicing GROUP BY id_project HAVING counter = 3) AS Count)";
+    public List<Project> getAllAvailableProjectsFromLastCourse() {
+        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and CS.id_course = (SELECT max(id_course) FROM Course) WHERE P.id_project NOT IN (SELECT id_project FROM (SELECT count(id_project) AS counter, id_project FROM Practicing GROUP BY id_project HAVING counter = 3) AS Count)";
         return getProjectsByStatement(statement);
     }
 
     @Override
-    public List<Project> getAllProjects() {
-        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number,  Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email,  CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and (SELECT max(id_course) FROM Course)";
+    public List<Project> getAllProjectsFromLastCourse() {
+        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number,  Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email,  CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and CS.id_course = (SELECT max(id_course) FROM Course)";
         return getProjectsByStatement(statement);
     }
 

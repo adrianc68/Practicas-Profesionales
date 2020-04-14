@@ -8,7 +8,8 @@ public interface IPracticingDAO {
     void addPracticing(Practicing practicing);
     void removePracticing(int idPracticing);
     void assignProject(int idPracticing, int idProject);
-    void addSelectedProject(Practicing practicing);
+    void assignProfessor(int idPracticing, int idProfessor);
+    void addSelectedProjectByPracticing(Practicing practicing);
     List<Project> getSelectedProjectsByIDPracticing(int idPracticing);
 
 }

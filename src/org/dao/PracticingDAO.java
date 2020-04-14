@@ -74,7 +74,22 @@ public class PracticingDAO implements IPracticingDAO {
     }
 
     @Override
-    public void addSelectedProject(Practicing practicing) {
+    public void assignProfessor(int idPracticing, int idProfessor) {
+        try(Connection conn = database.getConnection()){
+            conn.setAutoCommit(false);
+            String statement = "UPDATE Practicing SET id_professor = ? WHERE id_person = ?";
+            PreparedStatement assignProfessor = conn.prepareStatement(statement);
+            assignProfessor.setInt(1, idProfessor );
+            assignProfessor.setInt(2, idPracticing );
+            assignProfessor.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            Logger.getLogger(PracticingDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    @Override
+    public void addSelectedProjectByPracticing(Practicing practicing) {
 
     }
 

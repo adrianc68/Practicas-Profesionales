@@ -46,22 +46,6 @@ public class CompanyDAO implements ICompanyDAO{
     }
 
     @Override
-    public int getIDLastCompanyAdded() {
-        final int NO_COMPANY_WAS_ADDED = -1;
-        int idCompany = NO_COMPANY_WAS_ADDED;
-        try(Connection conn = database.getConnection() ){
-            String statement = "SELECT LAST_INSERT_ID()";
-            PreparedStatement queryIDCompanyAdded = conn.prepareStatement(statement);
-            result = queryIDCompanyAdded.executeQuery();
-            result.next();
-            idCompany = result.getInt(1);
-        } catch (SQLException e) {
-            Logger.getLogger(CompanyDAO.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return idCompany;
-    }
-
-    @Override
     public int getIDCompany(String name, int id_course) {
         int idCompany = -1;
         try(Connection conn = database.getConnection() ){
@@ -79,13 +63,13 @@ public class CompanyDAO implements ICompanyDAO{
     }
 
     @Override
-    public List<Company> getAllCompanies()  {
+    public List<Company> getAllCompaniesFromLastCourse()  {
         List<Company> companies = new ArrayList<>();
         Company company = null;
         Coordinator coordinator = null;
         Course course = null;
         try(Connection conn = database.getConnection() ){
-            String statement = "SELECT C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, P.id_person, P.name, P.phoneNumber, P.email, CS.id_course, CS.NRC, CS.Period, CS.name, CS.id_course FROM Company AS C INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS P ON C.id_coordinator = P.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and (SELECT max(id_course) FROM Course)";
+            String statement = "SELECT C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, P.id_person, P.name, P.phoneNumber, P.email, CS.id_course, CS.NRC, CS.Period, CS.name, CS.id_course FROM Company AS C INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS P ON C.id_coordinator = P.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and CS.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement queryCompanies = conn.prepareStatement(statement);
             result = queryCompanies.executeQuery();
             while( result.next() ){
