@@ -42,21 +42,12 @@ public class Security {
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         return ( !isStringBigger(email, EMAIL_LENGTH) && pattern.matcher(email).find());
     }
-
-    private static boolean isStringBigger(String string, int maxLength) {
-        return string.length() > maxLength;
-    }
-
     public static boolean verifyDuration(String date) {
         Pattern pattern = Pattern.compile(DURATION_PATTERN);
         return pattern.matcher(date).find();
     }
 
-    public static boolean verifyDateRegistration(LocalDate date) {
-        return LocalDate.now().compareTo(date) > -1;
-    }
-
-    public static String cryptText(String msg) throws NoSuchAlgorithmException {
+    public static String cryptString(String msg) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(HASH_FUNCTION);
         byte[] array = md.digest(msg.getBytes());
         StringBuffer sb = new StringBuffer();
@@ -64,6 +55,11 @@ public class Security {
             sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
         }
         return sb.toString();
+    }
+    
+
+    private static boolean isStringBigger(String string, int maxLength) {
+        return string.length() > maxLength;
     }
 
 }

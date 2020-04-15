@@ -1,11 +1,11 @@
-package org.dao;
+package org.database.dao;
 
 import org.domain.Company;
 import org.domain.Coordinator;
 import org.domain.Course;
 import org.domain.Project;
 import org.domain.Sector;
-import org.util.Database;
+import org.database.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

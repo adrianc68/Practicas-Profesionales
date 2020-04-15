@@ -1,4 +1,4 @@
-package org.dao;
+package org.database.dao;
 
 public class ProfessorDAO {
 }

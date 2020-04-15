@@ -1,4 +1,4 @@
-package org.dao;
+package org.database.dao;
 
 import org.domain.Company;
 
