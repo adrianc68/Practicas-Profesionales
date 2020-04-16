@@ -148,18 +148,21 @@ public class PracticingDAO implements IPracticingDAO {
                 ArrayList<String> methodologies = new ArrayList<>();
                 ArrayList<String> resources = new ArrayList<>();
                 ArrayList<String> responsabilities = new ArrayList<>();
-                Map<ArrayList, String> multivaluedAttributes = new HashMap<>();
-                multivaluedAttributes.put(activities,"SELECT * from project_activities WHERE id_project = ?");
-                multivaluedAttributes.put(mediateObjetives, "SELECT * from project_mediate_objetives WHERE id_project = ?");
-                multivaluedAttributes.put(methodologies, "SELECT * from project_methodologies WHERE id_project = ?");
-                multivaluedAttributes.put(resources, "SELECT * from project_resources WHERE id_project = ?");
-                multivaluedAttributes.put(responsabilities, "SELECT * from project_responsabilities WHERE id_project = ?");
-                for( Map.Entry<ArrayList, String> entry : multivaluedAttributes.entrySet() ) {
-                    PreparedStatement queryMultivaluedAttribute = conn.prepareStatement( entry.getValue() );
+                ArrayList<String> immediateObjetives = new ArrayList<>();
+                Map<String, List<String>> multivaluedAttributesStatementsMap = new HashMap<>();
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_activities WHERE id_project = ?", activities);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_mediate_objetives WHERE id_project = ?", mediateObjetives);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_methodologies WHERE id_project = ?", methodologies);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_resources WHERE id_project = ?", resources);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_responsabilities WHERE id_project = ?", responsabilities);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_immediate_objetives WHERE id_project = ?", immediateObjetives);
+                PreparedStatement queryMultivaluedAttribute = null;
+                for( Map.Entry<String, List<String>> entry : multivaluedAttributesStatementsMap.entrySet() ) {
+                    queryMultivaluedAttribute = conn.prepareStatement( entry.getKey() );
                     queryMultivaluedAttribute.setInt(1, project.getId());
                     ResultSet resultMultivaluedAttribute = queryMultivaluedAttribute.executeQuery();
                     while( resultMultivaluedAttribute.next() ) {
-                        entry.getKey().add(resultMultivaluedAttribute.getString(1));
+                        entry.getValue().add(resultMultivaluedAttribute.getString(1));
                     }
                 }
                 project.setActivities(activities);
@@ -167,6 +170,7 @@ public class PracticingDAO implements IPracticingDAO {
                 project.setMethodologies(methodologies);
                 project.setResources(resources);
                 project.setResponsibilities(responsabilities);
+                project.setImmediateObjetives(immediateObjetives);
                 projects.add(project);
             }
         } catch (SQLException e) {
