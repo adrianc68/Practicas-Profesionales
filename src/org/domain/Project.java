@@ -14,6 +14,7 @@ public class Project {
     private String emailResponsable;
     private Company company;
     private ArrayList<String> mediateObjectives;
+    private ArrayList<String> immediateObjetives;
     private ArrayList<String> resources;
     private ArrayList<String> methodologies;
     private ArrayList<String> activities;
@@ -107,6 +108,14 @@ public class Project {
         this.mediateObjectives = mediateObjectives;
     }
 
+    public ArrayList<String> getImmediateObjetives() {
+        return immediateObjetives;
+    }
+
+    public void setImmediateObjetives(ArrayList<String> immediateObjetives) {
+        this.immediateObjetives = immediateObjetives;
+    }
+
     public ArrayList<String> getResources() {
         return resources;
     }
@@ -153,6 +162,7 @@ public class Project {
                 ", emailResponsable='" + emailResponsable + '\'' +
                 ", company=" + company +
                 ", mediateObjectives=" + mediateObjectives +
+                ", immediateObjetives=" + immediateObjetives +
                 ", resources=" + resources +
                 ", methodologies=" + methodologies +
                 ", activities=" + activities +

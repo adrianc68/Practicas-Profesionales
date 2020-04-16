@@ -4,26 +4,8 @@ import java.io.File;
 import java.util.HashMap;
 
 public class Record {
-    private int id;
-    private String period;
     private Practicing practicing;
-    private HashMap<File, String> document;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(String period) {
-        this.period = period;
-    }
+    private HashMap<File, Document> document;
 
     public Practicing getPracticing() {
         return practicing;
@@ -33,12 +15,11 @@ public class Record {
         this.practicing = practicing;
     }
 
-    public HashMap<File, String> getDocument() {
+    public HashMap<File, Document> getDocument() {
         return document;
     }
 
-    public void setDocument(HashMap<File, String> document) {
+    public void setDocument(HashMap<File, Document> document) {
         this.document = document;
     }
-
 }

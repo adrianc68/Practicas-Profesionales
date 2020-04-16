@@ -30,28 +30,30 @@ public class ProjectDAO implements IProjectDAO {
     public void addProject(Project project) {
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
-            String statement = "INSERT INTO Project (duration, schedule, general_purpose, general_description, id_company, charge_responsable, name_responsable, email_responsable) values (?,?,?,?,?,?,?,?)";
+            String statement = "INSERT INTO Project (name, duration, schedule, general_purpose, general_description, id_company, charge_responsable, name_responsable, email_responsable) values (?,?,?,?,?,?,?,?,?)";
             PreparedStatement insertProject = conn.prepareStatement(statement);
-            insertProject.setFloat(1,project.getDuration() );
-            insertProject.setString(2, project.getSchedule() );
-            insertProject.setString(3, project.getGeneralPurpose() );
-            insertProject.setString(4, project.getGeneralDescription() );
-            insertProject.setInt(5, project.getCompany().getId() );
-            insertProject.setString(6, project.getChargeResponsable() );
-            insertProject.setString(7, project.getNameResponsable() );
-            insertProject.setString(8, project.getEmailResponsable() );
+            insertProject.setString(1, project.getName());
+            insertProject.setFloat(2,project.getDuration() );
+            insertProject.setString(3, project.getSchedule() );
+            insertProject.setString(4, project.getGeneralPurpose() );
+            insertProject.setString(5, project.getGeneralDescription() );
+            insertProject.setInt(6, project.getCompany().getId() );
+            insertProject.setString(7, project.getChargeResponsable() );
+            insertProject.setString(8, project.getNameResponsable() );
+            insertProject.setString(9, project.getEmailResponsable() );
             insertProject.executeUpdate();
             result = insertProject.executeQuery("SELECT LAST_INSERT_ID()");
             result.next();
             int projectID = result.getInt(1);
             project.setId(projectID);
-            Map<String, Iterator> multivaluedAttributes = new HashMap<>();
-            multivaluedAttributes.put("INSERT INTO Project_Activities(activity, id_project) VALUES(?, ?)", project.getActivities().iterator() );
-            multivaluedAttributes.put("INSERT INTO Project_Responsabilities(responsability, id_project) VALUES(?,?)", project.getResponsibilities().iterator() );
-            multivaluedAttributes.put("INSERT INTO Project_Mediate_Objetives(objetive, id_project) VALUES(?,?)", project.getMediateObjectives().iterator() );
-            multivaluedAttributes.put("INSERT INTO Project_Methodologies(methodology, id_project) VALUES(?,?)", project.getMethodologies().iterator() );
-            multivaluedAttributes.put("INSERT INTO Project_Resources(resource, id_project) VALUES(?,?)", project.getResources().iterator() );
-            for ( Map.Entry<String, Iterator> entry : multivaluedAttributes.entrySet() ) {
+            Map<String, Iterator> multivaluedAttributesStatementsMap = new HashMap<>();
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Activities(activity, id_project) VALUES(?, ?)", project.getActivities().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Responsabilities(responsability, id_project) VALUES(?,?)", project.getResponsibilities().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Mediate_Objetives(objetive, id_project) VALUES(?,?)", project.getMediateObjectives().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Methodologies(methodology, id_project) VALUES(?,?)", project.getMethodologies().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Resources(resource, id_project) VALUES(?,?)", project.getResources().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Immediate_Objetives(objetive, id_project) VALUES(?,?)", project.getImmediateObjetives().iterator() );
+            for ( Map.Entry<String, Iterator> entry : multivaluedAttributesStatementsMap.entrySet() ) {
                 insertProject = conn.prepareStatement( entry.getKey() );
                 Iterator listIterator = entry.getValue();
                 while( listIterator.hasNext() ) {
@@ -101,13 +103,14 @@ public class ProjectDAO implements IProjectDAO {
             updateProjectInformation = conn.prepareStatement(statementRemoveMultivaluedAttributes);
             updateProjectInformation.setInt(1, projectID);
             updateProjectInformation.executeUpdate();
-            Map<String, Iterator> multivaluedAttributes = new HashMap<>();
-            multivaluedAttributes.put("INSERT INTO Project_Activities(activity, id_project) VALUES(?, ?)", project.getActivities().iterator() );
-            multivaluedAttributes.put("INSERT INTO Project_Responsabilities(responsability, id_project) VALUES(?,?)", project.getResponsibilities().iterator() );
-            multivaluedAttributes.put("INSERT INTO Project_Mediate_Objetives(objetive, id_project) VALUES(?,?)", project.getMediateObjectives().iterator() );
-            multivaluedAttributes.put("INSERT INTO Project_Methodologies(methodology, id_project) VALUES(?,?)", project.getMethodologies().iterator() );
-            multivaluedAttributes.put("INSERT INTO Project_Resources(resource, id_project) VALUES(?,?)", project.getResources().iterator() );
-            for ( Map.Entry<String, Iterator> entry : multivaluedAttributes.entrySet() ) {
+            Map<String, Iterator> multivaluedAttributesStatementsMap = new HashMap<>();
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Activities(activity, id_project) VALUES(?, ?)", project.getActivities().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Responsabilities(responsability, id_project) VALUES(?,?)", project.getResponsibilities().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Mediate_Objetives(objetive, id_project) VALUES(?,?)", project.getMediateObjectives().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Methodologies(methodology, id_project) VALUES(?,?)", project.getMethodologies().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Resources(resource, id_project) VALUES(?,?)", project.getResources().iterator() );
+            multivaluedAttributesStatementsMap.put("INSERT INTO Project_Immediate_Objetives(objetive, id_project) VALUES(?,?)", project.getImmediateObjetives().iterator());
+            for ( Map.Entry<String, Iterator> entry : multivaluedAttributesStatementsMap.entrySet() ) {
                 updateProjectInformation = conn.prepareStatement( entry.getKey() );
                 Iterator listIterator = entry.getValue();
                 while( listIterator.hasNext() ) {
@@ -183,21 +186,24 @@ public class ProjectDAO implements IProjectDAO {
                 project.setEmailResponsable(result.getString("P.email_responsable"));
                 ArrayList<String> activities = new ArrayList<>();
                 ArrayList<String> mediateObjetives = new ArrayList<>();
+                ArrayList<String> immediateObjetives = new ArrayList<>();
                 ArrayList<String> methodologies = new ArrayList<>();
                 ArrayList<String> resources = new ArrayList<>();
                 ArrayList<String> responsabilities = new ArrayList<>();
-                Map<ArrayList, String> multivaluedAttributes = new HashMap<>();
-                multivaluedAttributes.put(activities,"SELECT * from project_activities WHERE id_project = ?");
-                multivaluedAttributes.put(mediateObjetives, "SELECT * from project_mediate_objetives WHERE id_project = ?");
-                multivaluedAttributes.put(methodologies, "SELECT * from project_methodologies WHERE id_project = ?");
-                multivaluedAttributes.put(resources, "SELECT * from project_resources WHERE id_project = ?");
-                multivaluedAttributes.put(responsabilities, "SELECT * from project_responsabilities WHERE id_project = ?");
-                for( Map.Entry<ArrayList, String> entry : multivaluedAttributes.entrySet() ) {
-                    PreparedStatement queryMultivaluedAttribute = conn.prepareStatement( entry.getValue() );
+                Map<String, List<String>> multivaluedAttributesStatementsMap = new HashMap<>();
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_activities WHERE id_project = ?", activities);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_mediate_objetives WHERE id_project = ?", mediateObjetives);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_methodologies WHERE id_project = ?", methodologies);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_resources WHERE id_project = ?", resources);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_responsabilities WHERE id_project = ?", responsabilities);
+                multivaluedAttributesStatementsMap.put("SELECT * FROM Project_immediate_objetives WHERE id_project = ?", immediateObjetives);
+                PreparedStatement queryMultivaluedAttribute = null;
+                for( Map.Entry<String, List<String>> entry : multivaluedAttributesStatementsMap.entrySet() ) {
+                    queryMultivaluedAttribute = conn.prepareStatement( entry.getKey() );
                     queryMultivaluedAttribute.setInt(1, project.getId());
                     ResultSet resultMultivaluedAttribute = queryMultivaluedAttribute.executeQuery();
                     while( resultMultivaluedAttribute.next() ) {
-                        entry.getKey().add(resultMultivaluedAttribute.getString(1));
+                        entry.getValue().add(resultMultivaluedAttribute.getString(1));
                     }
                 }
                 project.setActivities(activities);
@@ -205,6 +211,7 @@ public class ProjectDAO implements IProjectDAO {
                 project.setMethodologies(methodologies);
                 project.setResources(resources);
                 project.setResponsibilities(responsabilities);
+                project.setImmediateObjetives(immediateObjetives);
                 projects.add(project);
             }
         } catch (SQLException e) {

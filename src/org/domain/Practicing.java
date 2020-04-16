@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class Practicing extends Person{
     private String enrollment;
     private Project project;
-    private ArrayList<Project>  selectedProjects;
     private Professor professor;
+    private Record record;
+    private ArrayList<Project>  selectedProjects;
 
     public String getEnrollment() {
         return enrollment;
@@ -32,4 +33,19 @@ public class Practicing extends Person{
         this.professor = professor;
     }
 
+    public Record getRecord() {
+        return record;
+    }
+
+    public void setRecord(Record record) {
+        this.record = record;
+    }
+
+    public ArrayList<Project> getSelectedProjects() {
+        return selectedProjects;
+    }
+
+    public void setSelectedProjects(ArrayList<Project> selectedProjects) {
+        this.selectedProjects = selectedProjects;
+    }
 }

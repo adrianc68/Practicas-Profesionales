@@ -175,6 +175,4 @@ public class PracticingDAO implements IPracticingDAO {
         return projects;
     }
 
-
-
 }
