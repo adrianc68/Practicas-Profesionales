@@ -90,7 +90,20 @@ public class PracticingDAO implements IPracticingDAO {
 
     @Override
     public void addSelectedProjectByPracticing(Practicing practicing) {
-
+        ArrayList<Project> selectedProjects = practicing.getSelectedProjects();
+        try(Connection conn = database.getConnection()){
+            conn.setAutoCommit(false);
+            String statement = "CALL selectProject(?, ?)";
+            PreparedStatement selectProject = conn.prepareStatement(statement);
+            for(int i=0; i<selectedProjects.size(); i++) {
+                selectProject.setInt(1, practicing.getId() );
+                selectProject.setInt(2, selectedProjects.get(i).getId() );
+            }
+            selectProject.executeUpdate();
+            conn.commit();
+        }catch (SQLException e) {
+            Logger.getLogger(CompanyDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
     @Override
