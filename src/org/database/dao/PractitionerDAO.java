@@ -3,7 +3,7 @@ package org.database.dao;
 import org.domain.Company;
 import org.domain.Coordinator;
 import org.domain.Course;
-import org.domain.Practicing;
+import org.domain.Practitioner;
 import org.domain.Project;
 import org.domain.Sector;
 import org.database.Database;
@@ -18,105 +18,181 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PracticingDAO implements IPracticingDAO {
+public class PractitionerDAO implements IPractitionerDAO {
+    /***
+     * Constant for the connection to the database
+     */
     private final Database database;
+    /***
+     * Query results
+     */
     private ResultSet result;
 
-    public PracticingDAO() {
+    /***
+     * PractitionerDAO constructor.
+     * This constructor initialize a connection to the database.
+     */
+    public PractitionerDAO() {
         database = new Database();
     }
 
+    /***
+     * Add a Practitioner to database.
+     * <p>
+     * This method add a practitioner to database and return the rows number affected
+     * by this method. This method is used by the coordinator when he need to add a practicing.
+     * </p>
+     * @param practitioner to be added to database
+     * @return an int representing the rows number affected in database.
+     */
     @Override
-    public void addPracticing(Practicing practicing) {
+    public int addPractitioner(Practitioner practitioner) {
+        int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
-            String statement = "CALL addPracticing(?, ?, ?, ?, ?)";
-            PreparedStatement addPracticing = conn.prepareStatement(statement);
-            addPracticing.setString(1, practicing.getName() );
-            addPracticing.setString(2, practicing.getPhoneNumber() );
-            addPracticing.setString(3, practicing.getEmail() );
-            addPracticing.setInt(4, practicing.getCourse().getId() );
-            addPracticing.setString(5, practicing.getEnrollment() );
-            addPracticing.executeUpdate();
+            String statement = "CALL addPractitioner(?, ?, ?, ?, ?)";
+            PreparedStatement addPractitioner = conn.prepareStatement(statement);
+            addPractitioner.setString(1, practitioner.getName() );
+            addPractitioner.setString(2, practitioner.getPhoneNumber() );
+            addPractitioner.setString(3, practitioner.getEmail() );
+            addPractitioner.setInt(4, practitioner.getCourse().getId() );
+            addPractitioner.setString(5, practitioner.getEnrollment() );
+            rowsAffected = addPractitioner.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
-            Logger.getLogger(PracticingDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return rowsAffected;
     }
 
+    /***
+     * Delete a Practitioner from database.
+     * <p>
+     * This method remove a practitioner by an id provided. It's used by the coordinator when
+     * he needs to remove a practicing for any reason.
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @return an int representing the rows number affected in database.
+     */
     @Override
-    public void removePracticing(int idPracticing) {
+    public int removePractitioner(int idPractitioner) {
+        int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
-            String statement = "DELETE FROM Practicing WHERE id_person = ?";
-            PreparedStatement removePracticing = conn.prepareStatement(statement);
-            removePracticing.setInt(1, idPracticing );
-            removePracticing.executeUpdate();
+            String statement = "DELETE FROM Practitioner WHERE id_person = ?";
+            PreparedStatement removePractitioner = conn.prepareStatement(statement);
+            removePractitioner.setInt(1, idPractitioner );
+            rowsAffected = removePractitioner.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
-            Logger.getLogger(PracticingDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return rowsAffected;
     }
 
+    /***
+     * Assign a project to a Practitioner in database.
+     * <p>
+     * This method update the assigned project of a practitioner. It's used by the coordinator when
+     * he decided which project assign to a practitioner
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @param idProject the project's ID to be assigned to practitioner
+     * @return an int representing the rows number affected in database.
+     */
     @Override
-    public void assignProject(int idPracticing, int idProject) {
+    public int assignProject(int idPractitioner, int idProject) {
+        int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "CALL assignProject(?,?)";
             PreparedStatement assignProject = conn.prepareStatement(statement);
-            assignProject.setInt(1, idPracticing );
+            assignProject.setInt(1, idPractitioner );
             assignProject.setInt(2, idProject );
-            assignProject.executeUpdate();
+            rowsAffected = assignProject.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
-            Logger.getLogger(PracticingDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return rowsAffected;
     }
 
+    /***
+     * Assign a professor to a Practitioner in the database.
+     * <p>
+     * This method assign a professor to a student. It's used by the coordinator when he decided assign
+     * a professor to a practitioner.
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @param idProfessor the professor's id to be assigned to practitioner
+     * @return an int representing the rows number affected in database.
+     */
     @Override
-    public void assignProfessor(int idPracticing, int idProfessor) {
+    public int assignProfessor(int idPractitioner, int idProfessor) {
+        int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
-            String statement = "UPDATE Practicing SET id_professor = ? WHERE id_person = ?";
+            String statement = "UPDATE Practitioner SET id_professor = ? WHERE id_person = ?";
             PreparedStatement assignProfessor = conn.prepareStatement(statement);
             assignProfessor.setInt(1, idProfessor );
-            assignProfessor.setInt(2, idPracticing );
-            assignProfessor.executeUpdate();
+            assignProfessor.setInt(2, idPractitioner );
+            rowsAffected = assignProfessor.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
-            Logger.getLogger(PracticingDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return  rowsAffected;
     }
 
+    /***
+     * Add in the datase a project selected by a Practitioner
+     * <p>
+     * This method add to a practitioner the projects selected by himself. This method is used by
+     * the practitioner.
+     * </p>
+     * @param practitioner
+     * @return an int representing the rows number affected in database.
+     */
     @Override
-    public void addSelectedProjectByPracticing(Practicing practicing) {
-        ArrayList<Project> selectedProjects = practicing.getSelectedProjects();
+    public int addSelectedProjectByPractitioner(Practitioner practitioner) {
+        ArrayList<Project> selectedProjects = practitioner.getSelectedProjects();
+        int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "CALL selectProject(?, ?)";
             PreparedStatement selectProject = conn.prepareStatement(statement);
-            for(int i=0; i<selectedProjects.size(); i++) {
-                selectProject.setInt(1, practicing.getId() );
+            for(int i = 0; i < selectedProjects.size(); i++) {
+                selectProject.setInt(1, practitioner.getId() );
                 selectProject.setInt(2, selectedProjects.get(i).getId() );
             }
-            selectProject.executeUpdate();
+            rowsAffected = selectProject.executeUpdate();
             conn.commit();
         }catch (SQLException e) {
-            Logger.getLogger(CompanyDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return rowsAffected;
     }
 
+    /***
+     * Get the projects selected by a practitioner.
+     * <p>
+     * This method return a List, which contain the selected projects by a Practitioners. It's used by
+     * the coordinator as a support to assign a project to a Practitioner.
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @return an List which contain the projects selected by a practitioner.
+     */
     @Override
-    public List<Project> getSelectedProjectsByIDPracticing(int idPracticing) {
+    public List<Project> getSelectedProjectsByIDPractitioner(int idPractitioner) {
         List<Project> projects = new ArrayList<>();
         Course course;
         Coordinator coordinator;
         Company company;
         Project project;
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Practicing_Selected_Projects AS PSP ON PSP.selected_project = P.id_project AND PSP.id_person = ? INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and (SELECT max(id_course) FROM Course)";
+            String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Practitioner_Selected_Projects AS PSP ON PSP.selected_project = P.id_project AND PSP.id_person = ? INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and (SELECT max(id_course) FROM Course)";
             PreparedStatement queryProjects = conn.prepareStatement(statement);
-            queryProjects.setInt(1, idPracticing);
+            queryProjects.setInt(1, idPractitioner);
             result = queryProjects.executeQuery();
             while( result.next() ) {
                 course = new Course();
@@ -187,7 +263,7 @@ public class PracticingDAO implements IPracticingDAO {
                 projects.add(project);
             }
         } catch (SQLException e) {
-            Logger.getLogger(PracticingDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return projects;
     }

@@ -19,15 +19,34 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ProjectDAO implements IProjectDAO {
+    /***
+     * Constant for the connection to the database
+     */
     private final Database database;
+    /***
+     * Query results
+     */
     private ResultSet result;
-
+    /***
+     * ProjectDAO constructor.
+     * This constructor initialize a connection to the database.
+     */
     public ProjectDAO() {
         database = new Database();
     }
 
+    /***
+     * Add a project to database.
+     * <p>
+     * This method receive a instance of project and then add it to database.
+     * This method is used by coordinator when he needs to add a project
+     * </p>
+     * @param project the project to be added to database
+     * @return the row number affected by this method
+     */
     @Override
-    public void addProject(Project project) {
+    public int addProject(Project project) {
+        int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "INSERT INTO Project (name, duration, schedule, general_purpose, general_description, id_company, charge_responsable, name_responsable, email_responsable) values (?,?,?,?,?,?,?,?,?)";
@@ -41,7 +60,7 @@ public class ProjectDAO implements IProjectDAO {
             insertProject.setString(7, project.getChargeResponsable() );
             insertProject.setString(8, project.getNameResponsable() );
             insertProject.setString(9, project.getEmailResponsable() );
-            insertProject.executeUpdate();
+            rowsAffected += insertProject.executeUpdate();
             result = insertProject.executeQuery("SELECT LAST_INSERT_ID()");
             result.next();
             int projectID = result.getInt(1);
@@ -59,31 +78,52 @@ public class ProjectDAO implements IProjectDAO {
                 while( listIterator.hasNext() ) {
                     insertProject.setString(1, listIterator.next().toString() );
                     insertProject.setInt(2, projectID);
-                    insertProject.executeUpdate();
+                    rowsAffected += insertProject.executeUpdate();
                 }
             }
             conn.commit();
         } catch (SQLException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return rowsAffected;
     }
 
+    /***
+     * Remove a project from database.
+     * <p>
+     * This method will remove a project from database. It's used by Coordinator when he needs
+     * to remove a project for any reason.
+     * </p>
+     * @param idProject the project's id to be removed from database.
+     * @return return the rows number affected by this method.
+     */
     @Override
-    public void removeProjectByID(int idProject) {
+    public int removeProjectByID(int idProject) {
+        int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "CALL removeProject(?)";
             PreparedStatement removeProject = conn.prepareStatement(statement);
             removeProject.setInt(1, idProject );
-            removeProject.executeUpdate();
+            rowsAffected = removeProject.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return rowsAffected;
     }
 
+    /***
+     * Update the project information from a existing project in database.
+     * <p>
+     * This method receive a project and replaces the information in database
+     * </p>
+     * @param project the project with updated information.
+     * @return the rows number affected by this method
+     */
     @Override
-    public void updateProjectInformation(Project project) {
+    public int updateProjectInformation(Project project) {
+        int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "UPDATE Project SET name = ?, duration = ?, schedule = ?, general_purpose = ?, general_description = ?, charge_responsable = ?, name_responsable = ?, email_responsable = ? WHERE id_project = ?";
@@ -98,11 +138,11 @@ public class ProjectDAO implements IProjectDAO {
             updateProjectInformation.setString(8, project.getEmailResponsable() );
             int projectID = project.getId();
             updateProjectInformation.setInt(9, projectID);
-            updateProjectInformation.executeUpdate();
+            rowsAffected += updateProjectInformation.executeUpdate();
             String statementRemoveMultivaluedAttributes = "CALL removeMultivaluedAttributesProject(?)";
             updateProjectInformation = conn.prepareStatement(statementRemoveMultivaluedAttributes);
             updateProjectInformation.setInt(1, projectID);
-            updateProjectInformation.executeUpdate();
+            rowsAffected += updateProjectInformation.executeUpdate();
             Map<String, Iterator> multivaluedAttributesStatementsMap = new HashMap<>();
             multivaluedAttributesStatementsMap.put("INSERT INTO Project_Activities(activity, id_project) VALUES(?, ?)", project.getActivities().iterator() );
             multivaluedAttributesStatementsMap.put("INSERT INTO Project_Responsabilities(responsability, id_project) VALUES(?,?)", project.getResponsibilities().iterator() );
@@ -116,27 +156,53 @@ public class ProjectDAO implements IProjectDAO {
                 while( listIterator.hasNext() ) {
                     updateProjectInformation.setString(1, listIterator.next().toString() );
                     updateProjectInformation.setInt(2, projectID );
-                    updateProjectInformation.executeUpdate();
+                    rowsAffected += updateProjectInformation.executeUpdate();
                 }
             }
             conn.commit();
         } catch (SQLException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return rowsAffected;
     }
 
+    /***
+     * Get all unassigned projects or available of the actual/last course from the database.
+     * <p>
+     * This method get all available projects of the last course. This method is intended
+     * for the coordinator and practitioners.
+     * </p>
+     * @return List<Project> a list containing the available projects
+     */
     @Override
     public List<Project> getAllAvailableProjectsFromLastCourse() {
-        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and CS.id_course = (SELECT max(id_course) FROM Course) WHERE P.id_project NOT IN (SELECT id_project FROM (SELECT count(id_project) AS counter, id_project FROM Practicing GROUP BY id_project HAVING counter = 3) AS Count)";
+        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and CS.id_course = (SELECT max(id_course) FROM Course) WHERE P.id_project NOT IN (SELECT id_project FROM (SELECT count(id_project) AS counter, id_project FROM Practitioner GROUP BY id_project HAVING counter = 3) AS Count)";
         return getProjectsByStatement(statement);
     }
 
+    /***
+     * Get all projects of the actual/last course from the database.
+     * <p>
+     * This method get all projects of the last course from the database.
+     * This method is used by the coordinator.
+     * </p>
+     * @return List<Project> a list containing all projects of the last course
+     */
     @Override
     public List<Project> getAllProjectsFromLastCourse() {
         String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number,  Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email,  CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and CS.id_course = (SELECT max(id_course) FROM Course)";
         return getProjectsByStatement(statement);
     }
 
+    /***
+     * Get the project list according to the condition received as parameter
+     * <p>
+     * This method get the project list according to the parameter.
+     * The goal is re-use code.
+     * </p>
+     * @param statement
+     * @return
+     */
     private List<Project> getProjectsByStatement(String statement){
         List<Project> projects = new ArrayList<>();
         Course course;
