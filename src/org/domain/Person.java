@@ -1,11 +1,11 @@
 package org.domain;
 
 public class Person {
-    private int id;
-    private String name;
-    private String phoneNumber;
-    private String email;
-    private Course course;
+    protected int id;
+    protected String name;
+    protected String phoneNumber;
+    protected String email;
+    protected Course course;
 
     public int getId() {
         return id;
@@ -45,6 +45,17 @@ public class Person {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", course=" + course +
+                '}';
     }
 
 }

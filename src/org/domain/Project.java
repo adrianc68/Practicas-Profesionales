@@ -1,6 +1,6 @@
 package org.domain;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Project {
     private int id;
@@ -13,12 +13,12 @@ public class Project {
     private String nameResponsable;
     private String emailResponsable;
     private Company company;
-    private ArrayList<String> mediateObjectives;
-    private ArrayList<String> immediateObjetives;
-    private ArrayList<String> resources;
-    private ArrayList<String> methodologies;
-    private ArrayList<String> activities;
-    private ArrayList<String> responsibilities;
+    private List<String> mediateObjectives;
+    private List<String> immediateObjetives;
+    private List<String> resources;
+    private List<String> methodologies;
+    private List<String> activities;
+    private List<String> responsibilities;
 
     public int getId() {
         return id;
@@ -100,52 +100,52 @@ public class Project {
         this.company = company;
     }
 
-    public ArrayList<String> getMediateObjectives() {
+    public List<String> getMediateObjectives() {
         return mediateObjectives;
     }
 
-    public void setMediateObjectives(ArrayList<String> mediateObjectives) {
+    public void setMediateObjectives(List<String> mediateObjectives) {
         this.mediateObjectives = mediateObjectives;
     }
 
-    public ArrayList<String> getImmediateObjetives() {
+    public List<String> getImmediateObjetives() {
         return immediateObjetives;
     }
 
-    public void setImmediateObjetives(ArrayList<String> immediateObjetives) {
+    public void setImmediateObjetives(List<String> immediateObjetives) {
         this.immediateObjetives = immediateObjetives;
     }
 
-    public ArrayList<String> getResources() {
+    public List<String> getResources() {
         return resources;
     }
 
-    public void setResources(ArrayList<String> resources) {
+    public void setResources(List<String> resources) {
         this.resources = resources;
     }
 
-    public ArrayList<String> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(ArrayList<String> activities) {
-        this.activities = activities;
-    }
-
-    public ArrayList<String> getResponsibilities() {
-        return responsibilities;
-    }
-
-    public void setResponsibilities(ArrayList<String> responsibilities) {
-        this.responsibilities = responsibilities;
-    }
-
-    public ArrayList<String> getMethodologies() {
+    public List<String> getMethodologies() {
         return methodologies;
     }
 
-    public void setMethodologies(ArrayList<String> methodologies) {
+    public void setMethodologies(List<String> methodologies) {
         this.methodologies = methodologies;
+    }
+
+    public List<String> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<String> activities) {
+        this.activities = activities;
+    }
+
+    public List<String> getResponsibilities() {
+        return responsibilities;
+    }
+
+    public void setResponsibilities(List<String> responsibilities) {
+        this.responsibilities = responsibilities;
     }
 
     @Override

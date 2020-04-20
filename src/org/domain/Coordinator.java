@@ -25,7 +25,12 @@ public class Coordinator extends Person {
         return "Coordinator{" +
                 "cubicle=" + cubicle +
                 ", staff_number='" + staff_number + '\'' +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", course=" + course +
                 '}';
     }
-
+    
 }

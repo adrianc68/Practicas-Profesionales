@@ -3,6 +3,7 @@ package org.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,16 +13,12 @@ public class Database {
     private static String url;
     private Connection connection;
 
-    public static void setUser(String user) {
-        Database.user = user;
-    }
-
-    public static void setPass(String pass) {
-        Database.pass = pass;
-    }
-
-    public static void setUrl(String url) {
-        Database.url = url;
+    public Database() {
+        DatabaseProperties databaseProperties = new DatabaseProperties();
+        Map<String, String> propertiesMap = databaseProperties.readProperties();
+        user = propertiesMap.get("db.user");
+        pass = propertiesMap.get("db.password");
+        url = propertiesMap.get("db.url");
     }
 
     public Connection getConnection() throws SQLException {
@@ -29,7 +26,7 @@ public class Database {
         return connection;
     }
 
-    public void disconnect() {
+    public Connection disconnect() {
         if(connection != null){
             try {
                 connection.close();
@@ -38,6 +35,7 @@ public class Database {
             }
             connection = null;
         }
+        return null;
     }
 
     private void connectToDatabase() throws SQLException {

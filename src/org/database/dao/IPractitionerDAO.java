@@ -52,25 +52,25 @@ public interface IPractitionerDAO {
     int assignProfessor(int idPractitioner, int idProfessor);
 
     /***
-     * Add in the datase a project selected by a Practitioner
+     * Delete a assign of professor to a Practitioner in the database.
      * <p>
-     * This method add to a practitioner the projects selected by himself. This method is used by
-     * the practitioner.
-     * </p>
-     * @param practitioner
-     * @return an int representing the rows number affected in database.
-     */
-    int addSelectedProjectByPractitioner(Practitioner practitioner);
-
-    /***
-     * Get the projects selected by a practitioner.
-     * <p>
-     * This method return a List, which contain the selected projects by a Practitioners. It's used by
-     * the coordinator as a support to assign a project to a Practitioner.
+     * This method remove a assign of professor to a student. It's used by the coordinator when
+     * he decided to remove a assign of professor to a practitioner.
      * </p>
      * @param idPractitioner the practitioner's ID
-     * @return an List which contain the projects selected by a practitioner.
+     * @return an int representing the rows number affected in database.
      */
-    List<Project> getSelectedProjectsByIDPractitioner(int idPractitioner);
+    int removeAssignProfessor(int idPractitioner);
+
+    /***
+     * Get all practitioners from the actual/last course
+     * <p>
+     * This method get the practitioners and their assigned projects.
+     * This method is used by the coordinator and professor.
+     * Doesn't return any selected project and any activity delivery
+     * </p>
+     * @return List<Practitioner> a list with practitioners of the actual/last course from database
+     */
+    List<Practitioner> getAllPractitionersFromLastCourse();
 
 }

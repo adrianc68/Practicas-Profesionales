@@ -1,4 +1,4 @@
 package org.database.dao;
 
-public class RecordDAO {
+public class DeliveryDAO {
 }

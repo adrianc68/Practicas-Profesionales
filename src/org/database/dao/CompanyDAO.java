@@ -61,7 +61,7 @@ public class CompanyDAO implements ICompanyDAO{
             insertCompany.setInt(10,company.getCourse().getId() );
             rowsAffected = insertCompany.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             Logger.getLogger(CompanyDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return rowsAffected;
@@ -87,7 +87,7 @@ public class CompanyDAO implements ICompanyDAO{
             result = queryIDCompany.executeQuery();
             result.next();
             idCompany = result.getInt(1);
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             Logger.getLogger(CompanyDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return idCompany;
@@ -141,7 +141,7 @@ public class CompanyDAO implements ICompanyDAO{
                 company.setPhoneNumber( result.getString("phoneNumber") );
                 companies.add(company);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             Logger.getLogger(CompanyDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return companies;

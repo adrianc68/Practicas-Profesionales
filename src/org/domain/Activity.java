@@ -1,0 +1,64 @@
+package org.domain;
+
+import java.sql.Date;
+import java.util.List;
+
+public class Activity {
+    private int id;
+    private String description;
+    private Date deadline;
+    private Professor professor;
+    private List<Delivery> deliveries;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
+    public List<Delivery> getDeliveries() {
+        return deliveries;
+    }
+
+    public void setDeliveries(List<Delivery> deliveries) {
+        this.deliveries = deliveries;
+    }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", deadline=" + deadline +
+                ", professor=" + professor +
+                ", deliveries=" + deliveries +
+                '}';
+    }
+
+}

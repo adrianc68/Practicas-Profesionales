@@ -38,6 +38,19 @@ public interface IProjectDAO {
     int updateProjectInformation(Project project);
 
     /***
+     * Add in the datase a project selected by a Practitioner
+     * <p>
+     * This method add to a practitioner the projects selected by himself. This method is used by
+     * the practitioner.
+     * </p>
+     * @param idPractitioner practicing's id to set the selected project
+     * @param idProject project's id to set.
+     * @return an int representing the rows number affected in database.
+     */
+    int addSelectedProjectByPractitioner(int idPractitioner, int idProject);
+
+
+    /***
      * Get all unassigned projects or available of the actual/last course from the database.
      * <p>
      * This method get all available projects of the last course. This method is intended
@@ -48,13 +61,23 @@ public interface IProjectDAO {
     List<Project> getAllAvailableProjectsFromLastCourse();
 
     /***
-     * Get the project list according to the condition received as parameter
+     * Get the projects selected by a practitioner.
      * <p>
-     * This method get the project list according to the parameter.
-     * The goal is re-use code.
+     * This method return a List, which contain the selected projects by a Practitioners. It's used by
+     * the coordinator as a support to assign a project to a Practitioner.
      * </p>
-     * @param statement
-     * @return
+     * @param idPractitioner the practitioner's ID
+     * @return an List which contain the projects selected by a practitioner.
+     */
+    List<Project> getSelectedProjectsByIDPractitioner(int idPractitioner);
+
+    /***
+     * Get all projects of the actual/last course from the database.
+     * <p>
+     * This method get all projects of the last course from the database.
+     * This method is used by the coordinator.
+     * </p>
+     * @return List<Project> a list containing all projects of the actual/last course
      */
     List<Project> getAllProjectsFromLastCourse();
 

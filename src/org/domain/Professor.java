@@ -20,4 +20,17 @@ public class Professor extends Person {
         this.staff_number = staff_number;
     }
 
+    @Override
+    public String toString() {
+        return "Professor{" +
+                "cubicle=" + cubicle +
+                ", staff_number='" + staff_number + '\'' +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", course=" + course +
+                '}';
+    }
+
 }

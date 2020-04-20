@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,21 +24,18 @@ public class DatabaseProperties {
         }
     }
 
-    public String[] readProperties() {
-        String user = null;
-        String password = null;
-        String url = null;
+    public Map<String, String> readProperties() {
+        Map<String, String> propertiesMap = new HashMap<>();
         try (InputStream input = new FileInputStream("database.properties")) {
             Properties prop = new Properties();
             prop.load(input);
-            user = prop.getProperty("db.user");
-            password = prop.getProperty("db.password");
-            url = prop.getProperty("db.url");
+            propertiesMap.put("db.user", prop.getProperty("db.user"));
+            propertiesMap.put("db.password", prop.getProperty("db.password"));
+            propertiesMap.put("db.url", prop.getProperty("db.url"));
         } catch (IOException io) {
             Logger.getLogger(DatabaseProperties.class.getName()).log(Level.SEVERE, null, io);
         }
-        String[] properties = {user, password, url};
-        return properties;
+        return propertiesMap;
     }
 
 }
