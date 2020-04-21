@@ -19,18 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ProjectDAO implements IProjectDAO {
-    /***
-     * Constant for the connection to the database
-     */
     private final Database database;
-    /***
-     * Query results
-     */
     private ResultSet result;
-    /***
-     * ProjectDAO constructor.
-     * This constructor initialize a connection to the database.
-     */
+
     public ProjectDAO() {
         database = new Database();
     }
@@ -38,14 +29,13 @@ public class ProjectDAO implements IProjectDAO {
     /***
      * Add a project to database.
      * <p>
-     * This method receive a instance of project and then add it to database.
      * This method is used by coordinator when he needs to add a project
      * </p>
      * @param project the project to be added to database
-     * @return the row number affected by this method
+     * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public int addProject(Project project) {
+    public boolean addProject(Project project) {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -85,20 +75,19 @@ public class ProjectDAO implements IProjectDAO {
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected;
+        return rowsAffected > 0;
     }
 
     /***
      * Remove a project from database.
      * <p>
-     * This method will remove a project from database. It's used by Coordinator when he needs
-     * to remove a project for any reason.
+     * It's used by Coordinator when he needs to remove a project for any reason.
      * </p>
      * @param idProject the project's id to be removed from database.
-     * @return return the rows number affected by this method.
+     * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public int removeProjectByID(int idProject) {
+    public boolean removeProjectByID(int idProject) {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -110,7 +99,7 @@ public class ProjectDAO implements IProjectDAO {
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected;
+        return rowsAffected > 0;
     }
 
     /***
@@ -119,10 +108,10 @@ public class ProjectDAO implements IProjectDAO {
      * This method receive a project and replaces the information in database
      * </p>
      * @param project the project with updated information.
-     * @return the rows number affected by this method
+     * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public int updateProjectInformation(Project project) {
+    public boolean updateProjectInformation(Project project) {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -163,21 +152,20 @@ public class ProjectDAO implements IProjectDAO {
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected;
+        return rowsAffected > 0;
     }
 
     /***
      * Add in the datase a project selected by a Practitioner
      * <p>
-     * This method add to a practitioner the projects selected by himself. This method is used by
-     * the practitioner.
+     * This method is used by the practitioner to add a project selected by himself.
      * </p>
-     * @param idPractitioner practicing's id to set the selected project
+     * @param idPractitioner practioner's id to set the selected project
      * @param idProject project's id to set.
-     * @return an int representing the rows number affected in database.
+     * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public int addSelectedProjectByPractitioner(int idPractitioner, int idProject) {
+    public boolean addSelectedProjectByPractitionerID(int idPractitioner, int idProject) {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -190,78 +178,109 @@ public class ProjectDAO implements IProjectDAO {
         }catch (SQLException | NullPointerException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected;
-    }
-
-    /***
-     * Get all unassigned projects or available of the actual/last course from the database.
-     * <p>
-     * This method get all available projects of the last course. This method is intended
-     * for the coordinator and practitioners.
-     * </p>
-     * @return List<Project> a list containing the available projects
-     */
-    @Override
-    public List<Project> getAllAvailableProjectsFromLastCourse() {
-        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and CS.id_course = (SELECT max(id_course) FROM Course) WHERE P.id_project NOT IN (SELECT id_project FROM (SELECT count(id_project) AS counter, id_project FROM Practitioner GROUP BY id_project HAVING counter = 3) AS Count)";
-        return getProjectsByStatement(statement);
+        return rowsAffected > 0;
     }
 
     /***
      * Get the projects selected by a practitioner.
      * <p>
-     * This method return a List, which contain the selected projects by a Practitioners. It's used by
-     * the coordinator as a support to assign a project to a Practitioner.
+     * It's used by the coordinator as a support to assign a project to a Practitioner.
      * </p>
      * @param idPractitioner the practitioner's ID
      * @return an List which contain the projects selected by a practitioner.
      */
     @Override
-    public List<Project> getSelectedProjectsByIDPractitioner(int idPractitioner) {
+    public List<Project> getSelectedProjectsByPractitionerID(int idPractitioner) {
+        String statement = "SELECT PSP.id_person, PROJ.id_project, PROJ.name, PROJ.duration, PROJ.schedule, PROJ.general_purpose, PROJ.general_description, PROJ.id_company, PROJ.charge_responsable, PROJ.name_responsable, PROJ.email_responsable, COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM (SELECT selected_project, id_person FROM Practitioner_Selected_Projects WHERE id_person = ?) AS PSP INNER JOIN Project AS PROJ ON PROJ.id_project = PROJ.id_project AND PSP.selected_project = PROJ.id_project INNER JOIN Company AS COMP ON  PROJ.id_company = COMP.id_company INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON COMP.id_coordinator = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COUR.id_course";
+        return getProjectsByStatementAndIDPractitioner(statement, idPractitioner);
+    }
+
+    /***
+     * Get the assigned project of a practitioner.
+     * <p>
+     * It's used by the coordinator to view which project is assigned to a practitioner
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @return a Project of a Practitioner.
+     */
+    @Override
+    public Project getAssignedProjectByPractitionerID(int idPractitioner) {
+        String statement = "SELECT PROJ.id_project, PROJ.name, PROJ.duration, PROJ.schedule, PROJ.general_purpose, PROJ.general_description, PROJ.id_company, PROJ.charge_responsable, PROJ.name_responsable, PROJ.email_responsable, COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM (SELECT id_person, id_project FROM Practitioner WHERE id_person = ?) AS PRAC INNER JOIN Project AS PROJ ON PRAC.id_project = PROJ.id_project INNER JOIN Company AS COMP ON  PROJ.id_company = COMP.id_company INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON COMP.id_coordinator = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COUR.id_course";
+        List<Project> projects = getProjectsByStatementAndIDPractitioner(statement, idPractitioner);
+        Project project = ( projects.isEmpty() ) ? null : projects.get(0);
+        return project;
+    }
+
+    /***
+     * Get all unassigned projects or available of the actual/last course from the database.
+     * <p>
+     * This method is intended for the coordinator and practitioners.
+     * </p>
+     * @return List<Project> a list containing the available projects
+     */
+    @Override
+    public List<Project> getAllAvailableProjectsFromLastCourse() {
+        String statement = "SELECT PROJ.id_project, PROJ.name, PROJ.duration, PROJ.schedule, PROJ.general_purpose, PROJ.general_description, PROJ.id_company, PROJ.charge_responsable, PROJ.name_responsable, PROJ.email_responsable, COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Project AS PROJ INNER JOIN Company AS COMP ON  PROJ.id_company = COMP.id_company INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON COMP.id_coordinator = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COUR.id_course and COUR.id_course = (SELECT max(id_course) FROM Course) WHERE PROJ.id_project NOT IN (SELECT id_project FROM (SELECT count(id_project) AS counter, id_project FROM Practitioner GROUP BY id_project HAVING counter = 3) AS Count)";
+        return getProjectsByStatement(statement);
+    }
+
+    /***
+     * Get all projects of the actual/last course from the database.
+     * <p>.
+     * This method is used by the coordinator to verify the projects added.
+     * </p>
+     * @return List<Project> a list containing all projects of the actual/last course
+     */
+    @Override
+    public List<Project> getAllProjectsFromLastCourse() {
+        String statement = "SELECT PROJ.id_project, PROJ.name, PROJ.duration, PROJ.schedule, PROJ.general_purpose, PROJ.general_description, PROJ.id_company, PROJ.charge_responsable, PROJ.name_responsable, PROJ.email_responsable, COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Project AS PROJ INNER JOIN Company AS COMP ON  PROJ.id_company = COMP.id_company INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON CORD.id_person = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COUR.id_course and COUR.id_course = (SELECT max(id_course) FROM Course)";
+        return getProjectsByStatement(statement);
+    }
+
+    private List<Project> getProjectsByStatementAndIDPractitioner(String statement, int idPractitioner){
         List<Project> projects = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email, CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Practitioner_Selected_Projects AS PSP ON PSP.selected_project = P.id_project AND PSP.id_person = ? INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and (SELECT max(id_course) FROM Course)";
             PreparedStatement queryProjects = conn.prepareStatement(statement);
             queryProjects.setInt(1, idPractitioner);
             result = queryProjects.executeQuery();
             while( result.next() ) {
                 Course course = new Course();
-                course.setId(result.getInt("CS.id_course"));
-                course.setNRC(result.getString("CS.NRC"));
-                course.setPeriod(result.getString("CS.Period"));
-                course.setName(result.getString("CS.name"));
+                course.setId(result.getInt("COUR.id_course"));
+                course.setNRC(result.getString("COUR.NRC"));
+                course.setPeriod(result.getString("COUR.Period"));
+                course.setName(result.getString("COUR.name"));
                 Coordinator coordinator = new Coordinator();
-                coordinator.setId(result.getInt("Pe.id_person"));
-                coordinator.setName(result.getString("Pe.name"));
-                coordinator.setPhoneNumber(result.getString("Pe.phoneNumber"));
-                coordinator.setEmail(result.getString("Pe.email"));
+                coordinator.setId(result.getInt("PERSCORD.id_person"));
+                coordinator.setName(result.getString("PERSCORD.name"));
+                coordinator.setPhoneNumber(result.getString("PERSCORD.phoneNumber"));
+                coordinator.setEmail(result.getString("PERSCORD.email"));
                 coordinator.setCourse(course);
-                coordinator.setStaff_number(result.getString("CT.staff_number"));
-                coordinator.setCubicle(result.getInt("CT.cubicle"));
+                coordinator.setStaff_number(result.getString("CORD.staff_number"));
+                coordinator.setCubicle(result.getInt("CORD.cubicle"));
                 Company company = new Company();
-                company.setId(result.getInt("C.id_company"));
-                company.setName(result.getString("C.name"));
-                company.setAddress(result.getString("C.address"));
-                company.setEmail(result.getString("C.email"));
-                company.setState(result.getString("C.state"));
-                company.setPhoneNumber(result.getString("C.phoneNumber"));
-                company.setDirectUsers(result.getInt("C.direct_users"));
-                company.setIndirectUsers(result.getInt("C.indirect_users"));
-                company.setSector(Sector.valueOf(result.getString("C.sector").toUpperCase()));
-                company.setCity(result.getString("C.city"));
+                company.setId(result.getInt("COMP.id_company"));
+                company.setName(result.getString("COMP.name"));
+                company.setAddress(result.getString("COMP.address"));
+                company.setEmail(result.getString("COMP.email"));
+                company.setState(result.getString("COMP.state"));
+                company.setPhoneNumber(result.getString("COMP.phoneNumber"));
+                company.setDirectUsers(result.getInt("COMP.direct_users"));
+                company.setIndirectUsers(result.getInt("COMP.indirect_users"));
+                company.setSector(Sector.valueOf(result.getString("COMP.sector").toUpperCase()));
+                company.setCity(result.getString("COMP.city"));
                 company.setCoordinator(coordinator);
                 company.setCourse(course);
                 Project project = new Project();
-                project.setId(result.getInt("P.id_project"));
-                project.setName(result.getString("P.name"));
-                project.setDuration(result.getFloat("P.duration"));
-                project.setSchedule(result.getString("P.schedule"));
-                project.setGeneralPurpose(result.getString("P.general_purpose"));
-                project.setGeneralDescription(result.getString("P.general_description"));
+                project.setId(result.getInt("PROJ.id_project"));
+                project.setName(result.getString("PROJ.name"));
+                project.setDuration(result.getFloat("PROJ.duration"));
+                project.setSchedule(result.getString("PROJ.schedule"));
+                project.setGeneralPurpose(result.getString("PROJ.general_purpose"));
+                project.setGeneralDescription(result.getString("PROJ.general_description"));
                 project.setCompany(company);
-                project.setChargeResponsable(result.getString("P.charge_responsable"));
-                project.setNameResponsable(result.getString("P.name_responsable"));
-                project.setEmailResponsable(result.getString("P.email_responsable"));
+                project.setChargeResponsable(result.getString("PROJ.charge_responsable"));
+                project.setNameResponsable(result.getString("PROJ.name_responsable"));
+                project.setEmailResponsable(result.getString("PROJ.email_responsable"));
                 List<String> activities = new ArrayList<>();
                 List<String> mediateObjetives = new ArrayList<>();
                 List<String> methodologies = new ArrayList<>();
@@ -298,29 +317,6 @@ public class ProjectDAO implements IProjectDAO {
         return projects;
     }
 
-    /***
-     * Get all projects of the actual/last course from the database.
-     * <p>
-     * This method get all projects of the last course from the database.
-     * This method is used by the coordinator.
-     * </p>
-     * @return List<Project> a list containing all projects of the last course
-     */
-    @Override
-    public List<Project> getAllProjectsFromLastCourse() {
-        String statement = "SELECT P.id_project, P.name, P.duration, P.schedule, P.general_purpose, P.general_description, P.id_company, P.charge_responsable, P.name_responsable, P.email_responsable, C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number,  Pe.id_person, Pe.name, Pe.phoneNumber, Pe.email,  CS.id_course, CS.NRC, CS.period, CS.name FROM Project AS P INNER JOIN Company AS C ON  P.id_company = C.id_company INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS Pe ON C.id_coordinator = Pe.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and CS.id_course = (SELECT max(id_course) FROM Course)";
-        return getProjectsByStatement(statement);
-    }
-
-    /***
-     * Get the project list according to the condition received as parameter
-     * <p>
-     * This method get the project list according to the parameter.
-     * The goal is re-use code.
-     * </p>
-     * @param statement the statement is considered as condition
-     * @return List<Project> a list containing all projects according to the parameter.
-     */
     private List<Project> getProjectsByStatement(String statement){
         List<Project> projects = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
@@ -328,42 +324,42 @@ public class ProjectDAO implements IProjectDAO {
             result = queryProjects.executeQuery();
             while( result.next() ) {
                 Course course = new Course();
-                course.setId(result.getInt("CS.id_course"));
-                course.setNRC(result.getString("CS.NRC"));
-                course.setPeriod(result.getString("CS.Period"));
-                course.setName(result.getString("CS.name"));
+                course.setId(result.getInt("COUR.id_course"));
+                course.setNRC(result.getString("COUR.NRC"));
+                course.setPeriod(result.getString("COUR.Period"));
+                course.setName(result.getString("COUR.name"));
                 Coordinator coordinator = new Coordinator();
-                coordinator.setId(result.getInt("Pe.id_person"));
-                coordinator.setName(result.getString("Pe.name"));
-                coordinator.setPhoneNumber(result.getString("Pe.phoneNumber"));
-                coordinator.setEmail(result.getString("Pe.email"));
+                coordinator.setId(result.getInt("PERSCORD.id_person"));
+                coordinator.setName(result.getString("PERSCORD.name"));
+                coordinator.setPhoneNumber(result.getString("PERSCORD.phoneNumber"));
+                coordinator.setEmail(result.getString("PERSCORD.email"));
                 coordinator.setCourse(course);
-                coordinator.setStaff_number(result.getString("CT.staff_number"));
-                coordinator.setCubicle(result.getInt("CT.cubicle"));
+                coordinator.setStaff_number(result.getString("CORD.staff_number"));
+                coordinator.setCubicle(result.getInt("CORD.cubicle"));
                 Company company = new Company();
-                company.setId(result.getInt("C.id_company"));
-                company.setName(result.getString("C.name"));
-                company.setAddress(result.getString("C.address"));
-                company.setEmail(result.getString("C.email"));
-                company.setState(result.getString("C.state"));
-                company.setPhoneNumber(result.getString("C.phoneNumber"));
-                company.setDirectUsers(result.getInt("C.direct_users"));
-                company.setIndirectUsers(result.getInt("C.indirect_users"));
-                company.setSector( Sector.valueOf(result.getString("C.sector").toUpperCase()));
-                company.setCity(result.getString("C.city"));
+                company.setId(result.getInt("COMP.id_company"));
+                company.setName(result.getString("COMP.name"));
+                company.setAddress(result.getString("COMP.address"));
+                company.setEmail(result.getString("COMP.email"));
+                company.setState(result.getString("COMP.state"));
+                company.setPhoneNumber(result.getString("COMP.phoneNumber"));
+                company.setDirectUsers(result.getInt("COMP.direct_users"));
+                company.setIndirectUsers(result.getInt("COMP.indirect_users"));
+                company.setSector( Sector.valueOf(result.getString("COMP.sector").toUpperCase()));
+                company.setCity(result.getString("COMP.city"));
                 company.setCoordinator(coordinator);
                 company.setCourse(course);
                 Project project = new Project();
-                project.setId(result.getInt("P.id_project"));
-                project.setName(result.getString("P.name"));
-                project.setDuration(result.getFloat("P.duration"));
-                project.setSchedule(result.getString("P.schedule"));
-                project.setGeneralPurpose(result.getString("P.general_purpose"));
-                project.setGeneralDescription(result.getString("P.general_description"));
+                project.setId(result.getInt("PROJ.id_project"));
+                project.setName(result.getString("PROJ.name"));
+                project.setDuration(result.getFloat("PROJ.duration"));
+                project.setSchedule(result.getString("PROJ.schedule"));
+                project.setGeneralPurpose(result.getString("PROJ.general_purpose"));
+                project.setGeneralDescription(result.getString("PROJ.general_description"));
                 project.setCompany(company);
-                project.setChargeResponsable(result.getString("P.charge_responsable"));
-                project.setNameResponsable(result.getString("P.name_responsable"));
-                project.setEmailResponsable(result.getString("P.email_responsable"));
+                project.setChargeResponsable(result.getString("PROJ.charge_responsable"));
+                project.setNameResponsable(result.getString("PROJ.name_responsable"));
+                project.setEmailResponsable(result.getString("PROJ.email_responsable"));
                 ArrayList<String> activities = new ArrayList<>();
                 ArrayList<String> mediateObjetives = new ArrayList<>();
                 ArrayList<String> immediateObjetives = new ArrayList<>();

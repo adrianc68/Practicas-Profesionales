@@ -16,6 +16,36 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class ProjectDAOTest { 
 
     @Test
+    public void addProject() {
+
+    }
+
+    @Test
+    public void removeProjectByID() {
+
+    }
+
+    @Test
+    public void updateProjectInformation() {
+
+    }
+
+    @Test
+    public void addSelectedProjectByPractitionerID() {
+
+    }
+
+    @Test
+    public void getSelectedProjectsByPractitionerID() {
+
+    }
+
+    @Test
+    public void getAssignedProjectByPractitionerID() {
+
+    }
+
+    @Test
     public void testGetAllAvailableProjectsFromLastCourse() throws Exception {
         ProjectDAO projectDAO = new ProjectDAO();
         List<Project> projectsAvailableFromLastCourse = projectDAO.getAllAvailableProjectsFromLastCourse();

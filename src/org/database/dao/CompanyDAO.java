@@ -15,19 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CompanyDAO implements ICompanyDAO{
-    /***
-     * Constant for the connection to the database
-     */
     private final Database database;
-    /***
-     * Query results
-     */
     private ResultSet result;
 
-    /***
-     * CompanyDAO constructor.
-     * This constructor initialize a connection to the database.
-     */
     public CompanyDAO() {
         database = new Database();
     }
@@ -35,15 +25,14 @@ public class CompanyDAO implements ICompanyDAO{
     /***
      * Add a company to database.
      * <p>
-     * This method add a company to database and returns the row number affected
-     * by this method. This method is used by the coordinator when he is adding
-     * a project and the company of the project doesn't exist.
+     * This method is used by the coordinator when he is adding
+     * a project and the company's project doesn't exist.
      * </p>
      * @param company the company that you want to add to database
-     * @return the row number affected by this method
+     * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public int addCompany(Company company) {
+    public boolean addCompany(Company company) {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -64,81 +53,51 @@ public class CompanyDAO implements ICompanyDAO{
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(CompanyDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected;
-    }
-
-    /***
-     * Return a company ID.
-     * <p>
-     * This method will query the specified company.
-     * </p>
-     * @param name the company name
-     * @param id_course the course ID of the company
-     * @return return the ID company. return -1 if no company was find it.
-     */
-    @Override
-    public int getIDCompany(String name, int id_course) {
-        int idCompany = -1;
-        try(Connection conn = database.getConnection() ){
-            String statement = "SELECT id_company FROM Company WHERE name = ? AND id_course = ?";
-            PreparedStatement queryIDCompany = conn.prepareStatement(statement);
-            queryIDCompany.setString(1, name);
-            queryIDCompany.setInt(2, id_course);
-            result = queryIDCompany.executeQuery();
-            result.next();
-            idCompany = result.getInt(1);
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(CompanyDAO.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return idCompany;
+        return rowsAffected > 0;
     }
 
     /***
      * Return all the companies from the actual/last course.
      * <p>
-     * This method will get all the companies from the database.
      * This method is used by the coordinator when he is adding a project
-     * and need see if the project's company exist.
+     * and needs to see if the project's company exist.
      * </p>
      * @return List<Company>
      */
     @Override
     public List<Company> getAllCompaniesFromLastCourse()  {
         List<Company> companies = new ArrayList<>();
-        Company company = null;
-        Coordinator coordinator = null;
-        Course course = null;
         try(Connection conn = database.getConnection() ){
-            String statement = "SELECT C.id_company, C.name, C.address, C.email, C.state, C.direct_users, C.indirect_users, C.sector, C.city, C.phoneNumber, CT.cubicle, CT.staff_number, P.id_person, P.name, P.phoneNumber, P.email, CS.id_course, CS.NRC, CS.Period, CS.name, CS.id_course FROM Company AS C INNER JOIN Coordinator AS CT ON C.id_coordinator = CT.id_person INNER JOIN Person AS P ON C.id_coordinator = P.id_person INNER JOIN Course AS CS ON C.id_course = CS.id_course and CS.id_course = (SELECT max(id_course) FROM Course)";
+            String statement = "SELECT COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber,  COMP.id_course, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.NRC, COUR.Period, COUR.name, COUR.id_course FROM Company AS COMP INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON COMP.id_coordinator = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COMP.id_course and COUR.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement queryCompanies = conn.prepareStatement(statement);
             result = queryCompanies.executeQuery();
             while( result.next() ){
-                company = new Company();
-                coordinator = new Coordinator();
-                course = new Course();
-                course.setId( result.getInt("CS.id_course") );
-                course.setNRC( result.getString("CS.NRC") );
-                course.setPeriod( result.getString("CS.period") );
-                course.setName( result.getString("CS.name") );
-                coordinator.setId( result.getInt("P.id_person") );
-                coordinator.setName( result.getString("P.name") );
-                coordinator.setPhoneNumber( result.getString("P.phoneNumber") );
-                coordinator.setEmail( result.getString("P.email") );
+                Course course = new Course();
+                course.setId( result.getInt("COUR.id_course") );
+                course.setNRC( result.getString("COUR.NRC") );
+                course.setPeriod( result.getString("COUR.period") );
+                course.setName( result.getString("COUR.name") );
+                Coordinator coordinator = new Coordinator();
+                coordinator.setId( result.getInt("PERSCORD.id_person") );
+                coordinator.setName( result.getString("PERSCORD.name") );
+                coordinator.setPhoneNumber( result.getString("PERSCORD.phoneNumber") );
+                coordinator.setEmail( result.getString("PERSCORD.email") );
                 coordinator.setCourse(course);
-                coordinator.setCubicle( result.getInt("CT.cubicle") );
-                coordinator.setStaff_number( result.getString("CT.staff_number") );
-                company.setId( result.getInt("id_company") );
-                company.setName( result.getString("name") );
-                company.setAddress( result.getString("address") );
-                company.setEmail( result.getString("email") );
-                company.setState( result.getString("state") );
-                company.setDirectUsers( result.getInt("direct_users") );
-                company.setIndirectUsers( result.getInt("indirect_users") );
-                company.setSector(Sector.valueOf( result.getString("C.Sector").toUpperCase()) );
-                company.setCity( result.getString("city") );
+                coordinator.setCubicle( result.getInt("CORD.cubicle") );
+                coordinator.setStaff_number( result.getString("CORD.staff_number") );
+                Company company = new Company();
+                company.setId( result.getInt("COMP.id_company") );
+                company.setName( result.getString("COMP.name") );
+                company.setAddress( result.getString("COMP.address") );
+                company.setEmail( result.getString("COMP.email") );
+                company.setState( result.getString("COMP.state") );
+                company.setDirectUsers( result.getInt("COMP.direct_users") );
+                company.setIndirectUsers( result.getInt("COMP.indirect_users") );
+                company.setSector(Sector.valueOf( result.getString("COMP.Sector").toUpperCase()) );
+                company.setCity( result.getString("COMP.city") );
                 company.setCoordinator(coordinator);
                 company.setCourse(course);
-                company.setPhoneNumber( result.getString("phoneNumber") );
+                company.setPhoneNumber( result.getString("COMP.phoneNumber") );
                 companies.add(company);
             }
         } catch (SQLException | NullPointerException e) {

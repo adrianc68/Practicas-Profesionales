@@ -1,9 +1,11 @@
 package org.database.dao;
 
 import org.domain.Course;
+import java.util.List;
 
 public interface ICourseDAO {
-    int addCourse(Course course);
-    int removeCourseByID(int idCourse);
+    boolean addCourse(Course course);
+    boolean removeCourseByID(int idCourse);
+    List<Course> getAllCourses();
 
 }

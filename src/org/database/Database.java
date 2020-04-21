@@ -13,6 +13,10 @@ public class Database {
     private static String url;
     private Connection connection;
 
+    /***
+     * This method set the properties to database
+     * @see DatabaseProperties
+     */
     public Database() {
         DatabaseProperties databaseProperties = new DatabaseProperties();
         Map<String, String> propertiesMap = databaseProperties.readProperties();

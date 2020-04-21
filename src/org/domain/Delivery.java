@@ -3,9 +3,9 @@ package org.domain;
 public class Delivery {
     private float score;
     private String observation;
+    private Document document;
     private Practitioner practitioner;
     private Activity activity;
-    private Document document;
 
     public float getScore() {
         return score;
@@ -21,6 +21,14 @@ public class Delivery {
 
     public void setObservation(String observation) {
         this.observation = observation;
+    }
+
+    public Document getDocument() {
+        return document;
+    }
+
+    public void setDocument(Document document) {
+        this.document = document;
     }
 
     public Practitioner getPractitioner() {
@@ -39,22 +47,15 @@ public class Delivery {
         this.activity = activity;
     }
 
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
-    }
-
     @Override
     public String toString() {
         return "Delivery{" +
                 "score=" + score +
                 ", observation='" + observation + '\'' +
+                ", document=" + document +
                 ", practitioner=" + practitioner +
                 ", activity=" + activity +
-                ", document=" + document +
                 '}';
     }
+
 }

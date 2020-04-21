@@ -1,73 +1,66 @@
 package org.database.dao;
 
 import org.domain.Practitioner;
-import org.domain.Project;
 import java.util.List;
 
 public interface IPractitionerDAO {
     /***
      * Add a Practitioner to database.
      * <p>
-     * This method add a practitioner to database and return the rows number affected
-     * by this method. This method is used by the coordinator when he need to add a practicing.
+     * This method is used by the coordinator when he needs to add a practicing.
      * </p>
      * @param practitioner to be added to database
-     * @return an int representing the rows number affected in database.
+     * @return boolean true if 1 o more than 1 rows are affected
      */
-    int addPractitioner(Practitioner practitioner);
+    boolean addPractitioner(Practitioner practitioner);
 
     /***
      * Delete a Practitioner from database.
      * <p>
-     * This method remove a practitioner by an id provided. It's used by the coordinator when
-     * he needs to remove a practicing for any reason.
+     * It's used by the coordinator whem he needs to remove a practicing for any reason.
      * </p>
      * @param idPractitioner the practitioner's ID
-     * @return an int representing the rows number affected in database.
+     * @return boolean true if 1 o more than 1 rows are affected
      */
-    int removePractitioner(int idPractitioner);
+    boolean removePractitioner(int idPractitioner);
 
     /***
      * Assign a project to a Practitioner in database.
      * <p>
-     * This method update the assigned project of a practitioner. It's used by the coordinator when
-     * he decided which project assign to a practitioner
+     * It's used by the coordinator when he decided which project assign to a practitioner
      * </p>
      * @param idPractitioner the practitioner's ID
      * @param idProject the project's ID to be assigned to practitioner
-     * @return an int representing the rows number affected in database.
+     * @return boolean true if 1 o more than 1 rows are affected
      */
-    int assignProject(int idPractitioner, int idProject);
+    boolean assignProject(int idPractitioner, int idProject);
 
     /***
      * Assign a professor to a Practitioner in the database.
      * <p>
-     * This method assign a professor to a student. It's used by the coordinator when he decided assign
-     * a professor to a practitioner.
+     * It's used by the coordinator when he decided assign a professor to a practitioner.
      * </p>
      * @param idPractitioner the practitioner's ID
      * @param idProfessor the professor's id to be assigned to practitioner
-     * @return an int representing the rows number affected in database.
+     * @return boolean true if 1 o more than 1 rows are affected
      */
-    int assignProfessor(int idPractitioner, int idProfessor);
+    boolean assignProfessor(int idPractitioner, int idProfessor);
 
     /***
      * Delete a assign of professor to a Practitioner in the database.
      * <p>
-     * This method remove a assign of professor to a student. It's used by the coordinator when
-     * he decided to remove a assign of professor to a practitioner.
+     * It's used by the coordinator when he decided to remove a assign of professor to a practitioner.
      * </p>
      * @param idPractitioner the practitioner's ID
-     * @return an int representing the rows number affected in database.
+     * @return boolean true if 1 o more than 1 rows are affected
      */
-    int removeAssignProfessor(int idPractitioner);
+    boolean removeAssignProfessor(int idPractitioner);
 
     /***
-     * Get all practitioners from the actual/last course
+     * Get all practitioners and their assigned projects from the actual/last course
      * <p>
-     * This method get the practitioners and their assigned projects.
      * This method is used by the coordinator and professor.
-     * Doesn't return any selected project and any activity delivery
+     * Doesn't return with any activity delivery, selected project, assigned project or assigned professor
      * </p>
      * @return List<Practitioner> a list with practitioners of the actual/last course from database
      */
