@@ -1,11 +1,8 @@
 package org.database.dao;
 
 import org.database.Database;
-import org.domain.Activity;
-import org.domain.Course;
-import org.domain.Delivery;
-import org.domain.Document;
-import org.domain.Professor;
+import org.domain.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

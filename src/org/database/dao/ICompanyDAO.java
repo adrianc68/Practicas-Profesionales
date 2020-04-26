@@ -11,9 +11,9 @@ public interface ICompanyDAO {
      * a project and the company's project doesn't exist.
      * </p>
      * @param company the company that you want to add to database
-     * @return the row number affected by this method
+     * @return int representing the company's id
      */
-    boolean addCompany(Company company);
+    int addCompany(Company company);
 
     /***
      * Return all the companies from the actual/last course.

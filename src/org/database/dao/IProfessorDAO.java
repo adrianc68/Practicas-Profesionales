@@ -17,6 +17,15 @@ public interface IProfessorDAO {
      * @return Professor professor assigned to a specific practitioner.
      */
     Professor getAssignedProfessorByPractitionerID(int idPractitioner);
-    List<Professor> getAllProfessors();
+
+    /***
+     * Get all professors from actual/last course.
+     * <p>
+     * This method it's used by the coordinator when he is adding a new professor or
+     * assigning a professor to a practitioner.
+     * </p>
+     * @return List<Professor> a list with all professors from last course.
+     */
+    List<Professor> getAllProfessorsFromLastCourse();
 
 }

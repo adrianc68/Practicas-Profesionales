@@ -10,9 +10,9 @@ public interface IPractitionerDAO {
      * This method is used by the coordinator when he needs to add a practicing.
      * </p>
      * @param practitioner to be added to database
-     * @return boolean true if 1 o more than 1 rows are affected
+     * @return int the practitioner's id
      */
-    boolean addPractitioner(Practitioner practitioner);
+    int addPractitioner(Practitioner practitioner);
 
     /***
      * Delete a Practitioner from database.
@@ -33,7 +33,7 @@ public interface IPractitionerDAO {
      * @param idProject the project's ID to be assigned to practitioner
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean assignProject(int idPractitioner, int idProject);
+    boolean assignProjectToPractitioner(int idPractitioner, int idProject);
 
     /***
      * Assign a professor to a Practitioner in the database.
@@ -44,7 +44,7 @@ public interface IPractitionerDAO {
      * @param idProfessor the professor's id to be assigned to practitioner
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean assignProfessor(int idPractitioner, int idProfessor);
+    boolean assignProfessorToPractitioner(int idPractitioner, int idProfessor);
 
     /***
      * Delete a assign of professor to a Practitioner in the database.
@@ -54,7 +54,7 @@ public interface IPractitionerDAO {
      * @param idPractitioner the practitioner's ID
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean removeAssignProfessor(int idPractitioner);
+    boolean removeAssignedProfessorToPractitioner(int idPractitioner);
 
     /***
      * Get all practitioners and their assigned projects from the actual/last course

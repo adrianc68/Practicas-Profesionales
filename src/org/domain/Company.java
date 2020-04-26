@@ -1,7 +1,5 @@
 package org.domain;
 
-import java.util.ArrayList;
-
 public class Company {
     private int id;
     private String name;

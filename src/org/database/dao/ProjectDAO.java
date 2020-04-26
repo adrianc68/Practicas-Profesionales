@@ -32,11 +32,11 @@ public class ProjectDAO implements IProjectDAO {
      * This method is used by coordinator when he needs to add a project
      * </p>
      * @param project the project to be added to database
-     * @return boolean true if 1 o more than 1 rows are affected
+     * @return int representing the project's ID
      */
     @Override
-    public boolean addProject(Project project) {
-        int rowsAffected = 0;
+    public int addProject(Project project) {
+        int projectID = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "INSERT INTO Project (name, duration, schedule, general_purpose, general_description, id_company, charge_responsable, name_responsable, email_responsable) values (?,?,?,?,?,?,?,?,?)";
@@ -50,10 +50,10 @@ public class ProjectDAO implements IProjectDAO {
             insertProject.setString(7, project.getChargeResponsable() );
             insertProject.setString(8, project.getNameResponsable() );
             insertProject.setString(9, project.getEmailResponsable() );
-            rowsAffected += insertProject.executeUpdate();
+            insertProject.executeUpdate();
             result = insertProject.executeQuery("SELECT LAST_INSERT_ID()");
             result.next();
-            int projectID = result.getInt(1);
+            projectID = result.getInt(1);
             project.setId(projectID);
             Map<String, Iterator> multivaluedAttributesStatementsMap = new HashMap<>();
             multivaluedAttributesStatementsMap.put("INSERT INTO Project_Activities(activity, id_project) VALUES(?, ?)", project.getActivities().iterator() );
@@ -68,14 +68,14 @@ public class ProjectDAO implements IProjectDAO {
                 while( listIterator.hasNext() ) {
                     insertProject.setString(1, listIterator.next().toString() );
                     insertProject.setInt(2, projectID);
-                    rowsAffected += insertProject.executeUpdate();
+                    insertProject.executeUpdate();
                 }
             }
             conn.commit();
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected > 0;
+        return projectID;
     }
 
     /***

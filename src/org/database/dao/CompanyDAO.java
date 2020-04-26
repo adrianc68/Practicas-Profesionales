@@ -29,11 +29,11 @@ public class CompanyDAO implements ICompanyDAO{
      * a project and the company's project doesn't exist.
      * </p>
      * @param company the company that you want to add to database
-     * @return boolean true if 1 o more than 1 rows are affected
+     * @return int representing the company's id
      */
     @Override
-    public boolean addCompany(Company company) {
-        int rowsAffected = 0;
+    public int addCompany(Company company) {
+        int idCompany = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "INSERT INTO Company(name, address, email, state, direct_users, indirect_users, sector, city, id_coordinator, id_course) values (?,?,?,?,?,?,?,?,?,?)";
@@ -44,16 +44,19 @@ public class CompanyDAO implements ICompanyDAO{
             insertCompany.setString(4, company.getState() );
             insertCompany.setInt(5, company.getDirectUsers() );
             insertCompany.setInt(6, company.getIndirectUsers() );
-            insertCompany.setString(7, company.getSector().getSector() );
+            insertCompany.setString(7, company.getSector().name() );
             insertCompany.setString(8, company.getCity() );
             insertCompany.setInt(9, company.getCoordinator().getId() );
             insertCompany.setInt(10,company.getCourse().getId() );
-            rowsAffected = insertCompany.executeUpdate();
+            insertCompany.executeUpdate();
+            result = insertCompany.executeQuery("SELECT LAST_INSERT_ID()");
+            result.next();
+            idCompany = result.getInt(1);
             conn.commit();
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(CompanyDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected > 0;
+        return idCompany;
     }
 
     /***

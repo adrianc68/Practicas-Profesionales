@@ -1,8 +1,8 @@
 package org.database.dao;
 
 import org.database.Database;
-import org.domain.Course;
-import org.domain.Practitioner;
+import org.domain.*;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,11 +36,11 @@ public class PractitionerDAO implements IPractitionerDAO {
      * This method is used by the coordinator when he needs to add a practicing.
      * </p>
      * @param practitioner to be added to database
-     * @return boolean true if 1 o more than 1 rows are affected
+     * @return int the practitioner's id
      */
     @Override
-    public boolean addPractitioner(Practitioner practitioner) {
-        int rowsAffected = 0;
+    public int addPractitioner(Practitioner practitioner) {
+        int idPractitioner = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "CALL addPractitioner(?, ?, ?, ?, ?)";
@@ -50,12 +50,17 @@ public class PractitionerDAO implements IPractitionerDAO {
             addPractitioner.setString(3, practitioner.getEmail() );
             addPractitioner.setInt(4, practitioner.getCourse().getId() );
             addPractitioner.setString(5, practitioner.getEnrollment() );
-            rowsAffected = addPractitioner.executeUpdate();
+            addPractitioner.executeUpdate();
+            statement = "SELECT LAST_INSERT_ID()";
+            addPractitioner = conn.prepareStatement(statement);
+            result = addPractitioner.executeQuery();
+            result.next();
+            idPractitioner = result.getInt(1);
             conn.commit();
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected > 0;
+        return idPractitioner;
     }
 
     /***
@@ -92,7 +97,7 @@ public class PractitionerDAO implements IPractitionerDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean assignProject(int idPractitioner, int idProject) {
+    public boolean assignProjectToPractitioner(int idPractitioner, int idProject) {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -118,7 +123,7 @@ public class PractitionerDAO implements IPractitionerDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean assignProfessor(int idPractitioner, int idProfessor) {
+    public boolean assignProfessorToPractitioner(int idPractitioner, int idProfessor) {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -143,7 +148,7 @@ public class PractitionerDAO implements IPractitionerDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean removeAssignProfessor(int idPractitioner) {
+    public boolean removeAssignedProfessorToPractitioner(int idPractitioner) {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -186,8 +191,11 @@ public class PractitionerDAO implements IPractitionerDAO {
                 practitioner.setId(result.getInt("PRAC.id_person"));
                 practitioner.setEnrollment(result.getString("PRAC.enrollment"));
                 practitioner.setCourse(course);
+                List<Project> selectedProjects = new ArrayList<>();
+                List<Delivery> deliveries = new ArrayList<>();
+                practitioner.setSelectedProjects(selectedProjects);
+                practitioner.setDeliveries(deliveries);
                 practitioner.setProfessor(null);
-                practitioner.setDeliveries(null);
                 practitioner.setProject(null);
                 practitioners.add(practitioner);
             }

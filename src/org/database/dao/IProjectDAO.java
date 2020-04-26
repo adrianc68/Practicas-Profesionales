@@ -10,9 +10,9 @@ public interface IProjectDAO {
      * This method is used by coordinator when he needs to add a project
      * </p>
      * @param project the project to be added to database
-     * @return boolean true if 1 o more than 1 rows are affected
+     * @return int representing the project's ID
      */
-    boolean addProject(Project project);
+    int addProject(Project project);
 
     /***
      * Remove a project from database.

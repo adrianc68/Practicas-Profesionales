@@ -10,7 +10,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
     }
 
     @Override
-    public boolean removeCoordinator(Coordinator coordinator) {
+    public boolean removeCoordinatorByID(int idCoordinator) {
         return true;
     }
 
