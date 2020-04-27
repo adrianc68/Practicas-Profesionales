@@ -1,59 +1,86 @@
 package test.org.database.dao;
 
+import org.database.DatabaseProperties;
 import org.database.dao.PractitionerDAO;
 import org.domain.Course;
 import org.domain.Practitioner;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class PractitionerDAOTest {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class PractitionerDAOTest {
+    private DatabaseProperties databaseProperties;
+    private final int idPractitioner = 6;
+    private final int idProfessor = 2;
+    private final int idProject = 1;
+
+    public PractitionerDAOTest() {
+        databaseProperties = new DatabaseProperties();
+        databaseProperties.setPath("database.properties");
+
+    }
+
+    @After
+    public void after() {
+        databaseProperties.writeProperties("anonimo", "12345", "jdbc:mysql://localhost:3306/Practices?useTimezone=true&serverTimezone=UTC");
+    }
+
+    @Before
+    public void before() {
+        databaseProperties.writeProperties("anonimo", "12345", "jdbc:mysql://localhost:3306/PracticesTest?useTimezone=true&serverTimezone=UTC");
+    }
 
     @Test
-    void addPractitioner() {
+    public void addPractitioner() {
         Course course = new Course();
         course.setId(1);
-        course.setName("Practicas Profesionales");
-        course.setNRC("SRC01");
-        course.setPeriod("AGO 2020 DIC 2020");
         Practitioner practitioner = new Practitioner();
-        practitioner.setName("PRACTICANTE 3");
-        practitioner.setEnrollment("S2001223");
+        practitioner.setName("Roberto Gomez Duran");
+        practitioner.setEnrollment("S18014562");
         practitioner.setPhoneNumber("2223422543");
-        practitioner.setEmail("PRACTICANTE3@HOTMAIL.COM");
+        practitioner.setEmail("zS18012172@estudiantes.uv.mx");
         practitioner.setCourse(course);
         PractitionerDAO practitionerDAO = new PractitionerDAO();
-        assertTrue(practitionerDAO.addPractitioner(practitioner));
+        int actual = practitionerDAO.addPractitioner(practitioner);
+        int unexpected = 0;
+        assertNotEquals(unexpected, actual);
     }
 
     @Test
-    void removePractitioner() {
+    public void assignProject() {
         PractitionerDAO practitionerDAO = new PractitionerDAO();
-        assertTrue(practitionerDAO.removePractitioner(12));
+        assertFalse(practitionerDAO.assignProjectToPractitioner(idPractitioner, idProject));
     }
 
     @Test
-    void assignProject() {
+    public void assignProfessor() {
         PractitionerDAO practitionerDAO = new PractitionerDAO();
-        assertTrue(practitionerDAO.assignProjectToPractitioner(9, 3));
+        assertTrue(practitionerDAO.assignProfessorToPractitioner(idPractitioner, idProfessor));
     }
 
     @Test
-    void assignProfessor() {
+    public void getAllPractitionersFromLastCourse() {
         PractitionerDAO practitionerDAO = new PractitionerDAO();
-        assertTrue(practitionerDAO.assignProfessorToPractitioner(9, 2));
-    }
-
-    @Test
-    void removeAssignProfessor() {
-        PractitionerDAO practitionerDAO = new PractitionerDAO();
-        assertTrue(practitionerDAO.removeAssignedProfessorToPractitioner(9));
-    }
-
-    @Test
-    void getAllPractitionersFromLastCourse() {
-        PractitionerDAO practitionerDAO = new PractitionerDAO();
-        int expected = 7;
+        int expected = 1;
         int result = practitionerDAO.getAllPractitionersFromLastCourse().size();
         assertEquals(expected, result);
     }
+
+    @Test
+    public void removeAssignProfessor() {
+        PractitionerDAO practitionerDAO = new PractitionerDAO();
+        assertTrue(practitionerDAO.removeAssignedProfessorToPractitioner(idPractitioner));
+    }
+
+    @Test
+    public void removePractitioner() {
+        PractitionerDAO practitionerDAO = new PractitionerDAO();
+        assertTrue(practitionerDAO.removePractitioner(idPractitioner));
+    }
+
 }

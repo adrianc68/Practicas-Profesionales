@@ -12,21 +12,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DatabaseProperties {
-    public void writeProperties(String user, String password, String url) {
-        try (OutputStream output = new FileOutputStream("database.properties")) {
+    private String path;
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public boolean writeProperties(String user, String password, String url) {
+        boolean result = false;
+        try (OutputStream output = new FileOutputStream(path)) {
             Properties prop = new Properties();
             prop.setProperty("db.url", url);
             prop.setProperty("db.user", user);
             prop.setProperty("db.password", password);
             prop.store(output, null);
+            result = true;
         } catch (IOException io) {
             Logger.getLogger(DatabaseProperties.class.getName()).log(Level.WARNING, null, io);
         }
+        return result;
     }
 
     public Map<String, String> readProperties() {
         Map<String, String> propertiesMap = new HashMap<>();
-        try (InputStream input = new FileInputStream("database.properties")) {
+        try (InputStream input = new FileInputStream(path)) {
             Properties prop = new Properties();
             prop.load(input);
             propertiesMap.put("db.user", prop.getProperty("db.user"));

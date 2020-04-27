@@ -4,8 +4,8 @@ import org.domain.Professor;
 import java.util.List;
 
 public interface IProfessorDAO {
-    boolean addProfessor(Professor professor);
-    boolean removeProfessor(Professor professor);
+    int addProfessor(Professor professor);
+    boolean removeProfessor(int  idProfessor);
 
     /***
      * Get assigned professor of a practicing from datatabase.

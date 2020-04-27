@@ -19,11 +19,22 @@ public class Database {
      */
     public Database() {
         DatabaseProperties databaseProperties = new DatabaseProperties();
+        databaseProperties.setPath("database.properties");
         Map<String, String> propertiesMap = databaseProperties.readProperties();
         user = propertiesMap.get("db.user");
         pass = propertiesMap.get("db.password");
         url = propertiesMap.get("db.url");
     }
+
+    public void setAnotherDatabaseProperties(String path) {
+        DatabaseProperties databaseProperties = new DatabaseProperties();
+        databaseProperties.setPath(path);
+        Map<String, String> propertiesMap = databaseProperties.readProperties();
+        user = propertiesMap.get("db.user");
+        pass = propertiesMap.get("db.password");
+        url = propertiesMap.get("db.url");
+    }
+
 
     public Connection getConnection() throws SQLException {
         connectToDatabase();

@@ -21,12 +21,12 @@ public class ProfessorDAO implements IProfessorDAO {
     }
 
     @Override
-    public boolean addProfessor(Professor professor) {
-        return true;
+    public int addProfessor(Professor professor) {
+        return 0;
     }
 
     @Override
-    public boolean removeProfessor(Professor professor) {
+    public boolean removeProfessor(int idprofessor) {
         return true;
     }
 

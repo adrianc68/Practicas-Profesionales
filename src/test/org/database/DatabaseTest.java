@@ -19,6 +19,7 @@ public class DatabaseTest {
 
     public DatabaseTest() {
         database = new Database();
+        database.setAnotherDatabaseProperties("src/test/org/database/resources/databaseTest.properties");
     }
 
     @Test

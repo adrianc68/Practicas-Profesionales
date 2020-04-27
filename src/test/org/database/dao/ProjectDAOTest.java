@@ -4,11 +4,10 @@ import org.database.dao.ProjectDAO;
 import org.domain.Company;
 import org.domain.Course;
 import org.domain.Project;
-import org.domain.Sector;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
-
+import org.junit.runners.MethodSorters;
 import java.util.ArrayList;
-import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -17,20 +16,23 @@ import static org.junit.jupiter.api.Assertions.*;
 * @author <Angel Adrian Camal Garcia>
 * @since <pre>abr 14, 2020</pre> 
 * @version 1.0 
-*/ 
-public class ProjectDAOTest { 
+*/
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class ProjectDAOTest {
+    private final int idProject = 2;
+    private final int idPractitioner = 3;
 
     @Test
     public void addProject() {
         Project project = new Project();
-        project.setName("PROJECT TEST");
-        project.setDuration(0);
-        project.setSchedule("TEST");
-        project.setGeneralDescription("TEST");
-        project.setGeneralPurpose("TEST");
-        project.setNameResponsable("TEST");
-        project.setChargeResponsable("TEST");
-        project.setEmailResponsable("TEST@HOTMAIL.COM");
+        project.setName("Implementacion de metodologia de desarollo de software");
+        project.setDuration(420);
+        project.setSchedule("Lunes a jueves 12:30-16:30");
+        project.setGeneralDescription("Se hara un cambio de metodologia dentro de la corporacion");
+        project.setGeneralPurpose("Cambiar la metodologia de desarrollo de software");
+        project.setNameResponsable("Jorge Hernandez Hernandez");
+        project.setChargeResponsable("CEO");
+        project.setEmailResponsable("ceomet@microsoft.com");
         Company company = new Company();
         company.setId(1);
         Course course = new Course();
@@ -44,26 +46,23 @@ public class ProjectDAOTest {
         project.setResources(new ArrayList<>());
         project.setResponsibilities(new ArrayList<>());
         ProjectDAO projectDAO = new ProjectDAO();
-        assertTrue(projectDAO.addProject(project));
+        int expected = idProject;
+        int actual = projectDAO.addProject(project);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void removeProjectByID() {
-        ProjectDAO projectDAO = new ProjectDAO();
-        assertTrue(projectDAO.removeProjectByID(8));
-    }
-
-    @Test
-    public void updateProjectInformation() {
+    public void bUpdateProjectInformation() {
         Project project = new Project();
-        project.setName("PROJECT TEST UPDATE");
-        project.setDuration(0);
-        project.setSchedule("TEST");
-        project.setGeneralDescription("TEST");
-        project.setGeneralPurpose("TEST");
-        project.setNameResponsable("TEST");
-        project.setChargeResponsable("TEST");
-        project.setEmailResponsable("TEST@HOTMAIL.COM");
+        project.setName("Implementación de metodologia de desarollo SCRUM");
+        project.setDuration(420);
+        project.setSchedule("Lunes a jueves 12:30-16:30");
+        project.setGeneralDescription("Se hara un cambio de metodologia dentro de la corporación");
+        project.setGeneralPurpose("Cambiar la metodologia de desarrollo de software");
+        project.setNameResponsable("Francisco Hernandez Gonzalez");
+        project.setChargeResponsable("CEO");
+        project.setEmailResponsable("franCEO@microsoft.com");
+        project.setId(idProject);
         Company company = new Company();
         company.setId(1);
         Course course = new Course();
@@ -82,37 +81,47 @@ public class ProjectDAOTest {
 
     @Test
     public void addSelectedProjectByPractitionerID() {
-        ProjectDAO projectDAO = new ProjectDAO();
-        projectDAO.addSelectedProjectByPractitionerID(3, 5);
+//        ProjectDAO projectDAO = new ProjectDAO();
+//        assertTrue(projectDAO.addSelectedProjectByPractitionerID(idPractitioner, idProject));
     }
 
     @Test
     public void getSelectedProjectsByPractitionerID() {
         ProjectDAO projectDAO = new ProjectDAO();
-        int expected = 3;
-        int result = projectDAO.getSelectedProjectsByPractitionerID(3).size();
+        int expected = 0;
+        int result = projectDAO.getSelectedProjectsByPractitionerID(idPractitioner).size();
         assertEquals(expected, result);
     }
 
     @Test
     public void getAssignedProjectByPractitionerID() {
         ProjectDAO projectDAO = new ProjectDAO();
-        Project project = projectDAO.getAssignedProjectByPractitionerID(9);
-        assertNotNull(project);
+        Project project = projectDAO.getAssignedProjectByPractitionerID(idPractitioner);
+        int expected = 1;
+        int actual = project.getId();
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void testGetAllAvailableProjectsFromLastCourse() throws Exception {
+    public void gtestGetAllAvailableProjectsFromLastCourse() throws Exception {
         ProjectDAO projectDAO = new ProjectDAO();
-        List<Project> projectsAvailableFromLastCourse = projectDAO.getAllAvailableProjectsFromLastCourse();
-        assertNotNull(projectsAvailableFromLastCourse);
+        int expected = 1;
+        int actual = projectDAO.getAllAvailableProjectsFromLastCourse().size();
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void testGetAllProjectsFromLastCourse() throws Exception {
+    public void gtestGetAllProjectsFromLastCourse() throws Exception {
         ProjectDAO projectDAO = new ProjectDAO();
-        List<Project> projectsFromLastCourse = projectDAO.getAllProjectsFromLastCourse();
-        assertNotNull(projectsFromLastCourse);
+        int expected = 2;
+        int actual = projectDAO.getAllProjectsFromLastCourse().size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void removeProjectByID() {
+        ProjectDAO projectDAO = new ProjectDAO();
+        assertTrue(projectDAO.removeProjectByID(idProject));
     }
 
 } 
