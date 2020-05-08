@@ -1,6 +1,7 @@
 package org.domain;
 
 public class Delivery {
+    private int id;
     private float score;
     private String observation;
     private Document document;
@@ -13,6 +14,14 @@ public class Delivery {
 
     public void setScore(float score) {
         this.score = score;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getObservation() {
@@ -50,7 +59,8 @@ public class Delivery {
     @Override
     public String toString() {
         return "Delivery{" +
-                "score=" + score +
+                "id=" + id +
+                ", score=" + score +
                 ", observation='" + observation + '\'' +
                 ", document=" + document +
                 ", practitioner=" + practitioner +

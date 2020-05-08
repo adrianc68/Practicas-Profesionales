@@ -2,7 +2,7 @@ package org.domain;
 
 public class Coordinator extends Person {
     private int cubicle;
-    private String staff_number;
+    private String staffNumber;
 
     public int getCubicle() {
         return cubicle;
@@ -12,19 +12,19 @@ public class Coordinator extends Person {
         this.cubicle = cubicle;
     }
 
-    public String getStaff_number() {
-        return staff_number;
+    public String getStaffNumber() {
+        return staffNumber;
     }
 
-    public void setStaff_number(String staff_number) {
-        this.staff_number = staff_number;
+    public void setStaffNumber(String staffNumber) {
+        this.staffNumber = staffNumber;
     }
 
     @Override
     public String toString() {
         return "Coordinator{" +
                 "cubicle=" + cubicle +
-                ", staff_number='" + staff_number + '\'' +
+                ", staffNumber='" + staffNumber + '\'' +
                 ", id=" + id +
                 ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
