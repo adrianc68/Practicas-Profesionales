@@ -1,8 +1,9 @@
-package org.gui.users.coordinator.project;
+package org.gui.users.coordinator.practitioner.assignproject.assignother;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,9 +19,7 @@ import javafx.stage.Stage;
 import org.database.dao.ProjectDAO;
 import org.domain.Project;
 import org.gui.resources.card.ProjectCard;
-import org.gui.users.coordinator.project.registerproject.RegisterProjectController;
-import org.gui.users.coordinator.project.removeproject.RemoveProjectController;
-import org.gui.users.coordinator.project.updateproject.UpdateProjectController;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -28,7 +27,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ProjectController implements Initializable {
+public class AssignOtherProject implements Initializable {
     private ProjectCard selectedProjectCard;
 
     @FXML
@@ -84,65 +83,29 @@ public class ProjectController implements Initializable {
         setProjectsFromDatabaseToScrollPane();
     }
 
+    public ProjectCard getSelectedProjectCard() {
+        return selectedProjectCard;
+    }
+
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/users/coordinator/project/ProjectVista.fxml") );
+        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/users/coordinator/practitioner/assignproject/assignother/AssignOtherProjectVista.fxml") );
         loader.setController(this);
         Parent root = null;
         try{
             root = loader.load();
         } catch(IOException ioe) {
-            Logger.getLogger(ProjectController.class.getName()).log(Level.WARNING, null, ioe);
+            Logger.getLogger( AssignOtherProject.class.getName() ).log(Level.WARNING, null, ioe);
         }
         Stage projectStage = new Stage();
         projectStage.setScene( new Scene(root) );
-        projectStage.show();
+        projectStage.showAndWait();
     }
 
-    @FXML
-    void addButtonPressed(ActionEvent event) {
-        rootPane.setDisable(true);
-        RegisterProjectController registerProjectController = new RegisterProjectController();
-        registerProjectController.showStage();
-        if( registerProjectController.getAddOperationStatus() ) {
-            addProjectInACardToScrollPane( registerProjectController.getNewProject() );
-        }
-        rootPane.setDisable(false);
-    }
+
 
     @FXML
-    void removeButtonPressed(ActionEvent event) {
-        if(selectedProjectCard != null){
-            rootPane.setDisable(true);
-            RemoveProjectController removeProjectController = new RemoveProjectController( selectedProjectCard.getProject() );
-            removeProjectController.showStage();
-            if( removeProjectController.getRemoveOperationStatus() ) {
-                System.out.println(selectedProjectCard);
-                projectsPane.getChildren().remove(selectedProjectCard);
-                selectedProjectCard = null;
-            }
-            rootPane.setDisable(false);
-        }
-    }
-
-    @FXML
-    void updateButtonPressed(ActionEvent event) {
-        if(selectedProjectCard != null) {
-            rootPane.setDisable(true);
-            UpdateProjectController updateProjectController = new UpdateProjectController( selectedProjectCard.getProject() );
-            updateProjectController.showStage();
-            if( updateProjectController.getUpdateOperationStatus() ) {
-                selectedProjectCard.setProject( updateProjectController.getSelectedProject() );
-                selectedProjectCard.repaint();
-                setProjectInformationToLabels( selectedProjectCard.getProject() );
-            }
-            rootPane.setDisable(false);
-        }
-    }
-
-    @FXML
-    void cancelButtonPressed(ActionEvent event) {
-        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.close();
+    void assignButtonPressed(ActionEvent event) {
+        closeStage(event);
     }
 
     private void setProjectsFromDatabaseToScrollPane() {
@@ -190,6 +153,11 @@ public class ProjectController implements Initializable {
         ObservableList<String> responsabilitiesObservableList = FXCollections.observableArrayList();
         responsabilitiesObservableList.addAll( project.getResponsibilities() );
         responsabilitiesListView.setItems(responsabilitiesObservableList);
+    }
+
+    private void closeStage(Event event) {
+        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
+        stage.close();
     }
 
 }

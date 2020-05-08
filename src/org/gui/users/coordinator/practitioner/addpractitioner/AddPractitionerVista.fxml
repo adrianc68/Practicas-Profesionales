@@ -45,13 +45,13 @@
                                           <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                                              <children>
                                                 <Label text="Nombre practicante" />
-                                                <TextField fx:id="practitionerNameInput" prefHeight="42.0" />
+                                                <TextField fx:id="practitionerNameTextField" prefHeight="42.0" />
                                              </children>
                                           </VBox>
                                           <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1">
                                              <children>
                                                 <Label text="Telefono" />
-                                                <TextField fx:id="practitionerPhoneNumberInput" prefHeight="42.0" />
+                                                <TextField fx:id="practitionerPhoneNumberTextField" prefHeight="42.0" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -59,13 +59,13 @@
                                     <VBox alignment="CENTER_LEFT" prefHeight="73.0" prefWidth="463.0" spacing="10.0">
                                        <children>
                                           <Label text="Correo electronico" />
-                                          <TextField fx:id="practitionerEmailInput" maxHeight="42.0" minHeight="42.0" prefHeight="42.0" />
+                                          <TextField fx:id="practitionerEmailTextField" maxHeight="42.0" minHeight="42.0" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" prefHeight="73.0" prefWidth="463.0" spacing="10.0">
                                        <children>
                                           <Label text="Matricula" />
-                                          <TextField fx:id="practitionerEnrollmentInput" maxHeight="42.0" minHeight="42.0" prefHeight="42.0" />
+                                          <TextField fx:id="practitionerEnrollmentTextField" maxHeight="42.0" minHeight="42.0" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                  </children>

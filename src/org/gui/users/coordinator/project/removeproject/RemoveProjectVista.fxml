@@ -42,7 +42,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="259.0">
                      <children>
-                        <TextField fx:id="confirmationInputField" prefHeight="46.0" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="confirmationTextField" prefHeight="46.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="259.0" VBox.vgrow="ALWAYS">

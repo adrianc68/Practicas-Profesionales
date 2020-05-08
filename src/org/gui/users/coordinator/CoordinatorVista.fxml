@@ -31,7 +31,7 @@
                            <children>
                               <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../resources/profilePictureDefault.png" />
+                                    <Image url="@../../resources/images/profilePictureDefault.png" />
                                  </image></ImageView>
                            </children>
                         </VBox>
@@ -61,11 +61,6 @@
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#projectButtonPressed" prefHeight="59.0" prefWidth="117.0" text="Proyectos" />
                                     <Button mnemonicParsing="false" onAction="#practitionerButtonPressed" prefHeight="59.0" prefWidth="117.0" text="Practicantes" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="70.0" prefWidth="469.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="117.0" text="Indicadores" />
                                  </children>
                               </HBox>
                            </children>

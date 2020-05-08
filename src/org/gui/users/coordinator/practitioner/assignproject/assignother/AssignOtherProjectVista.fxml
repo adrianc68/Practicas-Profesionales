@@ -116,10 +116,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" minHeight="99.0" minWidth="1053.0" prefHeight="100.0" prefWidth="200.0" spacing="35.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="59.0" prefWidth="117.0" text="Cancelar" />
-                              <Button mnemonicParsing="false" onAction="#removeButtonPressed" prefHeight="59.0" prefWidth="117.0" text="Eliminar proyecto" textAlignment="CENTER" wrapText="true" />
-                              <Button mnemonicParsing="false" onAction="#updateButtonPressed" prefHeight="59.0" prefWidth="117.0" text="Actualizar proyecto" textAlignment="CENTER" wrapText="true" />
-                              <Button mnemonicParsing="false" onAction="#addButtonPressed" prefHeight="59.0" prefWidth="117.0" text="Registrar proyecto" textAlignment="CENTER" wrapText="true" />
+                              <Button mnemonicParsing="false" onAction="#assignButtonPressed" prefHeight="59.0" prefWidth="117.0" text="Asignar" textAlignment="CENTER" wrapText="true" />
                            </children>
                         </HBox>
                      </children>

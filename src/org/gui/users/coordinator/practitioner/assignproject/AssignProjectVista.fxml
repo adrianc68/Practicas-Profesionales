@@ -38,7 +38,7 @@
                                  <children>
                                     <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../../../resources/profilePictureDefault.png" />
+                                          <Image url="@../../../../resources/images/profilePictureDefault.png" />
                                        </image></ImageView>
                                  </children>
                               </VBox>
@@ -85,7 +85,7 @@
                                  <children>
                                     <ImageView fitHeight="99.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../../../resources/profileCompanyDefault.png" />
+                                          <Image url="@../../../../resources/images/profileCompanyDefault.png" />
                                        </image>
                                     </ImageView>
                                  </children></VBox>

@@ -1,4 +1,4 @@
-package org.gui.users.coordinator.project.registerproject;
+package org.gui.users.coordinator.project.updateproject;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,9 +20,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class RegisterProjectController implements Initializable {
-    private boolean addOperationStatus;
-    private Project newProject;
+public class UpdateProjectController implements Initializable {
+    private boolean updateOperationstatus;
+    private Project selectedProject;
     private AnchorPane firstScreen;
     private AnchorPane secondScreen;
     private AnchorPane thirdScreen;
@@ -34,35 +34,39 @@ public class RegisterProjectController implements Initializable {
     @FXML
     private Button addButton;
 
+    public UpdateProjectController(Project selectedProject) {
+        this.selectedProject = selectedProject;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        screenController = new ScreenController();
+        screenController = new ScreenController(selectedProject);
         firstScreen = loadFXMLScreen("/org/gui/users/coordinator/project/editionproject/screens/firstscreen/FirstScreenVista.fxml");
         secondScreen = loadFXMLScreen("/org/gui/users/coordinator/project/editionproject/screens/secondscreen/SecondScreenVista.fxml");
         thirdScreen = loadFXMLScreen("/org/gui/users/coordinator/project/editionproject/screens/thirdscreen/ThirdScreenVista.fxml");
         setScreenAndButtonText(firstScreen, "Siguiente");
     }
 
-    public Project getNewProject() {
-        return newProject;
+    public Project getSelectedProject() {
+        return selectedProject;
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/users/coordinator/project/registerproject/RegisterProjectVista.fxml") );
+        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/users/coordinator/project/updateproject/UpdateProjectVista.fxml") );
         loader.setController(this);
         Parent root = null;
         try{
             root = loader.load();
         } catch(IOException ioe) {
-            Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, ioe);
+            Logger.getLogger( UpdateProjectController.class.getName() ).log(Level.WARNING, null, ioe);
         }
-        Stage registerProject = new Stage();
-        registerProject.setScene( new Scene(root) );
-        registerProject.showAndWait();
+        Stage udpateProject = new Stage();
+        udpateProject.setScene( new Scene(root) );
+        udpateProject.showAndWait();
     }
 
-    public boolean getAddOperationStatus() {
-        return addOperationStatus;
+    public boolean getUpdateOperationStatus() {
+        return updateOperationstatus;
     }
 
     @FXML
@@ -82,37 +86,22 @@ public class RegisterProjectController implements Initializable {
 
     @FXML
     void cancelButtonPressed(ActionEvent event) {
-        addOperationStatus = false;
+        updateOperationstatus = false;
         closeStage(event);
     }
 
     @FXML
     void nextButtonPressed(ActionEvent event) {
         if(registrationPane.getChildren().get(0) == thirdScreen) {
-            if(screenController.isInputDataValid() ) {
-                addProjectToDatabase();
+            if( screenController.isInputDataValid() ) {
+                updateProjectInDatabase();
                 closeStage(event);
             }
         } else if(registrationPane.getChildren().get(0) == secondScreen) {
-                setScreenAndButtonText(thirdScreen, "Registrar");
-            } else {
-                setScreenAndButtonText(secondScreen, "Siguiente");
-            }
-    }
-
-    private void addProjectToDatabase() {
-        newProject = screenController.getNewProject();
-        int idProject = 0;
-        idProject = new ProjectDAO().addProject(newProject);
-        newProject.setId(idProject);
-        // T-O Ternary Operator !
-        addOperationStatus = (idProject == 0) ? false : true ;
-    }
-
-    private void setScreenAndButtonText(AnchorPane anchorPane, String buttonText) {
-        addButton.setText(buttonText);
-        registrationPane.getChildren().clear();
-        registrationPane.getChildren().add(anchorPane);
+            setScreenAndButtonText(thirdScreen, "Actualizar");
+        } else {
+            setScreenAndButtonText(secondScreen, "Siguiente");
+        }
     }
 
     private AnchorPane loadFXMLScreen(String sourcePath) {
@@ -122,9 +111,23 @@ public class RegisterProjectController implements Initializable {
         try {
             pane = loader.load();
         } catch (IOException e) {
-            Logger.getLogger(RegisterProjectController.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger(UpdateProjectController.class.getName()).log(Level.WARNING, null, e);
         }
         return pane;
+    }
+
+    private void setScreenAndButtonText(AnchorPane anchorPane, String buttonText) {
+        addButton.setText(buttonText);
+        registrationPane.getChildren().clear();
+        registrationPane.getChildren().add(anchorPane);
+    }
+
+    private void updateProjectInDatabase() {
+        int idProject = selectedProject.getId();
+        selectedProject = screenController.getNewProject();
+        selectedProject.setId(idProject);
+        ProjectDAO projectDAO = new ProjectDAO();
+        updateOperationstatus = projectDAO.updateProjectInformation(selectedProject);
     }
 
     private void closeStage(ActionEvent event) {

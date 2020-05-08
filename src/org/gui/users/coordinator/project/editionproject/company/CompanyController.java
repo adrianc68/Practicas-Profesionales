@@ -1,6 +1,7 @@
-package org.gui.users.coordinator.project.registerproject.company;
+package org.gui.users.coordinator.project.editionproject.company;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,12 +11,12 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.database.dao.CompanyDAO;
 import org.domain.Company;
-import org.gui.users.coordinator.card.CompanyCard;
-import org.gui.users.coordinator.project.registerproject.company.addcompany.AddCompanyController;
-
+import org.gui.resources.card.CompanyCard;
+import org.gui.users.coordinator.project.editionproject.company.addcompany.AddCompanyController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -38,7 +39,7 @@ public class CompanyController implements Initializable {
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/users/coordinator/project/registerproject/company/CompanyVista.fxml") );
+        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/users/coordinator/project/editionproject/company/CompanyVista.fxml") );
         loader.setController(this);
         Parent root = null;
         try{
@@ -47,6 +48,7 @@ public class CompanyController implements Initializable {
             Logger.getLogger(CompanyController.class.getName()).log(Level.WARNING, null, ioe);
         }
         Stage companyStage = new Stage();
+        companyStage.initModality(Modality.APPLICATION_MODAL);
         companyStage.setScene( new Scene(root) );
         companyStage.showAndWait();
     }
@@ -60,7 +62,7 @@ public class CompanyController implements Initializable {
         rootPane.setDisable(true);
         AddCompanyController addCompanyController = new AddCompanyController();
         addCompanyController.showStage();
-        if( addCompanyController.getStatus() ) {
+        if( addCompanyController.getAddOperationStatus() ) {
             addCompanyInACardToScrollPane( addCompanyController.getNewCompany() );
         }
         rootPane.setDisable(false);
@@ -84,13 +86,12 @@ public class CompanyController implements Initializable {
         CompanyCard card = new CompanyCard(company);
         card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
             selectedCompanyCard = card;
-            Stage stage = ( (Stage) ( (Node) mouseEvent.getSource() ).getScene().getWindow() );
-            stage.close();
+            closeStage(mouseEvent);
         });
         companiesPane.getChildren().add(card);
     }
 
-    private void closeStage(ActionEvent event) {
+    private void closeStage(Event event) {
         Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
         stage.close();
     }

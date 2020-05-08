@@ -47,49 +47,49 @@
                                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                                        <children>
                                           <Label text="Nombre de la empresa" />
-                                          <TextField fx:id="companyNameInput" prefHeight="42.0" />
+                                          <TextField fx:id="companyNameTextField" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1">
                                        <children>
                                           <Label text="Direccion" />
-                                          <TextField fx:id="companyAddressInput" prefHeight="42.0" />
+                                          <TextField fx:id="companyAddressTextField" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
                                        <children>
                                           <Label text="Ciudad" />
-                                          <TextField fx:id="companyCityInput" prefHeight="42.0" />
+                                          <TextField fx:id="companyCityTextField" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                        <children>
                                           <Label text="Estado" />
-                                          <TextField fx:id="companyStateInput" prefHeight="42.0" />
+                                          <TextField fx:id="companyStateTextField" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
                                        <children>
                                           <Label text="Correo" />
-                                          <TextField fx:id="companyEmailInput" prefHeight="42.0" />
+                                          <TextField fx:id="companyEmailTextField" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                        <children>
                                           <Label text="Telefono" />
-                                          <TextField fx:id="companyPhoneNumberInput" prefHeight="42.0" />
+                                          <TextField fx:id="companyPhoneNumberTextField" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
                                        <children>
                                           <Label text="Usuarios directos" />
-                                          <TextField fx:id="companyDirectUsersInput" prefHeight="42.0" />
+                                          <TextField fx:id="companyDirectUsersTextField" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                        <children>
                                           <Label text="Usuarios indirectos" />
-                                          <TextField fx:id="companyIndirectUsersInput" prefHeight="42.0" />
+                                          <TextField fx:id="companyIndirectUsersTextField" prefHeight="42.0" />
                                        </children>
                                     </VBox>
                                  </children>

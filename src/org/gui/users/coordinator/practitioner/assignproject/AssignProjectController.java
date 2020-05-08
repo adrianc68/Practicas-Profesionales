@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AssignProjectController implements Initializable {
-    private boolean status;
+    private boolean assignProjectStatus;
     private Practitioner practitioner;
     private Project project;
 
@@ -58,19 +58,19 @@ public class AssignProjectController implements Initializable {
     @FXML
     private Label projectEmailResponsableLabel;
 
+    public AssignProjectController(Project project, Practitioner practitioner) {
+        this.project = project;
+        this.practitioner = practitioner;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setPractitionerToCard();
         setProjectToCard();
     }
 
-    public AssignProjectController(Project project, Practitioner practitioner) {
-        this.project = project;
-        this.practitioner = practitioner;
-    }
-
-    public boolean getStatusAssignation() {
-        return status;
+    public boolean getAssignationOperationStatus() {
+        return assignProjectStatus;
     }
 
     public void showStage() {
@@ -80,7 +80,7 @@ public class AssignProjectController implements Initializable {
         try{
             root = loader.load();
         } catch(IOException ioe) {
-            Logger.getLogger(AssignProjectController.class.getName()).log(Level.WARNING, null, ioe);
+            Logger.getLogger( AssignProjectController.class.getName()).log(Level.WARNING, null, ioe);
         }
         Stage assignProjectStage = new Stage();
         assignProjectStage.initModality(Modality.APPLICATION_MODAL);
@@ -92,7 +92,7 @@ public class AssignProjectController implements Initializable {
     @FXML
     void assignProjectButtonPressed(ActionEvent event) {
         PractitionerDAO practitionerDAO = new PractitionerDAO();
-        status = practitionerDAO.assignProjectToPractitioner(practitioner.getId(), project.getId());
+        assignProjectStatus = practitionerDAO.assignProjectToPractitioner( practitioner.getId(), project.getId() );
         closeStage(event);
     }
 
@@ -102,21 +102,21 @@ public class AssignProjectController implements Initializable {
     }
 
     private void setPractitionerToCard() {
-        practitionerNameLabel.setText(practitioner.getName());
-        practitionerEnrollmentLabel.setText(practitioner.getEnrollment());
-        practitionerPhoneNumber.setText(practitioner.getPhoneNumber());
-        ObservableList<Project> observableList = FXCollections.observableArrayList();
-        observableList.setAll(practitioner.getSelectedProjects());
-        practitionerListView.setItems(observableList);
+        practitionerNameLabel.setText( practitioner.getName() );
+        practitionerEnrollmentLabel.setText( practitioner.getEnrollment() );
+        practitionerPhoneNumber.setText( practitioner.getPhoneNumber() );
+        ObservableList<Project> selectedProjectsObservableList = FXCollections.observableArrayList();
+        selectedProjectsObservableList.setAll( practitioner.getSelectedProjects() );
+        practitionerListView.setItems( selectedProjectsObservableList );
     }
 
     private void setProjectToCard() {
-        projectNameLabel.setText(project.getName());
-        projectScheduleLabel.setText(project.getSchedule());
-        projectDescriptionLabel.setText(project.getGeneralDescription());
-        projectGeneralPurposeLabel.setText(project.getGeneralPurpose());
-        projectCompanyNameLabel.setText(project.getCompany().getName());
-        projectEmailResponsableLabel.setText(project.getEmailResponsable());
+        projectNameLabel.setText( project.getName() );
+        projectScheduleLabel.setText( project.getSchedule() );
+        projectDescriptionLabel.setText( project.getGeneralDescription() );
+        projectGeneralPurposeLabel.setText( project.getGeneralPurpose() );
+        projectCompanyNameLabel.setText( project.getCompany().getName() );
+        projectEmailResponsableLabel.setText( project.getEmailResponsable() );
     }
 
     private void closeStage(ActionEvent event) {

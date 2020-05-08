@@ -31,37 +31,37 @@
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Nombre del proyecto" />
-                              <TextField fx:id="projectNameInput" prefHeight="42.0" />
+                              <TextField fx:id="projectNameTextField" maxHeight="42.0" maxWidth="214.0" minHeight="42.0" minWidth="214.0" prefHeight="42.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1">
                            <children>
                               <Label text="Horario" />
-                              <TextField fx:id="projectScheduleInput" prefHeight="42.0" />
+                              <TextField fx:id="projectScheduleTextField" maxHeight="42.0" maxWidth="214.0" minHeight="42.0" minWidth="214.0" prefHeight="42.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
                            <children>
                               <Label text="Nombre del responsable" />
-                              <TextField fx:id="projectResponsableNameInput" prefHeight="42.0" />
+                              <TextField fx:id="projectResponsableNameTextField" maxHeight="42.0" maxWidth="214.0" minHeight="42.0" minWidth="214.0" prefHeight="42.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
                               <Label text="Cargo del responsable" />
-                              <TextField fx:id="projectResponsableChargeInput" prefHeight="42.0" />
+                              <TextField fx:id="projectResponsableChargeTextField" maxHeight="42.0" maxWidth="214.0" minHeight="42.0" minWidth="214.0" prefHeight="42.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
                            <children>
                               <Label text="Correo del responsable" />
-                              <TextField fx:id="projectResponsableEmailInput" prefHeight="42.0" />
+                              <TextField fx:id="projectResponsableEmailTextField" maxHeight="42.0" maxWidth="214.0" minHeight="42.0" minWidth="214.0" prefHeight="42.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
                               <Label text="Duracion del proyecto" />
-                              <TextField fx:id="projectDurationInput" prefHeight="42.0" />
+                              <TextField fx:id="projectDurationTextField" maxWidth="214.0" minHeight="42.0" minWidth="214.0" prefHeight="42.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                      </children>
@@ -69,13 +69,13 @@
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                      <children>
                         <Label text="Descripción general" />
-                        <TextArea fx:id="projectDescriptionInput" prefHeight="102.0" prefWidth="498.0" wrapText="true" />
+                        <TextArea fx:id="projectDescriptionTextArea" prefHeight="102.0" prefWidth="498.0" wrapText="true" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                      <children>
                         <Label text="Proposito general" />
-                        <TextArea fx:id="projectPurposeInput" prefHeight="102.0" prefWidth="498.0" wrapText="true" />
+                        <TextArea fx:id="projectPurposeTextArea" prefHeight="102.0" prefWidth="498.0" wrapText="true" />
                      </children>
                   </VBox>
                </children>

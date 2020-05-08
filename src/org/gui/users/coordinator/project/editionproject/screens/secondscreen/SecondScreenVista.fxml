@@ -34,37 +34,37 @@
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Objetivos mediatos" />
-                              <ListView fx:id="mediateObjetives" prefHeight="46.0" prefWidth="214.0" />
+                              <ListView fx:id="mediateObjetivesListView" prefHeight="46.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
                            <children>
                               <Label text="Recursos" />
-                              <ListView fx:id="resources" prefHeight="46.0" prefWidth="214.0" />
+                              <ListView fx:id="resourcesListView" prefHeight="46.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
                            <children>
                               <Label text="Actividades" />
-                              <ListView fx:id="activities" prefHeight="46.0" prefWidth="214.0" />
+                              <ListView fx:id="activitiesListView" prefHeight="46.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
                            <children>
                               <Label text="Objetivos inmediatos" />
-                              <ListView fx:id="immediateObjetives" prefHeight="46.0" prefWidth="214.0" />
+                              <ListView fx:id="immediateObjetivesListView" prefHeight="46.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="4">
                            <children>
                               <Label text="Metodologias" />
-                              <ListView fx:id="methodologies" prefHeight="46.0" prefWidth="214.0" />
+                              <ListView fx:id="methodologiesListView" prefHeight="46.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="5">
                            <children>
                               <Label text="Responsabilidades" />
-                              <ListView fx:id="responsabilities" prefHeight="46.0" prefWidth="214.0" />
+                              <ListView fx:id="responsabilitiesListView" prefHeight="46.0" prefWidth="214.0" />
                            </children>
                         </VBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="35.0" GridPane.columnIndex="1">

@@ -17,10 +17,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RemovePractitionerController {
-    private boolean status;
+    private boolean removeOperationStatus;
     private Practitioner practitionerToBeRemoved;
     @FXML
-    private TextField confirmationInputField;
+    private TextField confirmationTextField;
 
     public RemovePractitionerController(Practitioner practitionerToBeRemoved) {
         this.practitionerToBeRemoved = practitionerToBeRemoved;
@@ -33,7 +33,7 @@ public class RemovePractitionerController {
         try{
             root = loader.load();
         } catch(IOException ioe) {
-            Logger.getLogger(RemovePractitionerController.class.getName()).log(Level.WARNING, null, ioe);
+            Logger.getLogger( RemovePractitionerController.class.getName() ).log(Level.WARNING, null, ioe);
         }
         Stage removeStage = new Stage();
         removeStage.initModality(Modality.APPLICATION_MODAL);
@@ -42,15 +42,15 @@ public class RemovePractitionerController {
         removeStage.showAndWait();
     }
 
-    public boolean getStatusRemoveOperation() {
-        return status;
+    public boolean getRemoveOperationStatus() {
+        return removeOperationStatus;
     }
 
     @FXML
     void removeButtonPressed(ActionEvent event) {
-        if(confirmationInputField.getText().equals("ELIMINAR")){
+        if(confirmationTextField.getText().equals("ELIMINAR")){
             PractitionerDAO practitionerDAO = new PractitionerDAO();
-            status = practitionerDAO.removePractitioner(practitionerToBeRemoved.getId());
+            removeOperationStatus = practitionerDAO.removePractitioner( practitionerToBeRemoved.getId() );
             closeStage(event);
         }
     }

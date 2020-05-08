@@ -17,10 +17,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RemoveProjectController {
-    private boolean status;
+    private boolean removeOperationStatus;
     private Project project;
     @FXML
-    private TextField confirmationInputField;
+    private TextField confirmationTextField;
 
     public RemoveProjectController(Project project) {
         this.project = project;
@@ -42,15 +42,15 @@ public class RemoveProjectController {
         removeStage.showAndWait();
     }
 
-    public boolean getStatusRemoveOperation() {
-        return status;
+    public boolean getRemoveOperationStatus() {
+        return removeOperationStatus;
     }
 
     @FXML
     void removeButtonPressed(ActionEvent event) {
-        if(confirmationInputField.getText().equals("ELIMINAR")){
+        if( confirmationTextField.getText().equals("ELIMINAR") ){
             ProjectDAO projectDAO = new ProjectDAO();
-            status = projectDAO.removeProjectByID(project.getId());
+            removeOperationStatus = projectDAO.removeProjectByID( project.getId() );
             closeStage(event);
         }
     }

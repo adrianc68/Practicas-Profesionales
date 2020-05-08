@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -26,7 +27,8 @@ import org.domain.Project;
 import org.gui.users.coordinator.practitioner.addpractitioner.AddPractitionerController;
 import org.gui.users.coordinator.practitioner.assignprofessor.AssignProfessorController;
 import org.gui.users.coordinator.practitioner.assignproject.AssignProjectController;
-import org.gui.users.coordinator.card.PractitionerCard;
+import org.gui.resources.card.PractitionerCard;
+import org.gui.users.coordinator.practitioner.assignproject.assignother.AssignOtherProject;
 import org.gui.users.coordinator.practitioner.removepractitioner.RemovePractitionerController;
 
 public class PractitionerController implements Initializable {
@@ -56,6 +58,7 @@ public class PractitionerController implements Initializable {
             Logger.getLogger(PractitionerController.class.getName()).log(Level.WARNING, null, ioe);
         }
         Stage practitionerStage = new Stage();
+        practitionerStage.initModality(Modality.APPLICATION_MODAL);
         practitionerStage.setScene( new Scene(root) );
         practitionerStage.show();
     }
@@ -66,7 +69,7 @@ public class PractitionerController implements Initializable {
             rootPane.setDisable(true);
             RemovePractitionerController removePractitionerController = new RemovePractitionerController( practitionerCardSelected.getPractitioner() );
             removePractitionerController.showStage();
-            if( removePractitionerController.getStatusRemoveOperation() ) {
+            if( removePractitionerController.getRemoveOperationStatus() ) {
                 practitionersPane.getChildren().remove(practitionerCardSelected);
                 practitionerCardSelected = null;
                 practitionerSelectedLabel.setText("Eliminado");
@@ -81,7 +84,7 @@ public class PractitionerController implements Initializable {
             rootPane.setDisable(true);
             AssignProfessorController assignProfessorController = new AssignProfessorController(practitionerCardSelected.getPractitioner());
             assignProfessorController.showStage();
-            if( assignProfessorController.getStatusAssignOperation() ) {
+            if( assignProfessorController.getAssignOperationStatus() ) {
                 practitionerCardSelected.getPractitioner().setProfessor(assignProfessorController.getProfessorCardSelected().getProfessor());
                 practitionerCardSelected.repaint();
             }
@@ -94,7 +97,7 @@ public class PractitionerController implements Initializable {
         rootPane.setDisable(true);
         AddPractitionerController addPractitionerController = new AddPractitionerController();
         addPractitionerController.showStage();
-        if(addPractitionerController.getStatus() ) {
+        if(addPractitionerController.getAddOperationStatus() ) {
             Practitioner newPractitioner = addPractitionerController.getNewPractitioner();
             int idPractitioner = newPractitioner.getId();
             newPractitioner.setProject( new ProjectDAO().getAssignedProjectByPractitionerID(idPractitioner) );
@@ -126,26 +129,28 @@ public class PractitionerController implements Initializable {
 
     private void addPractitionerInACardToScrollPane(Practitioner practitioner) {
         PractitionerCard card = new PractitionerCard(practitioner);
-        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
+        card.setOnMouseReleased((MouseEvent mouseEvent) -> {
             practitionerCardSelected = card;
-            practitionerSelectedLabel.setText( practitionerCardSelected.getPractitioner().getName() );
+            practitionerSelectedLabel.setText(practitionerCardSelected.getPractitioner().getName());
         });
-        card.getButton().setOnMouseReleased( (MouseEvent mouseEvent) -> {
-            Project selectedFromList = card.getListView().getSelectionModel().getSelectedItem();
-            if(selectedFromList != null) {
-                rootPane.setDisable(true);
-                AssignProjectController assignProjectController = new AssignProjectController(selectedFromList, practitioner);
-                assignProjectController.showStage();
-                if( assignProjectController.getStatusAssignation() ) {
-                    int index = practitionersPane.getChildren().indexOf(card);
-                    practitionersPane.getChildren().remove(index);
-                    practitioner.setProject(selectedFromList);
-                    card.setPractitioner(practitioner);
-                    card.repaint();
-                    practitionersPane.getChildren().add(index, card);
-                }
-                rootPane.setDisable(false);
+
+        card.getButton().setOnMouseReleased((MouseEvent mouseEvent) -> {
+            Project projectToAssign = card.getListView().getSelectionModel().getSelectedItem();
+            rootPane.setDisable(true);
+            if (projectToAssign == null) {
+                AssignOtherProject assignOtherProject = new AssignOtherProject();
+                assignOtherProject.showStage();
+                projectToAssign = assignOtherProject.getSelectedProjectCard().getProject();
             }
+            AssignProjectController assignProjectController = new AssignProjectController(projectToAssign, card.getPractitioner());
+            assignProjectController.showStage();
+            if (assignProjectController.getAssignationOperationStatus()) {
+                card.getPractitioner().setProject(projectToAssign);
+                card.repaint();
+                card.addAssignButton();
+            }
+            rootPane.setDisable(false);
+
         });
         practitionersPane.getChildren().add(card);
     }

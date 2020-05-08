@@ -19,7 +19,7 @@ import org.database.dao.PractitionerDAO;
 import org.database.dao.ProfessorDAO;
 import org.domain.Practitioner;
 import org.domain.Professor;
-import org.gui.users.coordinator.card.ProfessorCard;
+import org.gui.resources.card.ProfessorCard;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AssignProfessorController implements Initializable {
-    private boolean status;
+    private boolean assignOperationStatus;
     private ProfessorCard professorCardSelected;
     private Practitioner practitioner;
 
@@ -41,13 +41,13 @@ public class AssignProfessorController implements Initializable {
     @FXML
     private Label professorSelectedLabel;
 
+    public AssignProfessorController(Practitioner practitioner) {
+        this.practitioner = practitioner;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setProfessorsToScrollPaneFromDatabase();
-    }
-
-    public AssignProfessorController(Practitioner practitioner) {
-        this.practitioner = practitioner;
     }
 
     public void showStage() {
@@ -66,8 +66,8 @@ public class AssignProfessorController implements Initializable {
         professorStage.showAndWait();
     }
 
-    public boolean getStatusAssignOperation() {
-        return status;
+    public boolean getAssignOperationStatus() {
+        return assignOperationStatus;
     }
 
     public ProfessorCard getProfessorCardSelected() {
@@ -81,17 +81,17 @@ public class AssignProfessorController implements Initializable {
 
     private void assignProfessorToDatabase() {
             PractitionerDAO practitionerDAO = new PractitionerDAO();
-            status = practitionerDAO.assignProfessorToPractitioner(practitioner.getId(), professorCardSelected.getProfessor().getId());
+            assignOperationStatus = practitionerDAO.assignProfessorToPractitioner( practitioner.getId(), professorCardSelected.getProfessor().getId() );
     }
 
     private void addProfessorInACardToScrollPane(Professor professor) {
         ProfessorCard card = new ProfessorCard(professor);
-        card.getVBox().setOnMouseReleased( (MouseEvent mouseEvent) -> {
+        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
             professorCardSelected = card;
             assignProfessorToDatabase();
             closeStage(mouseEvent);
         });
-        professorsPane.getChildren().add(card.getVBox());
+        professorsPane.getChildren().add(card);
     }
 
     private void setProfessorsToScrollPaneFromDatabase() {
