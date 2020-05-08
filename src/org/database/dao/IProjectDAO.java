@@ -30,7 +30,7 @@ public interface IProjectDAO {
      * This method receive a project and replaces the information in database
      * </p>
      * @param project the project with updated information.
-     * @return boolean true if 1 o more than 1 rows are affected
+     * @return boolean true if project was removed.
      */
     boolean updateProjectInformation(Project project);
 

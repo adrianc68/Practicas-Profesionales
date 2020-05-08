@@ -87,7 +87,7 @@ public class CompanyDAO implements ICompanyDAO{
                 coordinator.setEmail( result.getString("PERSCORD.email") );
                 coordinator.setCourse(course);
                 coordinator.setCubicle( result.getInt("CORD.cubicle") );
-                coordinator.setStaff_number( result.getString("CORD.staff_number") );
+                coordinator.setStaffNumber( result.getString("CORD.staff_number") );
                 Company company = new Company();
                 company.setId( result.getInt("COMP.id_company") );
                 company.setName( result.getString("COMP.name") );

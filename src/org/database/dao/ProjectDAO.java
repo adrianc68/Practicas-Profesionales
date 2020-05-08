@@ -6,10 +6,8 @@ import org.domain.Course;
 import org.domain.Project;
 import org.domain.Sector;
 import org.database.Database;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -84,22 +82,24 @@ public class ProjectDAO implements IProjectDAO {
      * It's used by Coordinator when he needs to remove a project for any reason.
      * </p>
      * @param idProject the project's id to be removed from database.
-     * @return boolean true if 1 o more than 1 rows are affected
+     * @return boolean true if project was removed.
      */
     @Override
     public boolean removeProjectByID(int idProject) {
-        int rowsAffected = 0;
+        int idRemove = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
-            String statement = "CALL removeProject(?)";
-            PreparedStatement removeProject = conn.prepareStatement(statement);
+            String statement = "CALL removeProject(?, ?)";
+            CallableStatement removeProject = conn.prepareCall(statement);
             removeProject.setInt(1, idProject );
-            rowsAffected = removeProject.executeUpdate();
+            removeProject.registerOutParameter(2, Types.INTEGER);
+            removeProject.execute();
+            idRemove = removeProject.getInt("idRemove");
             conn.commit();
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected > 0;
+        return idRemove != 0;
     }
 
     /***
@@ -255,7 +255,7 @@ public class ProjectDAO implements IProjectDAO {
                 coordinator.setPhoneNumber(result.getString("PERSCORD.phoneNumber"));
                 coordinator.setEmail(result.getString("PERSCORD.email"));
                 coordinator.setCourse(course);
-                coordinator.setStaff_number(result.getString("CORD.staff_number"));
+                coordinator.setStaffNumber(result.getString("CORD.staff_number"));
                 coordinator.setCubicle(result.getInt("CORD.cubicle"));
                 Company company = new Company();
                 company.setId(result.getInt("COMP.id_company"));
@@ -324,42 +324,42 @@ public class ProjectDAO implements IProjectDAO {
             result = queryProjects.executeQuery();
             while( result.next() ) {
                 Course course = new Course();
-                course.setId(result.getInt("COUR.id_course"));
-                course.setNRC(result.getString("COUR.NRC"));
-                course.setPeriod(result.getString("COUR.Period"));
-                course.setName(result.getString("COUR.name"));
+                course.setId(result.getInt( "COUR.id_course") );
+                course.setNRC(result.getString( "COUR.NRC") );
+                course.setPeriod(result.getString( "COUR.Period") );
+                course.setName(result.getString( "COUR.name") );
                 Coordinator coordinator = new Coordinator();
-                coordinator.setId(result.getInt("PERSCORD.id_person"));
-                coordinator.setName(result.getString("PERSCORD.name"));
-                coordinator.setPhoneNumber(result.getString("PERSCORD.phoneNumber"));
-                coordinator.setEmail(result.getString("PERSCORD.email"));
+                coordinator.setId(result.getInt( "PERSCORD.id_person") );
+                coordinator.setName(result.getString( "PERSCORD.name") );
+                coordinator.setPhoneNumber(result.getString( "PERSCORD.phoneNumber") );
+                coordinator.setEmail(result.getString( "PERSCORD.email") );
                 coordinator.setCourse(course);
-                coordinator.setStaff_number(result.getString("CORD.staff_number"));
-                coordinator.setCubicle(result.getInt("CORD.cubicle"));
+                coordinator.setStaffNumber(result.getString( "CORD.staff_number") );
+                coordinator.setCubicle(result.getInt( "CORD.cubicle"));
                 Company company = new Company();
-                company.setId(result.getInt("COMP.id_company"));
-                company.setName(result.getString("COMP.name"));
-                company.setAddress(result.getString("COMP.address"));
-                company.setEmail(result.getString("COMP.email"));
-                company.setState(result.getString("COMP.state"));
-                company.setPhoneNumber(result.getString("COMP.phoneNumber"));
-                company.setDirectUsers(result.getInt("COMP.direct_users"));
-                company.setIndirectUsers(result.getInt("COMP.indirect_users"));
-                company.setSector( Sector.valueOf(result.getString("COMP.sector").toUpperCase()));
-                company.setCity(result.getString("COMP.city"));
+                company.setId(result.getInt( "COMP.id_company"));
+                company.setName(result.getString( "COMP.name"));
+                company.setAddress(result.getString( "COMP.address"));
+                company.setEmail(result.getString( "COMP.email"));
+                company.setState(result.getString( "COMP.state"));
+                company.setPhoneNumber(result.getString( "COMP.phoneNumber"));
+                company.setDirectUsers(result.getInt( "COMP.direct_users"));
+                company.setIndirectUsers(result.getInt( "COMP.indirect_users"));
+                company.setSector( Sector.valueOf(result.getString( "COMP.sector").toUpperCase()));
+                company.setCity(result.getString( "COMP.city"));
                 company.setCoordinator(coordinator);
                 company.setCourse(course);
                 Project project = new Project();
-                project.setId(result.getInt("PROJ.id_project"));
-                project.setName(result.getString("PROJ.name"));
-                project.setDuration(result.getFloat("PROJ.duration"));
-                project.setSchedule(result.getString("PROJ.schedule"));
-                project.setGeneralPurpose(result.getString("PROJ.general_purpose"));
-                project.setGeneralDescription(result.getString("PROJ.general_description"));
+                project.setId(result.getInt( "PROJ.id_project"));
+                project.setName(result.getString( "PROJ.name"));
+                project.setDuration(result.getFloat( "PROJ.duration"));
+                project.setSchedule(result.getString( "PROJ.schedule"));
+                project.setGeneralPurpose(result.getString( "PROJ.general_purpose"));
+                project.setGeneralDescription(result.getString( "PROJ.general_description"));
                 project.setCompany(company);
-                project.setChargeResponsable(result.getString("PROJ.charge_responsable"));
-                project.setNameResponsable(result.getString("PROJ.name_responsable"));
-                project.setEmailResponsable(result.getString("PROJ.email_responsable"));
+                project.setChargeResponsable(result.getString( "PROJ.charge_responsable"));
+                project.setNameResponsable(result.getString( "PROJ.name_responsable"));
+                project.setEmailResponsable(result.getString( "PROJ.email_responsable"));
                 ArrayList<String> activities = new ArrayList<>();
                 ArrayList<String> mediateObjetives = new ArrayList<>();
                 ArrayList<String> immediateObjetives = new ArrayList<>();
@@ -376,10 +376,10 @@ public class ProjectDAO implements IProjectDAO {
                 PreparedStatement queryMultivaluedAttribute = null;
                 for( Map.Entry<String, List<String>> entry : multivaluedAttributesStatementsMap.entrySet() ) {
                     queryMultivaluedAttribute = conn.prepareStatement( entry.getKey() );
-                    queryMultivaluedAttribute.setInt(1, project.getId());
+                    queryMultivaluedAttribute.setInt(1, project.getId() );
                     ResultSet resultMultivaluedAttribute = queryMultivaluedAttribute.executeQuery();
                     while( resultMultivaluedAttribute.next() ) {
-                        entry.getValue().add(resultMultivaluedAttribute.getString(1));
+                        entry.getValue().add( resultMultivaluedAttribute.getString(1) );
                     }
                 }
                 project.setActivities(activities);

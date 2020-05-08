@@ -42,7 +42,7 @@ public interface IPractitionerDAO {
      * </p>
      * @param idPractitioner the practitioner's ID
      * @param idProfessor the professor's id to be assigned to practitioner
-     * @return boolean true if 1 o more than 1 rows are affected
+     * @return boolean true if project was assigned
      */
     boolean assignProfessorToPractitioner(int idPractitioner, int idProfessor);
 

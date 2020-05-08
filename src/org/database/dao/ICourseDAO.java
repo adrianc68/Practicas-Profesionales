@@ -4,9 +4,41 @@ import org.domain.Course;
 import java.util.List;
 
 public interface ICourseDAO {
-    boolean addCourse(Course course);
+    /***
+     * Add a new educational experiencia related to professional practices
+     * <p>
+     * This method is used by Administrator when he is going to start a new course.
+     * </p>
+     * @param course
+     * @return int representing course's id
+     */
+    int addCourse(Course course);
+    /***
+     * Remove a course related to professional practices
+     * <p>
+     * This method is used by Administrator when he needs to remove a course by any reason.
+     * </p>
+     * @param idCourse
+     * @return true if course was removed from database.
+     */
     boolean removeCourseByID(int idCourse);
+
+    /***
+     * Get the last course.
+     * <p>
+     * This method is used by any user from the system when they need it for any reason.
+     * </p>
+     * @return
+     */
     Course getLastCourse();
+
+    /***
+     * Get all the courses from the system.
+     * <p>
+     * This method is used by the administrator when he needs to look up some course.
+     * </p>
+     * @return List<Course> a list containing all the courses
+     */
     List<Course> getAllCourses();
 
 }

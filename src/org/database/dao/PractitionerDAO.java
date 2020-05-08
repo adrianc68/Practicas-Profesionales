@@ -1,12 +1,12 @@
 package org.database.dao;
 
 import org.database.Database;
-import org.domain.*;
+import org.domain.Course;
+import org.domain.Delivery;
+import org.domain.Practitioner;
+import org.domain.Project;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -94,23 +94,25 @@ public class PractitionerDAO implements IPractitionerDAO {
      * </p>
      * @param idPractitioner the practitioner's ID
      * @param idProject the project's ID to be assigned to practitioner
-     * @return boolean true if 1 o more than 1 rows are affected
+     * @return boolean true if project was assigned
      */
     @Override
     public boolean assignProjectToPractitioner(int idPractitioner, int idProject) {
-        int rowsAffected = 0;
+        int idProjectAssigned = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
-            String statement = "CALL assignProject(?,?)";
-            PreparedStatement assignProject = conn.prepareStatement(statement);
+            String statement = "{CALL assignProject(?, ?, ?)}";
+            CallableStatement assignProject = conn.prepareCall(statement);
             assignProject.setInt(1, idPractitioner );
             assignProject.setInt(2, idProject );
-            rowsAffected = assignProject.executeUpdate();
+            assignProject.registerOutParameter("idProject", Types.INTEGER);
+            assignProject.execute();
             conn.commit();
+            idProjectAssigned = assignProject.getInt("idProject");
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return rowsAffected > 0;
+        return idProjectAssigned != 0;
     }
 
     /***
