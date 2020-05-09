@@ -20,7 +20,7 @@ import org.domain.Company;
 import org.domain.Project;
 import org.gui.users.coordinator.project.editionproject.screens.secondscreen.textinput.TextInputController;
 import org.gui.users.coordinator.project.editionproject.company.CompanyController;
-import org.util.Security;
+import org.util.Validator;
 
 public class ScreenController implements Initializable {
     private boolean inputDataValid;
@@ -266,21 +266,21 @@ public class ScreenController implements Initializable {
 
     private void setListenerToTextFields() {
         Map<Object[], TextField> textfields = new LinkedHashMap<>();
-        Object[] nameConstraints = {Security.PROJECT_NAME_PATTERN, Security.NAME_LENGTH};
+        Object[] nameConstraints = {Validator.PROJECT_NAME_PATTERN, Validator.NAME_LENGTH};
         textfields.put(nameConstraints, projectNameTextField);
-        Object[] scheduleConstraints = {Security.SCHEDULE_PATTERN, Security.SCHEDULE_LENGTH};
+        Object[] scheduleConstraints = {Validator.SCHEDULE_PATTERN, Validator.SCHEDULE_LENGTH};
         textfields.put(scheduleConstraints, projectScheduleTextField);
-        Object[] nameResponsableConstraints = {Security.NAME_PATTERN, Security.NAME_LENGTH};
+        Object[] nameResponsableConstraints = {Validator.NAME_PATTERN, Validator.NAME_LENGTH};
         textfields.put(nameResponsableConstraints, projectResponsableNameTextField);
-        Object[] chargeResponsableConstraints = {Security.CHARGE_RESPONSABLE_PATTERN, Security.CHARGE_RESPONSABLE_LENGTH};
+        Object[] chargeResponsableConstraints = {Validator.CHARGE_RESPONSABLE_PATTERN, Validator.CHARGE_RESPONSABLE_LENGTH};
         textfields.put(chargeResponsableConstraints, projectResponsableChargeTextField);
-        Object[] emailResponsableConstraints = {Security.EMAIL_PATTERN, Security.EMAIL_LENGTH};
+        Object[] emailResponsableConstraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH};
         textfields.put(emailResponsableConstraints, projectResponsableEmailTextField);
-        Object[] projectDurationConstraints = {Security.DURATION_PATTERN, Security.DURATION_LENGTH};
+        Object[] projectDurationConstraints = {Validator.DURATION_PATTERN, Validator.DURATION_LENGTH};
         textfields.put(projectDurationConstraints, projectDurationTextField);
         for (Map.Entry<Object[], TextField> entry : textfields.entrySet() ) {
             entry.getValue().textProperty().addListener( ((observable, oldValue, newValue) -> {
-                if( !Security.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Security.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
+                if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
                     inputDataValid = false;
                     entry.getValue().setStyle("-fx-background-color:red;");
                 } else {
@@ -293,13 +293,13 @@ public class ScreenController implements Initializable {
 
     private void setListenerToTextArea() {
         Map<Object[], TextArea> textAreas = new LinkedHashMap<>();
-        Object[] projectDescriptionConstraints = {Security.LARGE_TEXT_PATTERN, Security.LARGE_TEXT_LENGTH};
+        Object[] projectDescriptionConstraints = {Validator.LARGE_TEXT_PATTERN, Validator.LARGE_TEXT_LENGTH};
         textAreas.put(projectDescriptionConstraints, projectDescriptionTextArea);
-        Object[] projectPurposeConstraints = {Security.LARGE_TEXT_PATTERN, Security.LARGE_TEXT_LENGTH};
+        Object[] projectPurposeConstraints = {Validator.LARGE_TEXT_PATTERN, Validator.LARGE_TEXT_LENGTH};
         textAreas.put(projectPurposeConstraints, projectPurposeTextArea);
         for (Map.Entry<Object[], TextArea> entry : textAreas.entrySet() ) {
             entry.getValue().textProperty().addListener( (observable, oldValue, newValue) -> {
-                if( !Security.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Security.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
+                if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
                     inputDataValid = false;
                     entry.getValue().setStyle("-fx-background-color:red;");
                 } else {

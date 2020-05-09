@@ -7,14 +7,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.database.dao.AccessAccountDAO;
 import org.database.dao.CourseDAO;
 import org.database.dao.PractitionerDAO;
 import org.domain.Practitioner;
-import org.util.Security;
+import org.util.Cryptography;
+import org.util.Validator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -79,39 +84,55 @@ public class AddPractitionerController implements Initializable {
     @FXML
     void saveButtonPressed(ActionEvent event) {
         if(inputDataValid) {
+            addOperationStatus = false;
             newPractitioner = new Practitioner();
             newPractitioner.setName( practitionerNameTextField.getText() );
             newPractitioner.setPhoneNumber( practitionerPhoneNumberTextField.getText() );
             newPractitioner.setEmail( practitionerEmailTextField.getText() );
             newPractitioner.setEnrollment( practitionerEnrollmentTextField.getText() );
             newPractitioner.setCourse( new CourseDAO().getLastCourse() );
-            addPractitionerToDatabase();
+            PractitionerDAO practitionerDAO = new PractitionerDAO();
+            newPractitioner.setId( practitionerDAO.addPractitioner(newPractitioner) );
             closeStage(event);
+            if(newPractitioner.getId() != 0) {
+                addOperationStatus = true;
+                showAlertAccessAccount();
+            }
         }
     }
 
-    private void addPractitionerToDatabase() {
-        PractitionerDAO practitionerDAO = new PractitionerDAO();
-        int idPractitioner = 0;
-        idPractitioner = practitionerDAO.addPractitioner(newPractitioner);
-        newPractitioner.setId(idPractitioner);
-        // T-O Ternary Operator!
-        addOperationStatus = (idPractitioner == 0) ? false : true ;
+    private void showAlertAccessAccount() {
+        AccessAccountDAO accessAccountDAO = new AccessAccountDAO();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Cuenta de acceso generada");
+        alert.setHeaderText(null);
+        String password = Cryptography.generateRandomPassword();
+        accessAccountDAO.addPasswordToUser(  Cryptography.cryptSHA2(password), newPractitioner.getId() );
+        copyToClipboardSystem(newPractitioner.getEmail(), password);
+        alert.setContentText("Se ha copiado la cuenta de acceso al portapapeles de tu sistema");
+        alert.showAndWait();
+    }
+
+    private void copyToClipboardSystem(String email, String password) {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(email + ":" + password);
+        clipboard.setContent(content);
     }
 
     private void setListenerToTextFields() {
         Map<Object[], TextField> textfields = new LinkedHashMap<>();
-        Object[] nameConstraints = {Security.NAME_PATTERN, Security.NAME_LENGTH};
+        Object[] nameConstraints = {Validator.NAME_PATTERN, Validator.NAME_LENGTH};
         textfields.put(nameConstraints, practitionerNameTextField);
-        Object[] phoneNumberConstraints = {Security.PHONE_NUMBER_PATTERN, Security.PHONE_NUMBER_LENGTH};
+        Object[] phoneNumberConstraints = {Validator.PHONE_NUMBER_PATTERN, Validator.PHONE_NUMBER_LENGTH};
         textfields.put(phoneNumberConstraints, practitionerPhoneNumberTextField);
-        Object[] emailConstraints = {Security.EMAIL_PATTERN, Security.EMAIL_LENGTH};
+        Object[] emailConstraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH};
         textfields.put(emailConstraints, practitionerEmailTextField);
-        Object[] enrollmentConstraints = {Security.ENROLLMENT_PATTERN, Security.ENROLLMENT_LENGTH};
+        Object[] enrollmentConstraints = {Validator.ENROLLMENT_PATTERN, Validator.ENROLLMENT_LENGTH};
         textfields.put(enrollmentConstraints, practitionerEnrollmentTextField);
         for (Map.Entry<Object[], TextField> entry : textfields.entrySet() ) {
             entry.getValue().textProperty().addListener( (observable, oldValue, newValue) -> {
-                if( !Security.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Security.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
+                if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
                     inputDataValid = false;
                     entry.getValue().setStyle("-fx-background-color:red;");
                 } else {

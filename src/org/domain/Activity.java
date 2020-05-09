@@ -10,7 +10,6 @@ public class Activity {
     private Date deadline;
     private Professor professor;
     private List<Delivery> deliveries;
-    private List<Document> documents;
 
     public int getId() {
         return id;
@@ -56,16 +55,8 @@ public class Activity {
         return deliveries;
     }
 
-    public void setDocuments(List<Delivery> deliveries) {
+    public void setDeliveries(List<Delivery> deliveries) {
         this.deliveries = deliveries;
-    }
-
-    public List<Document> getDocuments() {
-        return documents;
-    }
-
-    public void setDeliveries(List<Document> documents) {
-        this.documents = documents;
     }
 
     @Override

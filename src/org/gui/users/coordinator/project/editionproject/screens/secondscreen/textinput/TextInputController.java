@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.util.Security;
+import org.util.Validator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -67,11 +67,11 @@ public class TextInputController implements Initializable {
 
     private void setListenerToTextFields() {
         Map<Object[], TextField> textfields = new LinkedHashMap<>();
-        Object[] elementConstraints = {Security.PROJECT_MULTIVALUED_ATTRIBUTE_PATTERN, Security.PROJECT_MULTIVALUED_ATTRIBUTES_LENGTH};
+        Object[] elementConstraints = {Validator.PROJECT_MULTIVALUED_ATTRIBUTE_PATTERN, Validator.PROJECT_MULTIVALUED_ATTRIBUTES_LENGTH};
         textfields.put(elementConstraints, inputTextField);
         for (Map.Entry<Object[], TextField> entry : textfields.entrySet() ) {
             entry.getValue().textProperty().addListener( (observable, oldValue, newValue) -> {
-                if( !Security.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Security.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
+                if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
                     validInputData = false;
                     entry.getValue().setStyle("-fx-background-color:red;");
                 } else {

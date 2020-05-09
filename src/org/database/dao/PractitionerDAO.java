@@ -5,21 +5,19 @@ import org.domain.Course;
 import org.domain.Delivery;
 import org.domain.Practitioner;
 import org.domain.Project;
-
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PractitionerDAO implements IPractitionerDAO {
-    /***
-     * Constant for the connection to the database
-     */
     private final Database database;
-    /***
-     * Query results
-     */
     private ResultSet result;
 
     /***
@@ -110,7 +108,7 @@ public class PractitionerDAO implements IPractitionerDAO {
             conn.commit();
             idProjectAssigned = assignProject.getInt("idProject");
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return idProjectAssigned != 0;
     }

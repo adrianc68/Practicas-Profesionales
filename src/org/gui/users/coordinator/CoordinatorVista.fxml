@@ -46,7 +46,7 @@
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="549.0" prefWidth="355.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <VBox prefHeight="304.0" prefWidth="469.0">
+                        <VBox alignment="CENTER" prefHeight="304.0" prefWidth="469.0">
                            <children>
                               <HBox alignment="CENTER" prefHeight="61.0" prefWidth="446.0">
                                  <children>
@@ -63,6 +63,7 @@
                                     <Button mnemonicParsing="false" onAction="#practitionerButtonPressed" prefHeight="59.0" prefWidth="117.0" text="Practicantes" />
                                  </children>
                               </HBox>
+                              <Button mnemonicParsing="false" onAction="#logOutButtonPressed" prefHeight="59.0" prefWidth="117.0" text="Cerrar sesión" />
                            </children>
                         </VBox>
                      </children>

@@ -60,6 +60,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="86.0" prefWidth="469.0" spacing="35.0">
                                  <children>
+                                    <Button mnemonicParsing="false" onAction="#logOutButtonPressed" prefHeight="59.0" prefWidth="147.0" text="Cerrar sesion" />
                                     <Button mnemonicParsing="false" onAction="#managementButtonPressed" prefHeight="59.0" prefWidth="147.0" text="Actualizar curso" />
                                  </children>
                               </HBox>

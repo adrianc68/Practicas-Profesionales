@@ -4,7 +4,7 @@ public class Delivery {
     private int id;
     private float score;
     private String observation;
-    private Document document;
+    private String documentPath;
     private Practitioner practitioner;
     private Activity activity;
 
@@ -32,12 +32,12 @@ public class Delivery {
         this.observation = observation;
     }
 
-    public Document getDocument() {
-        return document;
+    public String getDocumentPath() {
+        return documentPath;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setDocumentPath(String documentPath) {
+        this.documentPath = documentPath;
     }
 
     public Practitioner getPractitioner() {
@@ -62,10 +62,9 @@ public class Delivery {
                 "id=" + id +
                 ", score=" + score +
                 ", observation='" + observation + '\'' +
-                ", document=" + document +
+                ", documentPath='" + documentPath + '\'' +
                 ", practitioner=" + practitioner +
                 ", activity=" + activity +
                 '}';
     }
-
 }

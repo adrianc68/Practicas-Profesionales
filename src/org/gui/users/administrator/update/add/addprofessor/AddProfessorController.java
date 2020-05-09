@@ -9,15 +9,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.database.dao.CoordinatorDAO;
+import org.database.dao.AccessAccountDAO;
 import org.database.dao.ProfessorDAO;
 import org.domain.Course;
 import org.domain.Professor;
-import org.util.Security;
+import org.util.Cryptography;
+import org.util.Validator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -90,6 +94,7 @@ public class AddProfessorController implements Initializable {
     @FXML
     void saveButtonPressed(ActionEvent event) {
         if(dataInputValid) {
+            addOperationStatus = false;
             newProfessor = new Professor();
             newProfessor.setCourse(course);
             newProfessor.setName( nameTextField.getText() );
@@ -99,28 +104,50 @@ public class AddProfessorController implements Initializable {
             newProfessor.setStaffNumber( staffNumberTextField.getText() );
             ProfessorDAO professorDAO = new ProfessorDAO();
             newProfessor.setId( professorDAO.addProfessor(newProfessor) );
-            addOperationStatus = true;
             closeStage(event);
+            if(newProfessor.getId() != 0) {
+                addOperationStatus = true;
+                showAlertAccessAccount();
+            }
         }
+    }
+
+    private void showAlertAccessAccount() {
+        AccessAccountDAO accessAccountDAO = new AccessAccountDAO();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Cuenta de acceso generada");
+        alert.setHeaderText(null);
+        String password = Cryptography.generateRandomPassword();
+        accessAccountDAO.addPasswordToUser(  Cryptography.cryptSHA2(password), newProfessor.getId() );
+        copyToClipboardSystem(newProfessor.getEmail(), password);
+        alert.setContentText("Se ha copiado la cuenta de acceso al portapapeles de tu sistema");
+        alert.showAndWait();
+    }
+
+    private void copyToClipboardSystem(String email, String password) {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(email + ":" + password);
+        clipboard.setContent(content);
     }
 
     private void setListenerToTextFields() {
         Map<Object[], TextField> textfields = new LinkedHashMap<>();
-        Object[] nameConstraints = {Security.NAME_PATTERN, Security.NAME_LENGTH};
+        Object[] nameConstraints = {Validator.NAME_PATTERN, Validator.NAME_LENGTH};
         textfields.put(nameConstraints, nameTextField);
-        Object[] phoneNumberConstraints = {Security.PHONE_NUMBER_PATTERN, Security.PHONE_NUMBER_LENGTH};
+        Object[] phoneNumberConstraints = {Validator.PHONE_NUMBER_PATTERN, Validator.PHONE_NUMBER_LENGTH};
         textfields.put(phoneNumberConstraints, phoneNumberTextField);
-        Object[] emailConstraints = {Security.EMAIL_PATTERN, Security.EMAIL_LENGTH};
+        Object[] emailConstraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH};
         textfields.put(emailConstraints, emailTextField);
-        Object[] staffNumberConstraints = {Security.STAFF_NUMBER_PATTERN, Security.STAFF_NUMBER_LENGTH};
+        Object[] staffNumberConstraints = {Validator.STAFF_NUMBER_PATTERN, Validator.STAFF_NUMBER_LENGTH};
         textfields.put(staffNumberConstraints, staffNumberTextField);
-        Object[] cubicleConstraints = {Security.NUMBER_PATTERN, Security.NUMBER_LENGTH};
+        Object[] cubicleConstraints = {Validator.NUMBER_PATTERN, Validator.NUMBER_LENGTH};
         textfields.put(cubicleConstraints, cubicleTextField);
         for (Map.Entry<Object[], TextField> entry : textfields.entrySet() ) {
             entry.getValue().textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    if( !Security.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Security.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
+                    if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
                         dataInputValid = false;
                         entry.getValue().setStyle("-fx-background-color:red;");
                     } else {

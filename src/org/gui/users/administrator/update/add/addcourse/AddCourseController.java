@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.database.dao.CourseDAO;
 import org.domain.Course;
-import org.util.Security;
+import org.util.Validator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -90,17 +90,17 @@ public class AddCourseController implements Initializable {
 
     private void setListenerToTextFields() {
         Map<Object[], TextField> textfields = new LinkedHashMap<>();
-        Object[] nameConstraints = {Security.NAME_PATTERN, Security.NAME_LENGTH};
+        Object[] nameConstraints = {Validator.NAME_PATTERN, Validator.NAME_LENGTH};
         textfields.put(nameConstraints, nameTextField);
-        Object[] nrcConstraints = {Security.NRC_PATTERN, Security.NRC_LENGTH};
+        Object[] nrcConstraints = {Validator.NRC_PATTERN, Validator.NRC_LENGTH};
         textfields.put(nrcConstraints, nrcTextField);
-        Object[] periodConstraints = {Security.PERIOD_PATTERN, Security.PERIOD_LENGTH};
+        Object[] periodConstraints = {Validator.PERIOD_PATTERN, Validator.PERIOD_LENGTH};
         textfields.put(periodConstraints, periodTextField);
         for (Map.Entry<Object[], TextField> entry : textfields.entrySet() ) {
             entry.getValue().textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    if( !Security.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Security.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
+                    if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
                         dataInputValid = false;
                         entry.getValue().setStyle("-fx-background-color:red;");
                     } else {

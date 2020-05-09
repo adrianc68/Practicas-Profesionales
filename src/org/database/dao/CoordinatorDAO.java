@@ -73,7 +73,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
         int rowsAffected = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
-            String statement = "DELETE FROM Coordinator WHERE id_person = ?";
+            String statement = "DELETE FROM Person WHERE id_person = ?";
             PreparedStatement deleteCoordinator = conn.prepareStatement(statement);
             deleteCoordinator.setInt( 1, idCoordinator );
             rowsAffected = deleteCoordinator.executeUpdate();

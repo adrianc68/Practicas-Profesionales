@@ -3,12 +3,12 @@ package org.gui.users.coordinator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.gui.users.coordinator.practitioner.PractitionerController;
 import org.gui.users.coordinator.project.ProjectController;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,11 +22,11 @@ public class CoordinatorController {
         try{
             root = loader.load();
         } catch(IOException ioe) {
-            ioe.getMessage();
+            Logger.getLogger( CoordinatorController.class.getName() ).log(Level.WARNING, null, ioe);
         }
         Stage coordinator = new Stage();
         coordinator.setScene( new Scene(root) );
-        coordinator.show();
+        coordinator.showAndWait();
     }
 
     @FXML
@@ -39,6 +39,12 @@ public class CoordinatorController {
     void projectButtonPressed(ActionEvent event) {
         ProjectController projectController = new ProjectController();
         projectController.showStage();
+    }
+
+    @FXML
+    void logOutButtonPressed(ActionEvent event) {
+        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
+        stage.close();
     }
 
 

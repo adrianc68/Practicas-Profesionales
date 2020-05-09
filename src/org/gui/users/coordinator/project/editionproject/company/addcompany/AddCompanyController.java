@@ -16,7 +16,8 @@ import org.domain.Company;
 import org.domain.Coordinator;
 import org.domain.Course;
 import org.domain.Sector;
-import org.util.Security;
+import org.util.Auth;
+import org.util.Validator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -59,6 +60,8 @@ public class AddCompanyController implements Initializable {
     @FXML
     private ChoiceBox<String> companySectorChoiceBox;
 
+    private Auth instance;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         validInputData = false;
@@ -66,12 +69,10 @@ public class AddCompanyController implements Initializable {
         companySectorChoiceBox.getItems().add( Sector.PRIMARY.getSector() );
         companySectorChoiceBox.getItems().add( Sector.SECONDARY.getSector() );
         companySectorChoiceBox.getItems().add( Sector.TERTIARY.getSector() );
-        // USE AUTH CLASS TO INITIALIZA A COORDINATOR AND COURSE
-        System.out.println("To use correctly this feature implement Auth feature");
-        coordinator = new Coordinator();
-        coordinator.setId(2);
-        course = new Course();
-        course.setId(1);
+        instance = Auth.getInstance();
+        coordinator = ( (Coordinator) instance.getUser() );
+        course = coordinator.getCourse();
+        System.out.println(coordinator);
     }
 
     public void showStage() {
@@ -144,25 +145,25 @@ public class AddCompanyController implements Initializable {
 
     private void setListenerToTextFields() {
         Map<Object[], TextField> textfieldsMap = new LinkedHashMap<>();
-        Object[] nameConstraints = {Security.NAME_PATTERN, Security.NAME_LENGTH};
+        Object[] nameConstraints = {Validator.NAME_PATTERN, Validator.NAME_LENGTH};
         textfieldsMap.put(nameConstraints, companyNameTextField);
-        Object[] addressConstraints = {Security.ADDRESS_PATTERN, Security.ADDRESS_LENGTH};
+        Object[] addressConstraints = {Validator.ADDRESS_PATTERN, Validator.ADDRESS_LENGTH};
         textfieldsMap.put(addressConstraints, companyAddressTextField);
-        Object[] cityConstraints = {Security.CITY_PATTERN, Security.CITY_LENGTH};
+        Object[] cityConstraints = {Validator.CITY_PATTERN, Validator.CITY_LENGTH};
         textfieldsMap.put(cityConstraints, companyCityTextField);
-        Object[] stateConstraints = {Security.STATE_PATTERN, Security.STATE_LENGTH};
+        Object[] stateConstraints = {Validator.STATE_PATTERN, Validator.STATE_LENGTH};
         textfieldsMap.put(stateConstraints, companyStateTextField);
-        Object[] emailConstraints = {Security.EMAIL_PATTERN, Security.EMAIL_LENGTH};
+        Object[] emailConstraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH};
         textfieldsMap.put(emailConstraints, companyEmailTextField);
-        Object[] directUsersContraints = {Security.NUMBER_PATTERN, Security.NUMBER_LENGTH};
+        Object[] directUsersContraints = {Validator.NUMBER_PATTERN, Validator.NUMBER_LENGTH};
         textfieldsMap.put(directUsersContraints, companyDirectUsersTextField);
-        Object[] phoneNumberConstraints = {Security.PHONE_NUMBER_PATTERN, Security.PHONE_NUMBER_LENGTH};
+        Object[] phoneNumberConstraints = {Validator.PHONE_NUMBER_PATTERN, Validator.PHONE_NUMBER_LENGTH};
         textfieldsMap.put(phoneNumberConstraints, companyPhoneNumberTextField);
-        Object[] indirectUsersConstraints = {Security.NUMBER_PATTERN, Security.NUMBER_LENGTH};
+        Object[] indirectUsersConstraints = {Validator.NUMBER_PATTERN, Validator.NUMBER_LENGTH};
         textfieldsMap.put(indirectUsersConstraints, companyIndirectUsersTextField);
         for (Map.Entry<Object[], TextField> entry : textfieldsMap.entrySet() ) {
             entry.getValue().textProperty().addListener( ((observable, oldValue, newValue) -> {
-                if( !Security.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Security.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
+                if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getKey()[0] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getKey()[1]) ) ){
                     validInputData = false;
                     entry.getValue().setStyle("-fx-background-color:red;");
                 } else {

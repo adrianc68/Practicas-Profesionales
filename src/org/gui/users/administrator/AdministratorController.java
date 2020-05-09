@@ -3,19 +3,16 @@ package org.gui.users.administrator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.gui.users.administrator.update.ManagementController;
-
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AdministratorController {
-    @FXML
-    void managementButtonPressed(ActionEvent event) {
-        ManagementController managementController = new ManagementController();
-        managementController.showStage();
-    }
 
     public AdministratorController() {
     }
@@ -27,11 +24,23 @@ public class AdministratorController {
         try{
             root = loader.load();
         } catch(IOException ioe) {
-            ioe.getMessage();
+            Logger.getLogger( AdministratorController.class.getName() ).log(Level.WARNING, null, ioe);
         }
         Stage coordinator = new Stage();
         coordinator.setScene( new Scene(root) );
-        coordinator.show();
+        coordinator.showAndWait();
+    }
+
+    @FXML
+    void managementButtonPressed(ActionEvent event) {
+        ManagementController managementController = new ManagementController();
+        managementController.showStage();
+    }
+
+    @FXML
+    void logOutButtonPressed(ActionEvent event) {
+        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
+        stage.close();
     }
 
 

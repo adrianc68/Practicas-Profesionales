@@ -91,7 +91,7 @@ public class ProjectController implements Initializable {
         try{
             root = loader.load();
         } catch(IOException ioe) {
-            Logger.getLogger(ProjectController.class.getName()).log(Level.WARNING, null, ioe);
+            Logger.getLogger( ProjectController.class.getName() ).log(Level.WARNING, null, ioe);
         }
         Stage projectStage = new Stage();
         projectStage.setScene( new Scene(root) );
