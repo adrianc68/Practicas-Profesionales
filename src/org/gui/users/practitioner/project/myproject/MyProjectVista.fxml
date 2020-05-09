@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootPane" prefHeight="525.0" prefWidth="760.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="-14.0" prefHeight="525.0" prefWidth="786.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-14.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="65.0" prefWidth="764.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #8a8a8a;">
+               <children>
+                  <Label text="Practicante: Mi proyecto">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="459.0" prefWidth="771.0" />
+            <VBox alignment="CENTER" maxHeight="554.0" maxWidth="773.0" minHeight="516.0" minWidth="668.0" prefHeight="516.0" prefWidth="727.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="178.0" prefWidth="746.0" spacing="3.0">
+                     <children>
+                        <Label fx:id="projectNameLabel" text="Nombre" />
+                        <Label fx:id="projectDescriptionLabel" text="Descripcion" />
+                        <Label fx:id="projectPurposeLabel" text="Proposito" />
+                        <Label fx:id="projectScheduleLabel" text="Horario" />
+                        <Label fx:id="projectResponsableNameLabel" text="Nombre del resaponsable" />
+                        <Label fx:id="projectResponsableChargeLabel" text="Cargo del responsable" />
+                        <Label fx:id="projectEmailResponsableLabel" text="Email" />
+                        <Label fx:id="projectCompanyNameLabel" text="Nombre de la compañia" />
+                     </children>
+                     <padding>
+                        <Insets left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+                  <HBox alignment="CENTER" maxHeight="180.0" maxWidth="751.0" minHeight="180.0" minWidth="751.0" prefHeight="180.0" prefWidth="494.0" spacing="35.0">
+                     <children>
+                        <VBox alignment="CENTER" maxHeight="110.0" maxWidth="214.0" minHeight="110.0" minWidth="214.0" prefHeight="110.0" prefWidth="214.0">
+                           <children>
+                              <Label maxHeight="17.0" maxWidth="214.0" minHeight="17.0" minWidth="214.0" prefHeight="17.0" prefWidth="214.0" text="Responsabilidades" VBox.vgrow="ALWAYS" />
+                              <ListView fx:id="responsabilitiesListView" maxHeight="82.0" maxWidth="214.0" minHeight="82.0" minWidth="214.0" prefHeight="82.0" prefWidth="214.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" maxHeight="110.0" maxWidth="214.0" minHeight="110.0" minWidth="214.0" prefHeight="110.0" prefWidth="214.0">
+                           <children>
+                              <Label maxHeight="17.0" maxWidth="214.0" minHeight="17.0" minWidth="214.0" prefHeight="17.0" prefWidth="214.0" text="Actividades" VBox.vgrow="ALWAYS" />
+                              <ListView fx:id="activitiesListView" maxHeight="82.0" maxWidth="214.0" minHeight="82.0" minWidth="214.0" prefHeight="82.0" prefWidth="214.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" maxHeight="110.0" maxWidth="214.0" minHeight="110.0" minWidth="214.0" prefHeight="110.0" prefWidth="214.0">
+                           <children>
+                              <Label maxHeight="17.0" maxWidth="214.0" minHeight="17.0" minWidth="214.0" prefHeight="17.0" prefWidth="214.0" text="Objetivos mediatos" VBox.vgrow="ALWAYS" />
+                              <ListView fx:id="mediateObjetivesListView" maxHeight="82.0" maxWidth="214.0" minHeight="82.0" minWidth="214.0" prefHeight="82.0" prefWidth="214.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="35.0" left="15.0" right="15.0" top="35.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER" maxHeight="180.0" maxWidth="751.0" minHeight="180.0" minWidth="751.0" prefHeight="180.0" prefWidth="527.0" spacing="35.0">
+                     <children>
+                        <VBox maxHeight="110.0" maxWidth="214.0" minHeight="110.0" minWidth="214.0" prefHeight="110.0" prefWidth="214.0">
+                           <children>
+                              <Label maxHeight="17.0" maxWidth="214.0" minHeight="17.0" minWidth="214.0" prefHeight="17.0" prefWidth="214.0" text="Recursos" VBox.vgrow="ALWAYS" />
+                              <ListView fx:id="resourcesListView" maxHeight="82.0" maxWidth="214.0" minHeight="82.0" minWidth="214.0" prefHeight="82.0" prefWidth="214.0" />
+                           </children>
+                        </VBox>
+                        <VBox maxHeight="110.0" maxWidth="214.0" minHeight="110.0" minWidth="214.0" prefHeight="110.0" prefWidth="214.0">
+                           <children>
+                              <Label maxHeight="17.0" maxWidth="214.0" minHeight="17.0" minWidth="214.0" prefHeight="17.0" prefWidth="214.0" text="Objetivos inmediatos" />
+                              <ListView fx:id="immeadiateObjetivesListView" maxHeight="82.0" maxWidth="214.0" minHeight="82.0" minWidth="214.0" prefHeight="82.0" prefWidth="214.0" />
+                           </children>
+                        </VBox>
+                        <VBox maxHeight="110.0" maxWidth="214.0" minHeight="110.0" minWidth="214.0" prefHeight="110.0" prefWidth="214.0">
+                           <children>
+                              <Label maxHeight="17.0" maxWidth="214.0" minHeight="17.0" minWidth="214.0" prefHeight="17.0" prefWidth="214.0" text="Metodologias" VBox.vgrow="ALWAYS" />
+                              <ListView fx:id="methodologiesListView" maxHeight="82.0" maxWidth="214.0" minHeight="82.0" minWidth="214.0" prefHeight="82.0" prefWidth="214.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="35.0" left="15.0" right="15.0" top="35.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
