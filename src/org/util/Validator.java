@@ -1,6 +1,6 @@
 package org.util;
 
-public class Security {
+public class Validator {
     public static final int NAME_LENGTH = 75;
     public static final int EMAIL_LENGTH = 65;
     public static final int NRC_LENGTH = 15;
@@ -20,7 +20,6 @@ public class Security {
     public static final String STAFF_NUMBER_PATTERN = "([a-zA-Z0-9\\-]{3,})";
     public static final String ENROLLMENT_PATTERN = "S([\\d]{8})";
     public static final String PHONE_NUMBER_PATTERN = "([\\d]){8,10}";
-
     // WRONG REGEX
     public static final String ADDRESS_PATTERN = "[a-zA-Z\\ ]";
     public static final String CITY_PATTERN = "[a-zA-Z\\ ]";
