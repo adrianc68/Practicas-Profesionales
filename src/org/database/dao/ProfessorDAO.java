@@ -54,7 +54,7 @@ public class ProfessorDAO implements IProfessorDAO {
             idProfessor = resultSet.getInt(1);
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProfessorDAO.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return idProfessor;
     }
@@ -79,7 +79,7 @@ public class ProfessorDAO implements IProfessorDAO {
             rowsAffected = deleteProfessor.executeUpdate();
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProfessorDAO.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return rowsAffected > 0;
     }
@@ -97,27 +97,28 @@ public class ProfessorDAO implements IProfessorDAO {
     public Professor getAssignedProfessorByPractitionerID(int idPractitioner) {
         Professor professor = null;
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN Practitioner AS PRAC ON PROF.id_person = PRAC.id_professor AND PRAC.id_person = ? INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course";
+            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN Practitioner AS PRAC ON PROF.id_person = PRAC.id_professor AND PRAC.id_person = ? INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course";
             PreparedStatement queryProfessor = conn.prepareStatement(statement);
             queryProfessor.setInt(1, idPractitioner);
             resultSet = queryProfessor.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
-                course.setId(resultSet.getInt("COUR.id_course"));
-                course.setName(resultSet.getString("COUR.name"));
-                course.setNRC(resultSet.getString("COUR.NRC"));
-                course.setPeriod(resultSet.getString("COUR.period"));
+                course.setId( resultSet.getInt("COUR.id_course") );
+                course.setName( resultSet.getString("COUR.name") );
+                course.setNRC( resultSet.getString("COUR.NRC") );
+                course.setPeriod( resultSet.getString("COUR.period") );
                 professor = new Professor();
-                professor.setName(resultSet.getString("PERSPROF.name"));
-                professor.setPhoneNumber(resultSet.getString("PERSPROF.phoneNumber"));
-                professor.setEmail(resultSet.getString("PERSPROF.email"));
-                professor.setId(resultSet.getInt("PROF.id_person"));
-                professor.setCubicle(resultSet.getInt("PROF.cubicle"));
-                professor.setStaffNumber(resultSet.getString("PROF.staff_number"));
+                professor.setName( resultSet.getString("PERSPROF.name") );
+                professor.setPhoneNumber( resultSet.getString("PERSPROF.phoneNumber") );
+                professor.setEmail( resultSet.getString("PERSPROF.email") );
+                professor.setActivityState( resultSet.getString("PERSPROF.activity_state") );
+                professor.setId( resultSet.getInt("PROF.id_person") );
+                professor.setCubicle( resultSet.getInt("PROF.cubicle") );
+                professor.setStaffNumber( resultSet.getString("PROF.staff_number") );
                 professor.setCourse(course);
             }
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProfessorDAO.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return professor;
     }
@@ -134,27 +135,28 @@ public class ProfessorDAO implements IProfessorDAO {
     public List<Professor> getAllProfessorsFromLastCourse() {
         List<Professor> professors = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
+            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement queryProfessors = conn.prepareStatement(statement);
             resultSet = queryProfessors.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
-                course.setId(resultSet.getInt("COUR.id_course"));
-                course.setName(resultSet.getString("COUR.name"));
-                course.setNRC(resultSet.getString("COUR.NRC"));
-                course.setPeriod(resultSet.getString("COUR.period"));
+                course.setId( resultSet.getInt("COUR.id_course") );
+                course.setName( resultSet.getString("COUR.name") );
+                course.setNRC( resultSet.getString("COUR.NRC") );
+                course.setPeriod( resultSet.getString("COUR.period") );
                 Professor professor = new Professor();
-                professor.setName(resultSet.getString("PERSPROF.name"));
-                professor.setPhoneNumber(resultSet.getString("PERSPROF.phoneNumber"));
-                professor.setEmail(resultSet.getString("PERSPROF.email"));
-                professor.setId(resultSet.getInt("PROF.id_person"));
-                professor.setCubicle(resultSet.getInt("PROF.cubicle"));
-                professor.setStaffNumber(resultSet.getString("PROF.staff_number"));
+                professor.setName( resultSet.getString("PERSPROF.name") );
+                professor.setPhoneNumber( resultSet.getString("PERSPROF.phoneNumber") );
+                professor.setActivityState( resultSet.getString("PERSPROF.activity_state") );
+                professor.setEmail( resultSet.getString("PERSPROF.email") );
+                professor.setId( resultSet.getInt("PROF.id_person") );
+                professor.setCubicle( resultSet.getInt("PROF.cubicle") );
+                professor.setStaffNumber( resultSet.getString("PROF.staff_number") );
                 professor.setCourse(course);
                 professors.add(professor);
             }
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProfessorDAO.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return professors;
     }
@@ -171,28 +173,67 @@ public class ProfessorDAO implements IProfessorDAO {
     public List<Professor> getAllProfessorsByCourseID(int idCourse) {
         List<Professor> professors = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = ?";
+            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = ?";
             PreparedStatement queryProfessors = conn.prepareStatement(statement);
             queryProfessors.setInt(1, idCourse);
             resultSet = queryProfessors.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
-                course.setId(resultSet.getInt("COUR.id_course"));
-                course.setName(resultSet.getString("COUR.name"));
-                course.setNRC(resultSet.getString("COUR.NRC"));
-                course.setPeriod(resultSet.getString("COUR.period"));
+                course.setId( resultSet.getInt("COUR.id_course") );
+                course.setName( resultSet.getString("COUR.name") );
+                course.setNRC( resultSet.getString("COUR.NRC") );
+                course.setPeriod( resultSet.getString("COUR.period") );
                 Professor professor = new Professor();
-                professor.setName(resultSet.getString("PERSPROF.name"));
-                professor.setPhoneNumber(resultSet.getString("PERSPROF.phoneNumber"));
-                professor.setEmail(resultSet.getString("PERSPROF.email"));
-                professor.setId(resultSet.getInt("PROF.id_person"));
-                professor.setCubicle(resultSet.getInt("PROF.cubicle"));
-                professor.setStaffNumber(resultSet.getString("PROF.staff_number"));
+                professor.setName( resultSet.getString("PERSPROF.name") );
+                professor.setPhoneNumber( resultSet.getString("PERSPROF.phoneNumber") );
+                professor.setEmail( resultSet.getString("PERSPROF.email") );
+                professor.setActivityState( resultSet.getString("PERSPROF.activity_state") );
+                professor.setId( resultSet.getInt("PROF.id_person") );
+                professor.setCubicle( resultSet.getInt("PROF.cubicle") );
+                professor.setStaffNumber( resultSet.getString("PROF.staff_number") );
                 professor.setCourse(course);
                 professors.add(professor);
             }
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProfessorDAO.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
+        }
+        return professors;
+    }
+
+    /***
+     * Get all professors by every course.
+     * <p>
+     * This method return all the professors available in the system.
+     * The purpose it's their management.
+     * </p>
+     * @return List<Professor> a list with all professors from specified course
+     */
+    @Override
+    public List<Professor> getAllProfessors() {
+        List<Professor> professors = new ArrayList<>();
+        try(Connection conn = database.getConnection() ) {
+            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course";
+            PreparedStatement queryProfessors = conn.prepareStatement(statement);
+            resultSet = queryProfessors.executeQuery();
+            while( resultSet.next() ) {
+                Course course = new Course();
+                course.setId( resultSet.getInt("COUR.id_course") );
+                course.setName( resultSet.getString("COUR.name") );
+                course.setNRC( resultSet.getString("COUR.NRC") );
+                course.setPeriod( resultSet.getString("COUR.period") );
+                Professor professor = new Professor();
+                professor.setName( resultSet.getString("PERSPROF.name") );
+                professor.setPhoneNumber( resultSet.getString("PERSPROF.phoneNumber") );
+                professor.setEmail( resultSet.getString("PERSPROF.email") );
+                professor.setActivityState( resultSet.getString("PERSPROF.activity_state") );
+                professor.setId( resultSet.getInt("PROF.id_person") );
+                professor.setCubicle( resultSet.getInt("PROF.cubicle") );
+                professor.setStaffNumber( resultSet.getString("PROF.staff_number") );
+                professor.setCourse(course);
+                professors.add(professor);
+            }
+        } catch (SQLException | NullPointerException e) {
+            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return professors;
     }

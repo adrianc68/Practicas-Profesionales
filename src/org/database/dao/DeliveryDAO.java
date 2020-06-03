@@ -42,14 +42,11 @@ public class DeliveryDAO implements IDeliveryDAO {
         int idDelivery = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
-            String statement = "CALL addDelivery(?,?,?,?)";
+            String statement = "CALL addDelivery(?,?,?)";
             PreparedStatement addDelivery = conn.prepareStatement(statement);
             addDelivery.setInt(1,idActivity);
             addDelivery.setInt( 2, delivery.getPractitioner().getId() );
-            File file = delivery.getDocument().getDocument();
-            FileInputStream fileInputStream = new FileInputStream(file);
-            addDelivery.setBinaryStream(3, fileInputStream);
-            addDelivery.setString(4, delivery.getDocument().name() );
+            addDelivery.setString(3, delivery.getDocumentPath() );
             addDelivery.executeUpdate();
             statement = "SELECT LAST_INSERT_ID()";
             addDelivery = conn.prepareStatement(statement);
@@ -57,8 +54,8 @@ public class DeliveryDAO implements IDeliveryDAO {
             resultSet.next();
             idDelivery = resultSet.getInt(1);
             conn.commit();
-        } catch (SQLException | NullPointerException | FileNotFoundException e) {
-            Logger.getLogger(DeliveryDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException | NullPointerException e) {
+            Logger.getLogger( DeliveryDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return idDelivery;
     }
@@ -66,7 +63,7 @@ public class DeliveryDAO implements IDeliveryDAO {
     /***
      * Evaluate an activity in database.
      * <p>
-     * This method is used by Professor when he/she needs evaluate an activity saved in database.
+     * This method evaluate an activity saved in database.
      * </p>
      * @param idDelivery delivery's id to evaluate
      * @param  score the delivery score
@@ -102,7 +99,7 @@ public class DeliveryDAO implements IDeliveryDAO {
      */
     @Override
     public List<Delivery> getAllDeliveriesByActivity(int idActivity) {
-        String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file, DEL.filename, ACT.id_activity, ACT.name, ACT.description, ACT.deadline, COUR.id_course, COUR.NRC, COUR.name, COUR.PERIOD, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PROF.cubicle, PROF.staff_number FROM delivery AS DEL INNER JOIN Activity AS ACT ON DEL.id_activity = ? INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
+        String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path, ACT.id_activity, ACT.name, ACT.description, ACT.deadline, COUR.id_course, COUR.NRC, COUR.name, COUR.PERIOD, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PROF.cubicle, PROF.staff_number FROM delivery AS DEL INNER JOIN Activity AS ACT ON DEL.id_activity = ? INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
         return getAllDeliveryByStatementAndID(statement, idActivity);
     }
 
@@ -116,7 +113,7 @@ public class DeliveryDAO implements IDeliveryDAO {
      */
     @Override
     public List<Delivery> getAllDeliveriesByPractitionerID(int idPractitioner) {
-        String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file, DEL.filename, ACT.id_activity, ACT.name, ACT.description, ACT.deadline, COUR.id_course, COUR.NRC, COUR.name, COUR.PERIOD, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PROF.cubicle, PROF.staff_number FROM delivery AS DEL INNER JOIN Activity AS ACT ON DEL.id_activity = ACT.id_activity AND DEL.id_practitioner = ? INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
+        String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path, ACT.id_activity, ACT.name, ACT.description, ACT.deadline, COUR.id_course, COUR.NRC, COUR.name, COUR.PERIOD, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PROF.cubicle, PROF.staff_number FROM delivery AS DEL INNER JOIN Activity AS ACT ON DEL.id_activity = ACT.id_activity AND DEL.id_practitioner = ? INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
         return getAllDeliveryByStatementAndID(statement, idPractitioner);
     }
 
@@ -150,19 +147,10 @@ public class DeliveryDAO implements IDeliveryDAO {
                 Delivery delivery = new Delivery();
                 delivery.setActivity(activity);
                 delivery.setPractitioner(null);
-                delivery.setObservation( resultSet.getString("DEL.observation") );
-                delivery.setScore( resultSet.getFloat("DEl.score") );
+                delivery.setObservation( resultSet.getString("DEL.observation"));
+                delivery.setScore( resultSet.getFloat("DEl.score"));
                 delivery.setId( resultSet.getInt("DEL.id_delivery") );
-//                Document document = Document.valueOf( resultSet.getString("DEL.filename").toUpperCase() );
-//                File file = new File("hola.txt");
-//                FileOutputStream fileOutputStream = new FileOutputStream(file);
-//                InputStream input = resultSet.getBinaryStream("DEL.file");
-//                byte[] buffer = new byte[1024];
-//                while (input.read(buffer) > 0) {
-//                    fileOutputStream.write(buffer);
-//                }
-//                document.setFile(file);
-                delivery.setDocument(null);
+                delivery.setDocumentPath( resultSet.getString("DEL.file_path"));
                 deliveries.add(delivery);
                 conn.commit();
             }
@@ -171,7 +159,5 @@ public class DeliveryDAO implements IDeliveryDAO {
         }
         return deliveries;
     }
-
-
 
 }

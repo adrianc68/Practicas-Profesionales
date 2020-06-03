@@ -1,0 +1,469 @@
+
+/*
+  RADIO BUTTON
+*/
+.radiobutton {
+  -fx-text-fill:#EEEFEF;
+}
+
+.radiobutton .radio{
+
+  -fx-background-color:#ffffff;
+}
+
+
+/*
+  ICONS
+*/
+
+.firstLevelIcon {
+  -fx-fill:#fcfcfc;
+}
+
+.secondLevelIcon {
+  -fx-fill:#1471CD;
+}
+
+.thirdLevelIcon {
+  -fx-fill:#51B071;
+}
+
+.fourLevelIcon {
+    -fx-fill:#ED4D4E;
+}
+
+
+/*
+  IMAGEBOX
+*/
+.imageBox {
+  -fx-border-width:1 1 1 1;
+  -fx-border-color:#F6F6F6;
+  -fx-border-radius:3px;
+  -fx-background-radius:3px;
+}
+
+/*
+ FORMS
+*/
+.form {
+  -fx-border-radius: 7px;
+  -fx-border-width:1 1 1 1;
+  -fx-border-color:#000000;
+  -fx-background-color:#4E4E4E;
+  -fx-background-radius:7px;
+}
+
+.contentForm {
+  -fx-background-color:#565656;
+  -fx-effect: dropshadow( three-pass-box , rgba(5,5,5,0.97), 12.85,0,0,0);
+}
+
+/*
+ TABLEVIEW
+*/
+.tableView {
+  -fx-background-color:#363636;
+  -fx-border-color:transparent;
+}
+
+.tableView .column-header-background {
+  -fx-background-color:#424242;
+  -fx-cell-size:35px;
+}
+
+.tableView:focused {
+  -fx-background-color:transparent;
+}
+
+.tableView:focused .table-row-cell:selected{
+  -fx-background-color:#303d6d;
+}
+
+.table-row-cell:hover {
+  -fx-background-color:#5f79d8;
+}
+
+.table-view .label{
+  -fx-background-color: transparent;
+  -fx-text-fill: #F9F9F9;
+}
+
+#tableColumn {
+  -fx-background-color:transparent;
+  -fx-font-family:"Montserrat Light";
+  -fx-text-fill:#f4f4f4;
+  -fx-alignment:CENTER-LEFT;
+}
+
+.table-row-cell{
+    -fx-table-cell-border-color: #000000;
+    -fx-cell-size:35px;
+}
+
+.table-row-cell:odd{
+    -fx-background-color:#606060;
+}
+
+.table-row-cell:even{
+    -fx-background-color:#696969;
+}
+
+.splitPane {
+  -fx-background-color:#363333;
+}
+
+.splitPane *.split-pane-divider {
+  -fx-background-color:#363333;
+}
+
+/*
+ LISTVIEW
+*/
+.listView {
+  -fx-background-color:transparent;
+  -fx-background-radius:3px;
+  -fx-border-width:1 1 1 1;
+  -fx-border-color:#cccece;
+  -fx-border-radius:3px;
+}
+
+.listView .list-cell:even {
+  -fx-background-color:#232931;
+  -fx-text-fill:#E9E9E9;
+}
+.listView .list-cell:odd {
+  -fx-background-color:#393e46;
+  -fx-text-fill:#E9E9E9;
+}
+
+.projectListView {
+  -fx-background-radius:3px;
+  -fx-background-color:#3D3D3D;
+  -fx-text-fill:#B6B6B6;
+}
+
+.projectListView .list-cell:even {
+  -fx-background-color:#1D1D1D;
+  -fx-text-fill:#E0E0E0;
+}
+
+.projectListView .list-cell:odd {
+  -fx-background-color:#404040;
+  -fx-text-fill:#E0E0E0;
+}
+
+
+/*
+ CARD
+*/
+.scrollPane {
+  -fx-border-width:1 1 1 1;
+  -fx-border-color:#6C6969;
+  -fx-border-radius:3px;
+  -fx-background-radius:3px;
+}
+
+.scroll-pane:focused {
+    -fx-background-insets: 0;
+}
+
+.scroll-pane .corner {
+    -fx-background-insets: 0;
+}
+
+.flowPane {
+  -fx-background-color:#2C2A2A;
+}
+
+.card {
+  -fx-border-radius: 3px;
+  -fx-border-width:1 1 1 1;
+  -fx-border-color:#6C6969;
+  -fx-background-color:#3B3939;
+  -fx-background-radius:3px;
+}
+
+.card:hover{
+  -fx-border-width:1 1 1 1;
+  -fx-background-color:#303d6d;
+}
+
+/*
+ TEXTFIELD
+ The textfield doesn't have a specified order.
+*/
+.textfield {
+  -fx-background-color:#3D3D3D;
+  -fx-text-fill:#B6B6B6;
+}
+
+.wrongTextField {
+  /*-fx-fill:#1F2124;*/
+  -fx-fill:#000000;
+}
+
+.correctlyTextField {
+  -fx-fill:#00ff00;
+}
+
+.textArea {
+  -fx-background-radius:3px;
+  -fx-background-color:#3D3D3D;
+  -fx-text-fill:#B6B6B6;
+}
+
+.textArea .content {
+  -fx-background-color:#3D3D3D;
+  -fx-text-fill:#B6B6B6;
+}
+
+.scroll-pane {
+  -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport{
+  -fx-background-color: transparent;
+}
+
+.scroll-pane .content{
+  -fx-background-color: transparent;
+}
+
+.scroll-bar {
+  -fx-background-color:transparent;
+
+}
+.scroll-bar .track {
+  -fx-background-color:transparent;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color:#666666;
+  -fx-background-insets:2,0,0;
+  -fx-border-radius:5px;
+}
+
+.textArea .decrement-button, .textArea .increment-button {
+  -fx-background-color:transparent;
+}
+
+
+/*
+  CHOICEBOX AND COMBOBOX
+*/
+.choiceBox {
+  -fx-background-color:#3D3D3D;
+  -fx-text-fill:#FFA500;
+}
+
+.choice-box .context-menu {
+  -fx-background-color:#3D3D3D;
+}
+
+.choice-box .menu-item:focused {
+  -fx-background-color:#FFA500;
+}
+
+.choice-box .menu-item > .label {
+   -fx-text-fill:#ffffff;
+}
+
+.choice-box .label {
+   -fx-text-fill:#B6B6B6;
+}
+
+.choice-box .menu-item:focused > .label {
+  -fx-text-fill:#000000;
+}
+
+
+/*
+ LABELS
+ The labels are ordered by importance and represented by a color.
+*/
+
+.firstLevelLabel {
+  -fx-text-fill:#f4f4f4;
+}
+
+.secondLevelLabel {
+  -fx-text-fill:#BEC4CB;
+}
+
+.thirdLevelLabel {
+  -fx-text-fill:#cecece;
+}
+
+.lastLevelLabel {
+  -fx-text-fill:#b5b4b4;
+}
+
+.systemLabel {
+  -fx-text-fill:#ff0000;
+}
+
+.recoveryLabel {
+  -fx-text-fill:#a5a4a4;
+}
+
+.recoveryLabel:hover {
+  -fx-text-fill:#6F4CBB;
+}
+
+.formLabel {
+  -fx-text-fill:#E6F0FA;
+  -fx-font-family:"Montserrat Light";
+  -fx-font-size:11px;
+}
+
+.projectDescriptionLabel {
+  -fx-text-fill:#a0a0a0;
+  -fx-font-family:"Open Sans";
+  -fx-font-size:13px;
+}
+
+.cardLabel {
+  -fx-fill:#EEEFEF;
+  -fx-font-size:12px;
+  -fx-text-fill:#EFEFEF;
+}
+
+.cardSmallLabel {
+  -fx-text-fill:#9B9B9B;
+  -fx-font-size:10px;
+  -fx-font-family:"System";
+}
+
+
+/*
+  SEPARATOR
+*/
+.separator{
+}
+
+.separator *.line {
+  -fx-border-color:#3D3D3D;
+}
+
+/*
+ BUTTONS
+ The buttons are ordered by importance and represented by a color.
+*/
+
+.firstLevelButton {
+  -fx-background-color:#40B1F0;
+  -fx-text-fill:#EEEFEF;
+  -fx-border-width: 1 1 1 1;
+  -fx-border-radius:2px;
+  -fx-font-family:"Montserrat Light";
+}
+
+.firstLevelButton:hover {
+  -fx-border-color:#0069aa;
+}
+
+.thirdLevelButton {
+  -fx-background-color:#cccece;
+  -fx-text-fill:#ffffff;
+  -fx-border-width: 1 1 1 1;
+  -fx-border-radius:2px;
+  -fx-font-family:"Sanserif";
+}
+
+.thirdLevelButton:hover {
+  -fx-border-color:#0069aa;
+}
+
+.lastLevelButton {
+  -fx-background-color:#F8F8F8;
+  -fx-text-fill:#C5C5C5;
+  -fx-border-width: 1 1 1 1;
+  -fx-border-color:#B0B0B0;
+  -fx-border-radius:2px;
+}
+
+.lastLevelButton:hover {
+  -fx-border-color:#898989;
+}
+
+.withBorderButton {
+  -fx-background-color:#2F2F2F;
+  -fx-text-fill:#F3F3F3;
+  -fx-border-color:#585656;
+  -fx-border-width:1 1 1 1;
+  -fx-border-radius:3px;
+}
+
+.withBorderButton:hover {
+  -fx-background-color:#4C4552;
+}
+
+.withoutOutLineButton {
+  -fx-background-color:transparent;
+  -fx-text-fill:#E2E2E2;
+}
+
+.withoutOutLineButton:hover {
+  -fx-text-fill:#383838;
+}
+
+/*
+  SPECIAL FOR PROJECT
+*/
+
+.topDescription {
+  -fx-background-color:#3B3939;
+}
+
+.descriptionProject {
+  -fx-background-color:#4E4E4E;
+  -fx-background-radius:3px;
+  -fx-border-width:1 1 1 1;
+  -fx-border-radius:3px;
+  -fx-border-color:#585656;
+}
+
+.boxBorder {
+  -fx-border-color:#585656;
+  -fx-background-color:#1F1F1F;
+  -fx-border-width:1 1 1 1;
+  -fx-border-radius:3px;
+}
+
+/*
+  The background
+  There are just 3 themes: Dark theme, White theme and UV theme
+*/
+
+.windowTitle {
+  -fx-background-color:#FDFDFD;
+  -fx-background-radius:0 3 3 0;
+  -fx-text-fill:#121212;
+  -fx-font-family:"Montserrat Light";
+}
+
+.background {
+  -fx-background-color:#1F2124;
+  -fx-background-radius:3px;
+  -fx-border-radius: 3px;
+  -fx-border-color:#6C6969;
+  -fx-border-width:1 1 1 1;
+}
+
+.innerBackground {
+  -fx-border-width:1 0 1 0;
+  -fx-border-color:#585656;
+  -fx-background-color:#484040;
+}
+
+.innerBackgroundWithHover {
+  -fx-border-width:1 0 1 0;
+  -fx-border-color:#4C4651;
+  -fx-background-color:#282828;
+}
+
+.innerBackgroundWithHover:hover {
+  -fx-border-width:1 0 1 0;
+  -fx-background-color:#303d6d;
+}

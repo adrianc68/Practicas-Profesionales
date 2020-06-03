@@ -35,4 +35,14 @@ public interface ICoordinatorDAO {
      * @return List<Course> a list containing all coordinators.
      */
     List<Coordinator> getAllCoordinatorsByCourseID(int idCourse);
+
+    /***
+     * Get all coordinators from every course
+     * <p>
+     * This method gets all coordinator from every course. It's goal is
+     * management.
+     * </p>
+     * @return List<Course> a list containing all coordinators.
+     */
+    List<Coordinator> getAllCoordinators();
 }

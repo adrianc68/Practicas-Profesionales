@@ -18,8 +18,7 @@ public class Database {
      * @see DatabaseProperties
      */
     public Database() {
-        DatabaseProperties databaseProperties = new DatabaseProperties();
-        databaseProperties.setPath("database.properties");
+        DatabaseProperties databaseProperties = new DatabaseProperties("database.properties");
         Map<String, String> propertiesMap = databaseProperties.readProperties();
         user = propertiesMap.get("db.user");
         pass = propertiesMap.get("db.password");
@@ -27,14 +26,12 @@ public class Database {
     }
 
     public void setAnotherDatabaseProperties(String path) {
-        DatabaseProperties databaseProperties = new DatabaseProperties();
-        databaseProperties.setPath(path);
+        DatabaseProperties databaseProperties = new DatabaseProperties(path);
         Map<String, String> propertiesMap = databaseProperties.readProperties();
         user = propertiesMap.get("db.user");
         pass = propertiesMap.get("db.password");
         url = propertiesMap.get("db.url");
     }
-
 
     public Connection getConnection() throws SQLException {
         connectToDatabase();
@@ -46,7 +43,7 @@ public class Database {
             try {
                 connection.close();
             } catch(SQLException e) {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, e);
+                Logger.getLogger( Database.class.getName() ).log(Level.SEVERE, null, e);
             }
             connection = null;
         }

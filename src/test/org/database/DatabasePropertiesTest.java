@@ -22,8 +22,7 @@ public class DatabasePropertiesTest {
     private final DatabaseProperties databaseProperties;
 
     public DatabasePropertiesTest() {
-        databaseProperties = new DatabaseProperties();
-        databaseProperties.setPath("src/test/org/database/resources/databaseTest.properties");
+        databaseProperties = new DatabaseProperties("src/test/org/database/resources/databaseTest.properties");
     }
 
     @Test

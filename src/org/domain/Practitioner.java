@@ -62,6 +62,7 @@ public class Practitioner extends Person{
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", course=" + course +
+                ", activityState='" + activityState + '\'' +
                 '}';
     }
 

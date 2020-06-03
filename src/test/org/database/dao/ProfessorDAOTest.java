@@ -1,6 +1,5 @@
 package test.org.database.dao;
 
-import org.database.dao.CoordinatorDAO;
 import org.database.dao.ProfessorDAO;
 import org.domain.Course;
 import org.domain.Professor;
@@ -12,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ProfessorDAOTest {
+    private final int idProfessor = 3;
     private final int idPractitioner = 3;
 
     @Test
@@ -49,7 +49,7 @@ public class ProfessorDAOTest {
     @Test
     void removeProfessor() {
         ProfessorDAO professorDAO = new ProfessorDAO();
-        boolean actual = professorDAO.removeProfessor(1);
+        boolean actual = professorDAO.removeProfessorByID(1);
         assertTrue(actual);
     }
 

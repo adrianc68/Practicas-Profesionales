@@ -1,7 +1,7 @@
 package test.org.database.dao;
 
 import org.database.dao.ProjectDAO;
-import org.domain.Company;
+import org.domain.Organization;
 import org.domain.Course;
 import org.domain.Project;
 import org.junit.FixMethodOrder;
@@ -33,12 +33,12 @@ public class ProjectDAOTest {
         project.setNameResponsable("Jorge Hernandez Hernandez");
         project.setChargeResponsable("CEO");
         project.setEmailResponsable("ceomet@microsoft.com");
-        Company company = new Company();
-        company.setId(1);
+        Organization organization = new Organization();
+        organization.setId(1);
         Course course = new Course();
         course.setId(1);
-        company.setCourse(course);
-        project.setCompany(company);
+        organization.setCourse(course);
+        project.setOrganization(organization);
         project.setActivities(new ArrayList<>());
         project.setImmediateObjetives(new ArrayList<>());
         project.setMethodologies(new ArrayList<>());
@@ -63,12 +63,12 @@ public class ProjectDAOTest {
         project.setChargeResponsable("CEO");
         project.setEmailResponsable("franCEO@microsoft.com");
         project.setId(idProject);
-        Company company = new Company();
-        company.setId(1);
+        Organization organization = new Organization();
+        organization.setId(1);
         Course course = new Course();
         course.setId(1);
-        company.setCourse(course);
-        project.setCompany(company);
+        organization.setCourse(course);
+        project.setOrganization(organization);
         project.setActivities(new ArrayList<>());
         project.setImmediateObjetives(new ArrayList<>());
         project.setMethodologies(new ArrayList<>());

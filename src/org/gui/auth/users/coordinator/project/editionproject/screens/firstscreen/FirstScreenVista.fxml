@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="591.0" stylesheets="@../../../../../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER" fillHeight="false" prefHeight="749.0" prefWidth="1053.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="507.0" prefWidth="495.0" styleClass="contentForm">
+               <children>
+                  <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="477.0" prefWidth="465.0" styleClass="scrollPane" vbarPolicy="NEVER">
+                    <content>
+                      <AnchorPane maxHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="445.0">
+                           <children>
+                              <FlowPane maxWidth="-Infinity" prefHeight="789.0" prefWidth="465.0" styleClass="flowPane" vgap="15.0">
+                                 <children>
+                                    <VBox maxWidth="-Infinity" prefHeight="393.0" prefWidth="425.0" spacing="5.0" styleClass="contentForm">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="58.0" prefWidth="703.0">
+                                             <children>
+                                                <Label styleClass="firstLevelLabel" text="Información de proyecto">
+                                                   <font>
+                                                      <Font name="Open Sans Light" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                             <padding>
+                                                <Insets left="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <VBox prefHeight="64.0" prefWidth="425.0" spacing="5.0">
+                                             <children>
+                                                <Label alignment="TOP_LEFT" prefHeight="10.0" prefWidth="231.0" styleClass="formLabel" text="NOMBRE">
+                                                   <graphic>
+                                                      <MaterialDesignIconView fx:id="checkIconName" glyphName="CHECK" size="15" />
+                                                   </graphic></Label>
+                                                <TextField fx:id="projectNameTextField" minHeight="-Infinity" prefHeight="42.0" prefWidth="15.0" promptText="e.g Universidad Veracruzana" styleClass="textfield" />
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="15.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="112.0" prefWidth="425.0" spacing="5.0">
+                                             <children>
+                                                <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="234.0" styleClass="formLabel" text="DESCRIPCIÓN GENERAL" wrapText="true">
+                                                   <graphic>
+                                                      <MaterialDesignIconView fx:id="checkIconGeneralDescription" glyphName="CHECK" size="15" />
+                                                   </graphic></Label>
+                                                <TextArea fx:id="projectDescriptionTextArea" prefHeight="121.0" prefWidth="390.0" promptText="e.g Descripción" styleClass="textArea" wrapText="true" />
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="15.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox minHeight="-Infinity" prefHeight="112.0" prefWidth="423.0" spacing="5.0">
+                                             <children>
+                                                <Label alignment="TOP_LEFT" prefHeight="1.0" prefWidth="201.0" styleClass="formLabel" text="PROPÓSITO GENERAL" wrapText="true">
+                                                   <graphic>
+                                                      <MaterialDesignIconView fx:id="checkIconGeneralPurpose" glyphName="CHECK" size="15" />
+                                                   </graphic></Label>
+                                                <TextArea fx:id="projectPurposeTextArea" promptText="e.g Propósito" styleClass="textArea" wrapText="true" />
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="15.0" />
+                                             </padding>
+                                          </VBox>
+                                          <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="58.0" prefWidth="703.0">
+                                             <children>
+                                                <Label styleClass="firstLevelLabel" text="Detalles de proyecto">
+                                                   <font>
+                                                      <Font name="Open Sans Light" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                             <padding>
+                                                <Insets left="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <VBox prefHeight="64.0" spacing="5.0">
+                                             <children>
+                                                <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="153.0" styleClass="formLabel" text="HORARIO">
+                                                   <padding>
+                                                      <Insets top="5.0" />
+                                                   </padding>
+                                                   <graphic>
+                                                      <MaterialDesignIconView fx:id="checkIconSchedule" glyphName="CHECK" size="15" />
+                                                   </graphic>
+                                                </Label>
+                                                <TextField fx:id="projectScheduleTextField" minHeight="-Infinity" prefHeight="42.0" promptText="e.g Lunes a viernes de 8 a 3 PM" styleClass="textfield" />
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="15.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox prefHeight="64.0" spacing="5.0">
+                                             <children>
+                                                <Label alignment="TOP_LEFT" prefHeight="3.0" prefWidth="126.0" styleClass="formLabel" text="DURACIÓN">
+                                                   <padding>
+                                                      <Insets top="5.0" />
+                                                   </padding>
+                                                   <graphic>
+                                                      <MaterialDesignIconView fx:id="checkIconDuration" glyphName="CHECK" size="15" />
+                                                   </graphic>
+                                                </Label>
+                                                <TextField fx:id="projectDurationTextField" minHeight="-Infinity" prefHeight="42.0" promptText="e.g 420" styleClass="textfield" />
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="15.0" />
+                                             </padding>
+                                          </VBox>
+                                          <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="58.0" prefWidth="703.0">
+                                             <children>
+                                                <Label styleClass="firstLevelLabel" text="Información del responsable">
+                                                   <font>
+                                                      <Font name="Open Sans Light" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                             <padding>
+                                                <Insets left="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <VBox prefHeight="64.0" spacing="5.0">
+                                             <children>
+                                                <Label alignment="TOP_LEFT" prefHeight="3.0" prefWidth="126.0" styleClass="formLabel" text="NOMBRE">
+                                                   <padding>
+                                                      <Insets top="5.0" />
+                                                   </padding>
+                                                   <graphic>
+                                                      <MaterialDesignIconView fx:id="checkIconNameResponsable" glyphName="CHECK" size="15" />
+                                                   </graphic>
+                                                </Label>
+                                                <TextField fx:id="projectResponsableNameTextField" minHeight="-Infinity" prefHeight="42.0" prefWidth="390.0" promptText="e.g Josue Lira Lira" styleClass="textfield" />
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="15.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox prefHeight="54.0" spacing="5.0">
+                                             <children>
+                                                <Label alignment="TOP_LEFT" prefHeight="9.0" prefWidth="137.0" styleClass="formLabel" text="CARGO">
+                                                   <padding>
+                                                      <Insets top="5.0" />
+                                                   </padding>
+                                                   <graphic>
+                                                      <MaterialDesignIconView fx:id="checkIconChargeResponsable" glyphName="CHECK" size="15" />
+                                                   </graphic>
+                                                </Label>
+                                                <TextField fx:id="projectResponsableChargeTextField" minHeight="42.0" prefHeight="42.0" promptText="e.g Recursos humanos" styleClass="textfield" />
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="15.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox prefHeight="54.0" spacing="5.0">
+                                             <children>
+                                                <Label alignment="TOP_LEFT" prefHeight="5.0" prefWidth="212.0" styleClass="formLabel" text="CORREO">
+                                                   <padding>
+                                                      <Insets top="5.0" />
+                                                   </padding>
+                                                   <graphic>
+                                                      <MaterialDesignIconView fx:id="checkIconEmail" glyphName="CHECK" size="15" />
+                                                   </graphic>
+                                                </Label>
+                                                <TextField fx:id="projectResponsableEmailTextField" minHeight="42.0" prefHeight="30.0" promptText="e.g jjlira@hotmail.com" styleClass="textfield" />
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="15.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                       <FlowPane.margin>
+                                          <Insets left="5.0" />
+                                       </FlowPane.margin>
+                                       <padding>
+                                          <Insets bottom="15.0" top="15.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                 </padding>
+                              </FlowPane>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -56,7 +56,7 @@ public class PractitionerDAO implements IPractitionerDAO {
             idPractitioner = result.getInt(1);
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return idPractitioner;
     }
@@ -80,7 +80,7 @@ public class PractitionerDAO implements IPractitionerDAO {
             rowsAffected = removePractitioner.executeUpdate();
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return rowsAffected > 0;
     }
@@ -134,7 +134,7 @@ public class PractitionerDAO implements IPractitionerDAO {
             rowsAffected = assignProfessor.executeUpdate();
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return  rowsAffected > 0;
     }
@@ -175,21 +175,22 @@ public class PractitionerDAO implements IPractitionerDAO {
     public List<Practitioner> getAllPractitionersFromLastCourse() {
         List<Practitioner> practitioners = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT PRAC.id_person, PRAC.enrollment, PERS.name, PERS.phoneNumber, PERS.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Practitioner AS PRAC INNER JOIN Person AS PERS ON PRAC.id_person = PERS.id_person INNER JOIN Course AS COUR ON PERS.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
+            String statement = "SELECT PRAC.id_person, PRAC.enrollment, PERS.name, PERS.phoneNumber, PERS.email, PERS.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Practitioner AS PRAC INNER JOIN Person AS PERS ON PRAC.id_person = PERS.id_person INNER JOIN Course AS COUR ON PERS.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement queryPractitioner = conn.prepareStatement(statement);
             result = queryPractitioner.executeQuery();
             while( result.next() ) {
                 Course course = new Course();
-                course.setId(result.getInt("COUR.id_course"));
-                course.setName(result.getString("COUR.name"));
-                course.setNRC(result.getString("COUR.NRC"));
-                course.setPeriod(result.getString("COUR.period"));
+                course.setId( result.getInt("COUR.id_course")) ;
+                course.setName( result.getString("COUR.name") );
+                course.setNRC( result.getString("COUR.NRC") );
+                course.setPeriod( result.getString("COUR.period") );
                 Practitioner practitioner = new Practitioner();
-                practitioner.setName(result.getString("PERS.name"));
-                practitioner.setPhoneNumber(result.getString("PERS.phoneNumber"));
-                practitioner.setEmail(result.getString("PERS.email"));
-                practitioner.setId(result.getInt("PRAC.id_person"));
-                practitioner.setEnrollment(result.getString("PRAC.enrollment"));
+                practitioner.setName( result.getString("PERS.name") );
+                practitioner.setPhoneNumber( result.getString("PERS.phoneNumber") );
+                practitioner.setEmail( result.getString("PERS.email") );
+                practitioner.setActivityState( result.getString("PERS.activity_state") );
+                practitioner.setId( result.getInt("PRAC.id_person") );
+                practitioner.setEnrollment( result.getString("PRAC.enrollment") );
                 practitioner.setCourse(course);
                 List<Project> selectedProjects = new ArrayList<>();
                 List<Delivery> deliveries = new ArrayList<>();
@@ -200,7 +201,7 @@ public class PractitionerDAO implements IPractitionerDAO {
                 practitioners.add(practitioner);
             }
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return practitioners;
     }

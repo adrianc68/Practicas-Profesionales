@@ -6,12 +6,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Cryptography {
-    private static final String HASH_FUNCTION = "SHA-256";
+    private static final String SHA_256_FUNCTION = "SHA-256";
+    private static final String MD5_FUNCTION = "MD5";
 
     public static String cryptSHA2(String string) {
         MessageDigest messageDigest = null;
         try {
-            messageDigest = MessageDigest.getInstance(HASH_FUNCTION);
+            messageDigest = MessageDigest.getInstance(SHA_256_FUNCTION);
         } catch (NoSuchAlgorithmException e) {
             Logger.getLogger( Cryptography.class.getName() ).log(Level.SEVERE, null, e);
         }
@@ -26,7 +27,7 @@ public class Cryptography {
     public static String cryptMD5(String string) {
         MessageDigest messageDigest = null;
         try {
-            messageDigest = java.security.MessageDigest.getInstance("MD5");
+            messageDigest = MessageDigest.getInstance(MD5_FUNCTION);
         } catch (NoSuchAlgorithmException e) {
             Logger.getLogger( Cryptography.class.getName() ).log(Level.SEVERE, null, e);
         }

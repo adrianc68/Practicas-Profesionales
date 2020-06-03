@@ -1,5 +1,10 @@
 package org.util;
 
+import javafx.scene.control.TextField;
+
+import java.awt.*;
+import java.util.Map;
+
 public class Validator {
     public static final int NAME_LENGTH = 75;
     public static final int EMAIL_LENGTH = 65;
@@ -17,6 +22,8 @@ public class Validator {
     public static final int PROJECT_MULTIVALUED_ATTRIBUTES_LENGTH = 35;
     public static  final int DURATION_LENGTH = 5;
     public static final int NUMBER_LENGTH = 11;
+
+
     public static final String STAFF_NUMBER_PATTERN = "([a-zA-Z0-9\\-]{3,})";
     public static final String ENROLLMENT_PATTERN = "S([\\d]{8})";
     public static final String PHONE_NUMBER_PATTERN = "([\\d]){8,10}";

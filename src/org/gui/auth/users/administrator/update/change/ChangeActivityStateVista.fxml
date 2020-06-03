@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootStage" maxWidth="-Infinity" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="745.0" prefWidth="428.0" styleClass="background" stylesheets="@../../../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="10.0" layoutY="10.0" prefHeight="782.0" prefWidth="509.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="42.0" prefWidth="499.0" spacing="15.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" minHeight="-Infinity" prefHeight="384.0" prefWidth="396.0">
+                     <children>
+                        <ImageView fitHeight="216.0" fitWidth="223.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../resources/images/assignProject.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" prefHeight="78.0" prefWidth="225.0" styleClass="firstLevelLabel" text="Cambiar estado de actividad" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="Gill Sans" size="31.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="89.0" prefWidth="379.0" styleClass="thirdLevelLabel" text="Cambiar el estado de actividad del personal implica que este último pueda tener acceso o no al sistema dependiendo de su tipo de estado de actividad" textAlignment="CENTER" wrapText="true" />
+                     </children>
+                  </VBox>
+                  <Label alignment="CENTER" minHeight="-Infinity" prefHeight="50.0" prefWidth="396.0" styleClass="thirdLevelLabel" text="Se cambiará al estado" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="Gill Sans" size="17.0" />
+                     </font>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="stateLabel" alignment="CENTER" prefHeight="26.0" prefWidth="127.0" styleClass="firstLevelLabel" text="Inactivo" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label styleClass="thirdLevelLabel" text="de">
+                     <font>
+                        <Font name="Gill Sans" size="17.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="userLabel" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="469.0" styleClass="thirdLevelLabel" text="NOMBRE" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="164.0" prefWidth="499.0">
+                     <children>
+                        <Label fx:id="systemLabel" alignment="CENTER" prefHeight="35.0" prefWidth="572.0" styleClass="systemLabel" textAlignment="CENTER" wrapText="true" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="80.0" prefWidth="427.0" spacing="10.0">
+               <children>
+                  <Button maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#changeActivityStateButtonPressed" prefHeight="42.0" prefWidth="381.0" styleClass="firstLevelButton" text="Cambiar" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="21.0" styleClass="withoutOutLineButton" text="Cancelar">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" />
+               </padding>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="15.0" right="15.0" top="45.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

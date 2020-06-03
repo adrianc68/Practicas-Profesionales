@@ -46,4 +46,5 @@ public interface IDeliveryDAO {
      * @return List<Delivery> A delivery list of practitioner.
      */
     List<Delivery> getAllDeliveriesByPractitionerID(int idPractitioner);
+
 }

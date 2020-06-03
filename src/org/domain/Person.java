@@ -6,6 +6,7 @@ public class Person {
     protected String phoneNumber;
     protected String email;
     protected Course course;
+    protected String activityState;
 
     public int getId() {
         return id;
@@ -47,6 +48,14 @@ public class Person {
         this.course = course;
     }
 
+    public String getActivityState() {
+        return activityState;
+    }
+
+    public void setActivityState(String activityState) {
+        this.activityState = activityState;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -55,6 +64,7 @@ public class Person {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", course=" + course +
+                ", activityState='" + activityState + '\'' +
                 '}';
     }
 

@@ -25,6 +25,40 @@ public class PersonDAO implements IPersonDAO {
         database = new Database();
     }
 
+
+    public String getActivityStateByEmailAndPassword(String email, String password) {
+        String activityState = null;
+        try( Connection conn = database.getConnection() ) {
+            String statement = "SELECT PERS.activity_state FROM Person AS PERS INNER JOIN AccessAccount AS ACA ON ACA.id_user = PERS.id_person AND ACA.email = ? AND ACA.password = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, password);
+            resultSet = preparedStatement.executeQuery();
+            if( resultSet.next() ) {
+                activityState = resultSet.getString("PERS.activity_state");
+            }
+        } catch (SQLException e) {
+            Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, e);
+        }
+        return activityState;
+    }
+
+    public boolean changeActivityStateByID(int idPractitioner) {
+        int rowsAffected = 0;
+        try( Connection conn = database.getConnection() ) {
+            String statement = "UPDATE Person SET activity_state = CASE WHEN (activity_state = 1) THEN 2 ELSE 1 END WHERE id_person = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idPractitioner);
+            rowsAffected = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, e);
+        }
+        System.out.println(rowsAffected);
+        return rowsAffected > 0;
+    }
+
+
+
     /***
      * Return a person from database.
      * <p>
@@ -38,8 +72,8 @@ public class PersonDAO implements IPersonDAO {
     @Override
     public Person getPersonByEmailAndPassword(String email, String password) {
         Person person = null;
-        try(Connection conn = database.getConnection()) {
-            String statement = "SELECT PERS.id_person, PERS.name, PERS.email, PERS.phoneNumber, COUR.id_course, COUR.name, COUR.NRC, COUR.period, CORD.cubicle, CORD.staff_number, PROF.cubicle, PROF.staff_number, PRAC.enrollment FROM AccessAccount AS ACA INNER JOIN Person AS PERS ON ACA.id_user = PERS.id_person AND ACA.email = ? AND ACA.password = ? INNER JOIN Course AS COUR ON PERS.id_course =  COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM COURSE) LEFT JOIN Coordinator AS CORD ON PERS.id_person = CORD.id_person LEFT JOIN Professor AS PROF ON PERS.id_person = PROF.id_person LEFT JOIN Practitioner AS PRAC ON PERS.id_person = PRAC.id_person";
+        try( Connection conn = database.getConnection() ) {
+            String statement = "SELECT PERS.id_person, PERS.name, PERS.email, PERS.phoneNumber, PERS.activity_state, COUR.id_course, COUR.name, COUR.NRC, COUR.period, CORD.cubicle, CORD.staff_number, PROF.cubicle, PROF.staff_number, PRAC.enrollment FROM AccessAccount AS ACA INNER JOIN Person AS PERS ON ACA.id_user = PERS.id_person AND ACA.email = ? AND ACA.password = ? AND PERS.activity_state = 1 INNER JOIN Course AS COUR ON PERS.id_course =  COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course) LEFT JOIN Coordinator AS CORD ON PERS.id_person = CORD.id_person LEFT JOIN Professor AS PROF ON PERS.id_person = PROF.id_person LEFT JOIN Practitioner AS PRAC ON PERS.id_person = PRAC.id_person";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
@@ -51,12 +85,12 @@ public class PersonDAO implements IPersonDAO {
                 person.setPhoneNumber( resultSet.getString("PERS.phoneNumber") );
                 person.setEmail( resultSet.getString("PERS.email") );
                 person.setId( resultSet.getInt("PERS.id_person") );
+                person.setActivityState( resultSet.getString("PERS.activity_state") );
                 person.setCourse(course);
             }
         } catch (SQLException e) {
             Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
-
         return person;
     }
 
@@ -72,6 +106,7 @@ public class PersonDAO implements IPersonDAO {
         return course;
     }
 
+    // BAD USER MANAGER ??? <---- FIX THIS!!!!
     private Person getInstanceOfResultSet(ResultSet resultSet) throws SQLException {
         Person person = new Person();
         if( resultSet.getString("CORD.cubicle") != null) {

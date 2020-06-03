@@ -30,6 +30,7 @@ public class Professor extends Person {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", course=" + course +
+                ", activityState='" + activityState + '\'' +
                 '}';
     }
 

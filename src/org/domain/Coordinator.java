@@ -30,7 +30,8 @@ public class Coordinator extends Person {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", course=" + course +
+                ", activityState='" + activityState + '\'' +
                 '}';
     }
-    
+
 }

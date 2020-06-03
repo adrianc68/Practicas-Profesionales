@@ -20,9 +20,7 @@ public class PractitionerDAOTest {
     private final int idProject = 1;
 
     public PractitionerDAOTest() {
-        databaseProperties = new DatabaseProperties();
-        databaseProperties.setPath("database.properties");
-
+        databaseProperties = new DatabaseProperties("database.properties");
     }
 
     @After

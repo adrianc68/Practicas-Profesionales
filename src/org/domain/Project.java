@@ -12,7 +12,7 @@ public class Project {
     private String chargeResponsable;
     private String nameResponsable;
     private String emailResponsable;
-    private Company company;
+    private Organization organization;
     private List<String> mediateObjectives;
     private List<String> immediateObjetives;
     private List<String> resources;
@@ -92,12 +92,12 @@ public class Project {
         this.emailResponsable = emailResponsable;
     }
 
-    public Company getCompany() {
-        return company;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     public List<String> getMediateObjectives() {
@@ -160,7 +160,7 @@ public class Project {
                 ", chargeResponsable='" + chargeResponsable + '\'' +
                 ", nameResponsable='" + nameResponsable + '\'' +
                 ", emailResponsable='" + emailResponsable + '\'' +
-                ", company=" + company +
+                ", company=" + organization +
                 ", mediateObjectives=" + mediateObjectives +
                 ", immediateObjetives=" + immediateObjetives +
                 ", resources=" + resources +

@@ -14,6 +14,10 @@ import java.util.logging.Logger;
 public class DatabaseProperties {
     private String path;
 
+    public DatabaseProperties(String path) {
+        this.path = path;
+    }
+
     public void setPath(String path) {
         this.path = path;
     }

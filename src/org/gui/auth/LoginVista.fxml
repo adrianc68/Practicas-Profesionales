@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="706.0" prefWidth="1201.0" style="-fx-border-width: 1 1 1 1; -fx-border-color: #000000; -fx-border-radius: 2;" styleClass="background" stylesheets="@resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="674.0" prefWidth="963.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER" fillWidth="false" prefHeight="704.0" prefWidth="381.0" style="-fx-border-width: 0 1 0 0; -fx-border-color: #000;">
+               <children>
+                  <Label prefHeight="124.0" prefWidth="342.0" styleClass="firstLevelLabel" text="Sistema de Prácticas Profesionales" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="SansSerif Regular" size="36.0" />
+                     </font>
+                  </Label>
+                  <GridPane prefHeight="216.0" prefWidth="335.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="79.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="71.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="183.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="335.0" spacing="5.0">
+                           <children>
+                              <Label styleClass="formLabel" text="USUARIO">
+                                 <font>
+                                    <Font name="SansSerif Regular" size="13.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="emailTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="335.0" promptText="miusuario@gmail.com" styleClass="textfield" />
+                           </children>
+                        </VBox>
+                        <VBox fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="71.0" prefWidth="335.0" spacing="5.0" GridPane.rowIndex="1">
+                           <children>
+                              <Label styleClass="formLabel" text="CONTRASEÑA">
+                                 <font>
+                                    <Font name="SansSerif Regular" size="13.0" />
+                                 </font>
+                              </Label>
+                              <PasswordField fx:id="passwordTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="335.0" promptText="miContraseña1234" styleClass="textfield" />
+                           </children>
+                        </VBox>
+                        <HBox alignment="CENTER" prefHeight="145.0" prefWidth="335.0" spacing="25.0" GridPane.rowIndex="2">
+                           <children>
+                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#loginButtonPressed" prefHeight="42.0" prefWidth="131.0" styleClass="firstLevelButton" text="Iniciar sesión" wrapText="true" />
+                              <Button fx:id="closeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="42.0" prefWidth="131.0" styleClass="lastLevelButton" text="Cerrar" wrapText="true" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+                  <Label alignment="TOP_CENTER" onMousePressed="#passwordRecoveryButtonPressed" prefHeight="37.0" prefWidth="269.0" styleClass="recoveryLabel" text="¿Has olvidado tu contraseña? Recupera tu contraseña haciendo clic aquí." textAlignment="CENTER" underline="true" wrapText="true" />
+                  <Label fx:id="systemLabel" styleClass="systemLabel" textFill="RED" />
+                  <Label styleClass="lastLevelLabel" text="Universidad Veracruzana 2020 Copyright © Todos los derechos reservados" translateY="180.0">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="100.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <ImageView fitHeight="704.0" fitWidth="826.0" pickOnBounds="true">
+               <image>
+                  <Image url="@resources/images/loginBackground3.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <Label alignment="CENTER" prefHeight="47.0" prefWidth="373.0" styleClass="windowTitle" text="Iniciar sesión" textAlignment="CENTER">
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <font>
+            <Font name="Open Sans Regular" size="13.0" />
+         </font>
+      </Label>
+   </children>
+   <effect>
+      <InnerShadow height="7.0" radius="2.0" width="3.0" />
+   </effect>
+</AnchorPane>

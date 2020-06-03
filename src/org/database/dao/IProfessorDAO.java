@@ -57,6 +57,15 @@ public interface IProfessorDAO {
      */
     List<Professor> getAllProfessorsByCourseID(int idCourse);
 
+    /***
+     * Get all professors by every course.
+     * <p>
+     * This method return all the professors available in the system.
+     * The purpose it's their management.
+     * </p>
+     * @return List<Professor> a list with all professors from specified course
+     */
+     List<Professor> getAllProfessors();
 
 
 }

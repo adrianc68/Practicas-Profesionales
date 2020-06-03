@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootStage" minWidth="550.0" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="626.0" prefWidth="825.0" styleClass="background" stylesheets="@../../../../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="1.0" layoutY="20.0" prefHeight="30.0" prefWidth="175.0" styleClass="windowTitle" text="Organizaciones">
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <font>
+            <Font name="Open Sans Regular" size="13.0" />
+         </font>
+      </Label>
+      <VBox layoutX="2.0" prefHeight="573.0" prefWidth="823.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="66.0" prefWidth="427.0">
+               <children>
+                  <ImageView fitHeight="52.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../resources/images/logouv.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets top="15.0" />
+               </padding>
+            </VBox>
+            <HBox prefHeight="469.0" prefWidth="764.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="540.0" prefWidth="823.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="553.0" styleClass="scrollPane">
+                           <content>
+                              <AnchorPane prefHeight="794.0">
+                                 <children>
+                                    <FlowPane fx:id="companiesPane" hgap="25.0" layoutX="30.0" layoutY="30.0" prefWidth="777.0" prefWrapLength="777.0" rowValignment="TOP" styleClass="flowPane" vgap="35.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <padding>
+                                          <Insets bottom="15.0" left="10.0" right="10.0" top="15.0" />
+                                       </padding>
+                                    </FlowPane>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="72.0" prefWidth="823.0" spacing="35.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#addCompanyButtonPressed" prefHeight="52.0" prefWidth="150.0" styleClass="withBorderButton" text="Registrar compañia" textAlignment="CENTER" wrapText="true">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="UNIVERSITY" size="25" styleClass="secondLevelIcon" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeButtonPressed" prefHeight="52.0" prefWidth="150.0" styleClass="withBorderButton" text="Cancelar" />
+               </children>
+               <padding>
+                  <Insets right="15.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
