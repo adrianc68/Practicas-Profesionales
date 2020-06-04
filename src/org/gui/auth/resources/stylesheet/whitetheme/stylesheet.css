@@ -1,6 +1,13 @@
 
 
-
+.tooltip {
+  -fx-background: rgba(30,30,30);
+  -fx-text-fill: white;
+  -fx-background-color: rgba(30,30,30,0.8);
+  -fx-max-width:100;
+  -fx-min-width:100;
+  -fx-pref-width:100;
+}
 
 /*
   RADIO BUTTON
@@ -133,11 +140,11 @@
 }
 
 .wrongTextField {
-  -fx-background-color:#ff0000;
+  -fx-fill:#000000;
 }
 
 .correctlyTextField {
-  -fx-background-color:#0000ff;
+  -fx-fill:#00ff00;
 }
 
 

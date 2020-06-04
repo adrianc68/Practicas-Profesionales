@@ -2,20 +2,13 @@ package org.gui.auth.users.administrator.update.remove;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.database.dao.CoordinatorDAO;
 import org.database.dao.CourseDAO;
 import org.database.dao.ProfessorDAO;
@@ -23,17 +16,13 @@ import org.domain.Coordinator;
 import org.domain.Course;
 import org.domain.Person;
 import org.domain.Professor;
+import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.CSSProperties;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class RemoveObjectController implements Initializable {
-    private double mousePositionOnX;
-    private double mousePositionOnY;
+public class RemoveObjectController extends Controller implements Initializable {
     private boolean statusRemoveOperation;
     private Object object;
     @FXML private Label userLabel;
@@ -44,7 +33,7 @@ public class RemoveObjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass();
+        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
         statusRemoveOperation = false;
         if(object != null) {
             // T-O Ternary Operator Here!
@@ -53,21 +42,9 @@ public class RemoveObjectController implements Initializable {
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/auth/users/administrator/update/remove/RemoveObjectVista.fxml") );
-        loader.setController(this);
-        Parent root = null;
-        try{
-            root = loader.load();
-        } catch(IOException ioe) {
-            Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, ioe);
-        }
-        Stage removeStage = new Stage();
-        removeStage.initModality(Modality.APPLICATION_MODAL);
-        removeStage.initStyle(StageStyle.TRANSPARENT);
-        Scene scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
-        removeStage.setScene( scene );
-        removeStage.showAndWait();
+        loadFXMLFile(getClass().getResource("/org/gui/auth/users/administrator/update/remove/RemoveObjectVista.fxml"), this);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
     }
 
     public void setObject(Object object) {
@@ -79,10 +56,25 @@ public class RemoveObjectController implements Initializable {
     }
 
     @FXML
-    void removeButtonPressed(ActionEvent event) {
+    protected void cancelButtonPressed(ActionEvent event) {
+        stage.close();
+    }
+
+    @FXML
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
+    }
+
+    @FXML
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
+    }
+
+    @FXML
+    protected void removeButtonPressed(ActionEvent event) {
         if(confirmationTextField.getText().equals("ELIMINAR")){
             removeObjectFromDatabase();
-            closeButton.fire();
+            stage.close();
             if(statusRemoveOperation) {
                 showSucessfullAlert();
             } else {
@@ -91,25 +83,6 @@ public class RemoveObjectController implements Initializable {
         } else {
             systemLabel.setText("¡Verifica los datos!");
         }
-    }
-
-    @FXML
-    void cancelButtonPressed(ActionEvent event) {
-        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.close();
-    }
-
-    @FXML
-    void stageDragged(MouseEvent event) {
-        Stage stage = (Stage) ( ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.setX( event.getScreenX() - mousePositionOnX );
-        stage.setY( event.getScreenY() - mousePositionOnY );
-    }
-
-    @FXML
-    void stagePressed(MouseEvent event) {
-        mousePositionOnX = event.getSceneX();
-        mousePositionOnY = event.getSceneY();
     }
 
     private void showSucessfullAlert() {
@@ -138,11 +111,6 @@ public class RemoveObjectController implements Initializable {
         } else {
             systemLabel.setText("¡No se puede eliminar!");
         }
-    }
-
-    private void setStyleClass() {
-        rootStage.getStylesheets().clear();
-        rootStage.getStylesheets().add(getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
     }
 
 }

@@ -2,11 +2,7 @@ package org.gui.auth.util.changepassword;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -15,24 +11,17 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.database.dao.AccessAccountDAO;
-import org.domain.Person;
+import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
 import org.util.CSSProperties;
 import org.util.Cryptography;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class ChangePasswordController implements Initializable {
+public class ChangePasswordController extends Controller implements Initializable {
     private String email;
-    private double mousePositionOnX;
-    private double mousePositionOnY;
     @FXML private PasswordField passwordTextField;
     @FXML private PasswordField confirmationPasswordTextField;
     @FXML private Label systemLabel;
@@ -41,22 +30,12 @@ public class ChangePasswordController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass();
+        setStyleClass(rootStage, getClass().getResource("../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/auth/util/changepassword/ChangePasswordVista.fxml") );
-        loader.setController(this);
-        Parent root = null;
-        try{
-            root = loader.load();
-        } catch(IOException ioe) {
-            Logger.getLogger( ChangePasswordController.class.getName() ).log(Level.SEVERE, null, ioe);
-        }
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.TRANSPARENT);
+        loadFXMLFile(getClass().getResource("/org/gui/auth/util/changepassword/ChangePasswordVista.fxml"), this);
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene( new Scene(root) );
         stage.showAndWait();
     }
 
@@ -65,7 +44,7 @@ public class ChangePasswordController implements Initializable {
     }
 
     @FXML
-    void changePasswordButtonPressed(ActionEvent event) {
+    protected void changePasswordButtonPressed(ActionEvent event) {
         if( !passwordTextField.getText().equals("") && !confirmationPasswordTextField.getText().equals("") ) {
             changePassword();
         } else {
@@ -75,30 +54,25 @@ public class ChangePasswordController implements Initializable {
     }
 
     @FXML
-    void cancelButtonPressed(ActionEvent event) {
-        Stage stage = ( ( Stage) ( (Node) event.getSource() ).getScene().getWindow() );
+    protected void cancelButtonPressed(ActionEvent event) {
         stage.close();
     }
 
     @FXML
-    void stageDragged(MouseEvent event) {
-        Stage stage = (Stage) ( ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.setX( event.getScreenX() - mousePositionOnX );
-        stage.setY( event.getScreenY() - mousePositionOnY );
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
     }
 
     @FXML
-    void stagePressed(MouseEvent event) {
-        mousePositionOnX = event.getSceneX();
-        mousePositionOnY = event.getSceneY();
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
     }
 
     private void changePassword() {
         String newPassword = passwordTextField.getText();
         String newPasswordConfirmation = confirmationPasswordTextField.getText();
-        Person user = Auth.getInstance().getUser();
         if( newPassword.equals(newPasswordConfirmation) ) {
-            if(user == null) {
+            if( Auth.getInstance().getUser() == null ) {
                 changePasswordByUnloggedUser(newPassword, email);
             } else {
                 changePasswordByLoggedUser(newPassword);
@@ -147,11 +121,6 @@ public class ChangePasswordController implements Initializable {
         ClipboardContent content = new ClipboardContent();
         content.putString(email + ":" + password);
         clipboard.setContent(content);
-    }
-
-    private void setStyleClass() {
-        rootStage.getStylesheets().clear();
-        rootStage.getStylesheets().add(getClass().getResource("../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
     }
 
 }

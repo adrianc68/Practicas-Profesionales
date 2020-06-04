@@ -50,8 +50,7 @@ public class CSSProperties {
         }
         return result;
     }
-
-
+    
     private static Properties readProperties() {
         Properties properties = new Properties();
         try (InputStream input = new FileInputStream(PROPERTIES_PATH)) {

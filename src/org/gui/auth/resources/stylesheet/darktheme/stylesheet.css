@@ -1,4 +1,10 @@
 
+
+.tooltip {
+  -fx-background: rgba(30,30,30);
+  -fx-text-fill: white;
+  -fx-background-color: rgba(30,30,30,0.8);
+}
 /*
   RADIO BUTTON
 */

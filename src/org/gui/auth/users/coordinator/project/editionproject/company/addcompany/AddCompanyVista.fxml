@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -70,7 +71,10 @@
                                                    <graphic>
                                                       <MaterialDesignIconView fx:id="checkIconName" glyphName="CHECK" size="15" />
                                                    </graphic></Label>
-                                                <TextField fx:id="companyNameTextField" prefHeight="42.0" promptText="e.g Tech Inc" styleClass="textfield" />
+                                                <TextField fx:id="companyNameTextField" prefHeight="42.0" promptText="e.g Tech Inc" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -86,7 +90,10 @@
                                                    <graphic>
                                                       <MaterialDesignIconView fx:id="checkIconAddress" glyphName="CHECK" size="15" />
                                                    </graphic></Label>
-                                                <TextField fx:id="companyAddressTextField" prefHeight="42.0" promptText="e.g Boca del Rio" styleClass="textfield" />
+                                                <TextField fx:id="companyAddressTextField" prefHeight="42.0" promptText="e.g Boca del Rio" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -102,7 +109,10 @@
                                                    <graphic>
                                                       <MaterialDesignIconView fx:id="checkIconEmail" glyphName="CHECK" size="15" />
                                                    </graphic></Label>
-                                                <TextField fx:id="companyEmailTextField" prefHeight="42.0" promptText="e.g tech@corp.com" styleClass="textfield" />
+                                                <TextField fx:id="companyEmailTextField" prefHeight="42.0" promptText="e.g tech@corp.com" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="250.0" text="• Debe contener carácteres simples.&#10;• Debe contener un @.&#10;• Debe contener un ." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -116,7 +126,10 @@
                                              <graphic>
                                                 <MaterialDesignIconView fx:id="checkIconPhoneNumber" glyphName="CHECK" size="15" />
                                              </graphic></Label>
-                                          <TextField fx:id="companyPhoneNumberTextField" prefHeight="42.0" promptText="e.g 2200000000" styleClass="textfield" />
+                                          <TextField fx:id="companyPhoneNumberTextField" prefHeight="42.0" promptText="e.g 2200000000" styleClass="textfield">
+                                             <tooltip>
+                                                <Tooltip id="tooltip" maxWidth="200.0" text="• Debe tener solo números.&#10;• Puede ser de una longitud de 8 a 10 caracteres.&#10;" textAlignment="JUSTIFY" wrapText="true" />
+                                             </tooltip></TextField>
                                        </children>
                                        <padding>
                                           <Insets left="20.0" right="15.0" />
@@ -145,7 +158,10 @@
                                                    <graphic>
                                                       <MaterialDesignIconView fx:id="checkIconCity" glyphName="CHECK" size="15" />
                                                    </graphic></Label>
-                                                <TextField fx:id="companyCityTextField" prefHeight="42.0" promptText="e.g Veracruz" styleClass="textfield" />
+                                                <TextField fx:id="companyCityTextField" prefHeight="42.0" promptText="e.g Veracruz" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -159,7 +175,10 @@
                                              <graphic>
                                                 <MaterialDesignIconView fx:id="checkIconState" glyphName="CHECK" size="15" />
                                              </graphic></Label>
-                                          <TextField fx:id="companyStateTextField" prefHeight="42.0" promptText="e.g Veracruz" styleClass="textfield" />
+                                          <TextField fx:id="companyStateTextField" prefHeight="42.0" promptText="e.g Veracruz" styleClass="textfield">
+                                             <tooltip>
+                                                <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                             </tooltip></TextField>
                                        </children>
                                        <padding>
                                           <Insets left="20.0" right="15.0" />
@@ -173,7 +192,10 @@
                                                    <graphic>
                                                       <MaterialDesignIconView fx:id="checkIconDirectUsers" glyphName="CHECK" size="15" />
                                                    </graphic></Label>
-                                                <TextField fx:id="companyDirectUsersTextField" prefHeight="42.0" promptText="e.g 25" styleClass="textfield" />
+                                                <TextField fx:id="companyDirectUsersTextField" prefHeight="42.0" promptText="e.g 25" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="Debe contener solo números enteros" textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -185,7 +207,10 @@
                                                    <graphic>
                                                       <MaterialDesignIconView fx:id="checkIconIndirectUsers" glyphName="CHECK" size="15" />
                                                    </graphic></Label>
-                                                <TextField fx:id="companyIndirectUsersTextField" prefHeight="42.0" promptText="e.g 122" styleClass="textfield" />
+                                                <TextField fx:id="companyIndirectUsersTextField" prefHeight="42.0" promptText="e.g 122" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="Debe contener solo números enteros" textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />

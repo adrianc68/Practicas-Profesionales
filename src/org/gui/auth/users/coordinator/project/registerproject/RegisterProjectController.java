@@ -4,31 +4,23 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.database.dao.ProjectDAO;
 import org.domain.Project;
+import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.CSSProperties;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.gui.auth.resources.alerts.OperationAlert.showSuccessfullAlert;
-import static org.gui.auth.resources.alerts.OperationAlert.showUnsuccessfullAlert;
 import org.gui.auth.users.coordinator.project.editionproject.screens.ScreenController;
 
-public class RegisterProjectController implements Initializable {
-    private double mousePositionOnX;
-    private double mousePositionOnY;
+public class RegisterProjectController extends Controller implements Initializable {
     private boolean addOperationStatus;
     private Project newProject;
     private AnchorPane firstScreen;
@@ -45,26 +37,14 @@ public class RegisterProjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass();
+        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
         initScreens();
         firstLoaderRadioButton.fire();
         addOperationStatus = false;
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/auth/users/coordinator/project/registerproject/RegisterProjectVista.fxml") );
-        loader.setController(this);
-        Parent root = null;
-        try{
-            root = loader.load();
-        } catch(IOException ioe) {
-            Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, ioe);
-        }
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.TRANSPARENT);
-        Scene scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
-        stage.setScene(scene);
+        loadFXMLFile(getClass().getResource("/org/gui/auth/users/coordinator/project/registerproject/RegisterProjectVista.fxml"), this);
         stage.showAndWait();
     }
 
@@ -76,9 +56,39 @@ public class RegisterProjectController implements Initializable {
         return addOperationStatus;
     }
 
+    @FXML
+    protected void loadFirstScreenPressed(ActionEvent event) {
+        setScreenAndButtonText(firstScreen, "Siguiente");
+    }
+
+    @FXML
+    protected void loadSecondScreenPressed(ActionEvent event) {
+        setScreenAndButtonText(secondScreen, "Siguiente");
+    }
+
+    @FXML
+    protected void loadThirdScreenPressed(ActionEvent event) {
+        setScreenAndButtonText(thirdScreen, "Registrar");
+    }
+
+    @FXML
+    protected void cancelButtonPressed(ActionEvent event) {
+        stage.close();
+    }
+
+    @FXML
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
+    }
+
+    @FXML
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
+    }
+
     // BAD SCREEN MANAGER ??? <--- FIX THIS
     @FXML
-    void nextButtonPressed(ActionEvent event) {
+    protected void nextButtonPressed(ActionEvent event) {
         if(registrationPane.getChildren().get(0) == thirdScreen) {
             if(screenController.verifyInputData() ) {
                 addProjectToDatabase();
@@ -91,40 +101,6 @@ public class RegisterProjectController implements Initializable {
         }
     }
 
-    @FXML
-    void loadFirstScreenPressed(ActionEvent event) {
-        setScreenAndButtonText(firstScreen, "Siguiente");
-    }
-
-    @FXML
-    void loadSecondScreenPressed(ActionEvent event) {
-        setScreenAndButtonText(secondScreen, "Siguiente");
-    }
-
-    @FXML
-    void loadThirdScreenPressed(ActionEvent event) {
-        setScreenAndButtonText(thirdScreen, "Registrar");
-    }
-
-    @FXML
-    void cancelButtonPressed(ActionEvent event) {
-        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.close();
-    }
-
-    @FXML
-    void stageDragged(MouseEvent event) {
-        Stage stage = (Stage) ( ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.setX( event.getScreenX() - mousePositionOnX );
-        stage.setY( event.getScreenY() - mousePositionOnY );
-    }
-
-    @FXML
-    void stagePressed(MouseEvent event) {
-        mousePositionOnX = event.getSceneX();
-        mousePositionOnY = event.getSceneY();
-    }
-
     private void addProjectToDatabase() {
         newProject = screenController.getNewProject();
         int idProject = 0;
@@ -134,11 +110,11 @@ public class RegisterProjectController implements Initializable {
             addOperationStatus = true;
             String title = "Se agregó el proyecto.";
             String contentText = "¡Se ha agregado al sistema el nuevo proyecto.";
-            showSuccessfullAlert(title, contentText);
+            OperationAlert.showSuccessfullAlert(title, contentText);
         } else {
             String title = "No se pudo agregar el proyecto";
             String contentText = "¡No se pudo agregar el nuevo proyecto al sistema!";
-            showUnsuccessfullAlert(title, contentText);
+            OperationAlert.showUnsuccessfullAlert(title, contentText);
         }
     }
 
@@ -151,11 +127,8 @@ public class RegisterProjectController implements Initializable {
     private void initScreens() {
         screenController = new ScreenController();
         firstScreen = loadSpecifiedScreen("/org/gui/auth/users/coordinator/project/editionproject/screens/firstscreen/FirstScreenVista.fxml");
-        setStyleClassToScreens(firstScreen);
         secondScreen = loadSpecifiedScreen("/org/gui/auth/users/coordinator/project/editionproject/screens/secondscreen/SecondScreenVista.fxml");
-        setStyleClassToScreens(secondScreen);
         thirdScreen = loadSpecifiedScreen("/org/gui/auth/users/coordinator/project/editionproject/screens/thirdscreen/ThirdScreenVista.fxml");
-        setStyleClassToScreens(thirdScreen);
     }
 
     private AnchorPane loadSpecifiedScreen(String sourcePath) {
@@ -167,17 +140,9 @@ public class RegisterProjectController implements Initializable {
         } catch (IOException e) {
             Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, e);
         }
+        pane.getStylesheets().clear();
+        pane.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
         return pane;
-    }
-
-    private void setStyleClassToScreens(AnchorPane screen) {
-        screen.getStylesheets().clear();
-        screen.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-    }
-
-    private void setStyleClass() {
-        rootStage.getStylesheets().clear();
-        rootStage.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
     }
 
 }

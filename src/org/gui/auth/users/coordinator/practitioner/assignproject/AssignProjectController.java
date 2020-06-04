@@ -2,33 +2,22 @@ package org.gui.auth.users.coordinator.practitioner.assignproject;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.database.dao.PractitionerDAO;
 import org.domain.Practitioner;
 import org.domain.Project;
+import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.CSSProperties;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class AssignProjectController implements Initializable {
-    private double mousePositionOnX;
-    private double mousePositionOnY;
+public class AssignProjectController extends Controller implements Initializable {
     private boolean assignProjectStatus;
     private Practitioner practitioner;
     private Project project;
@@ -43,7 +32,7 @@ public class AssignProjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass();
+        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
         assignProjectStatus = false;
         if(practitioner != null && project != null) {
             setInformationToCards();
@@ -51,20 +40,8 @@ public class AssignProjectController implements Initializable {
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/auth/users/coordinator/practitioner/assignproject/AssignProjectVista.fxml") );
-        loader.setController(this);
-        Parent root = null;
-        try{
-            root = loader.load();
-        } catch(IOException ioe) {
-            Logger.getLogger( AssignProjectController.class.getName()).log(Level.WARNING, null, ioe);
-        }
-        Stage stage = new Stage();
+        loadFXMLFile(getClass().getResource("/org/gui/auth/users/coordinator/practitioner/assignproject/AssignProjectVista.fxml"), this);
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        Scene scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
-        stage.setScene(scene);
         stage.showAndWait();
     }
 
@@ -108,21 +85,17 @@ public class AssignProjectController implements Initializable {
 
     @FXML
     void cancelButtonPressed(ActionEvent event) {
-        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
         stage.close();
     }
 
     @FXML
-    void stageDragged(MouseEvent event) {
-        Stage stage = (Stage) ( ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.setX( event.getScreenX() - mousePositionOnX );
-        stage.setY( event.getScreenY() - mousePositionOnY );
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
     }
 
     @FXML
-    void stagePressed(MouseEvent event) {
-        mousePositionOnX = event.getSceneX();
-        mousePositionOnY = event.getSceneY();
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
     }
 
     private void setPractitionerToCard() {
@@ -134,11 +107,6 @@ public class AssignProjectController implements Initializable {
         projectNameLabel.setText( project.getName() );
         projectScheduleLabel.setText( project.getSchedule() );
         projectEmailResponsableLabel.setText( project.getEmailResponsable() );
-    }
-
-    private void setStyleClass() {
-        rootStage.getStylesheets().clear();
-        rootStage.getStylesheets().add(getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
     }
 
 }

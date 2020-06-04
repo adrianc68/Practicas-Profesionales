@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
@@ -47,7 +48,10 @@
                                                    <graphic>
                                                       <MaterialDesignIconView fx:id="checkIconName" glyphName="CHECK" size="15" />
                                                    </graphic></Label>
-                                                <TextField fx:id="projectNameTextField" minHeight="-Infinity" prefHeight="42.0" prefWidth="15.0" promptText="e.g Universidad Veracruzana" styleClass="textfield" />
+                                                <TextField fx:id="projectNameTextField" minHeight="-Infinity" prefHeight="42.0" prefWidth="15.0" promptText="e.g Universidad Veracruzana" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -59,7 +63,10 @@
                                                    <graphic>
                                                       <MaterialDesignIconView fx:id="checkIconGeneralDescription" glyphName="CHECK" size="15" />
                                                    </graphic></Label>
-                                                <TextArea fx:id="projectDescriptionTextArea" prefHeight="121.0" prefWidth="390.0" promptText="e.g Descripción" styleClass="textArea" wrapText="true" />
+                                                <TextArea fx:id="projectDescriptionTextArea" prefHeight="121.0" prefWidth="390.0" promptText="e.g Descripción" styleClass="textArea" wrapText="true">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextArea>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -71,7 +78,10 @@
                                                    <graphic>
                                                       <MaterialDesignIconView fx:id="checkIconGeneralPurpose" glyphName="CHECK" size="15" />
                                                    </graphic></Label>
-                                                <TextArea fx:id="projectPurposeTextArea" promptText="e.g Propósito" styleClass="textArea" wrapText="true" />
+                                                <TextArea fx:id="projectPurposeTextArea" promptText="e.g Propósito" styleClass="textArea" wrapText="true">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextArea>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -92,38 +102,50 @@
                                                 <Insets left="5.0" />
                                              </padding>
                                           </HBox>
-                                          <VBox prefHeight="64.0" spacing="5.0">
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="153.0" styleClass="formLabel" text="HORARIO">
+                                                <VBox prefHeight="64.0" spacing="5.0">
+                                                   <children>
+                                                      <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="153.0" styleClass="formLabel" text="HORARIO">
+                                                         <padding>
+                                                            <Insets top="5.0" />
+                                                         </padding>
+                                                         <graphic>
+                                                            <MaterialDesignIconView fx:id="checkIconSchedule" glyphName="CHECK" size="15" />
+                                                         </graphic>
+                                                      </Label>
+                                                      <TextField fx:id="projectScheduleTextField" minHeight="-Infinity" prefHeight="42.0" prefWidth="299.0" promptText="e.g Lunes a viernes de 8 a 3 PM" styleClass="textfield">
+                                                         <tooltip>
+                                                            <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                                         </tooltip>
+                                                      </TextField>
+                                                   </children>
                                                    <padding>
-                                                      <Insets top="5.0" />
+                                                      <Insets left="20.0" right="15.0" />
                                                    </padding>
-                                                   <graphic>
-                                                      <MaterialDesignIconView fx:id="checkIconSchedule" glyphName="CHECK" size="15" />
-                                                   </graphic>
-                                                </Label>
-                                                <TextField fx:id="projectScheduleTextField" minHeight="-Infinity" prefHeight="42.0" promptText="e.g Lunes a viernes de 8 a 3 PM" styleClass="textfield" />
-                                             </children>
-                                             <padding>
-                                                <Insets left="20.0" right="15.0" />
-                                             </padding>
-                                          </VBox>
-                                          <VBox prefHeight="64.0" spacing="5.0">
-                                             <children>
-                                                <Label alignment="TOP_LEFT" prefHeight="3.0" prefWidth="126.0" styleClass="formLabel" text="DURACIÓN">
+                                                </VBox>
+                                                <VBox prefHeight="64.0" spacing="5.0">
+                                                   <children>
+                                                      <Label alignment="TOP_LEFT" prefHeight="3.0" prefWidth="126.0" styleClass="formLabel" text="DURACIÓN">
+                                                         <padding>
+                                                            <Insets top="5.0" />
+                                                         </padding>
+                                                         <graphic>
+                                                            <MaterialDesignIconView fx:id="checkIconDuration" glyphName="CHECK" size="15" />
+                                                         </graphic>
+                                                      </Label>
+                                                      <TextField fx:id="projectDurationTextField" minHeight="-Infinity" prefHeight="42.0" promptText="e.g 420" styleClass="textfield">
+                                                         <tooltip>
+                                                            <Tooltip id="tooltip" maxWidth="200.0" text="Debe contener solo números y estar expresado en horas." textAlignment="JUSTIFY" wrapText="true" />
+                                                         </tooltip>
+                                                      </TextField>
+                                                   </children>
                                                    <padding>
-                                                      <Insets top="5.0" />
+                                                      <Insets left="20.0" right="15.0" />
                                                    </padding>
-                                                   <graphic>
-                                                      <MaterialDesignIconView fx:id="checkIconDuration" glyphName="CHECK" size="15" />
-                                                   </graphic>
-                                                </Label>
-                                                <TextField fx:id="projectDurationTextField" minHeight="-Infinity" prefHeight="42.0" promptText="e.g 420" styleClass="textfield" />
+                                                </VBox>
                                              </children>
-                                             <padding>
-                                                <Insets left="20.0" right="15.0" />
-                                             </padding>
-                                          </VBox>
+                                          </HBox>
                                           <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="58.0" prefWidth="703.0">
                                              <children>
                                                 <Label styleClass="firstLevelLabel" text="Información del responsable">
@@ -149,7 +171,10 @@
                                                       <MaterialDesignIconView fx:id="checkIconNameResponsable" glyphName="CHECK" size="15" />
                                                    </graphic>
                                                 </Label>
-                                                <TextField fx:id="projectResponsableNameTextField" minHeight="-Infinity" prefHeight="42.0" prefWidth="390.0" promptText="e.g Josue Lira Lira" styleClass="textfield" />
+                                                <TextField fx:id="projectResponsableNameTextField" minHeight="-Infinity" prefHeight="42.0" prefWidth="390.0" promptText="e.g Josue Lira Lira" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -165,7 +190,10 @@
                                                       <MaterialDesignIconView fx:id="checkIconChargeResponsable" glyphName="CHECK" size="15" />
                                                    </graphic>
                                                 </Label>
-                                                <TextField fx:id="projectResponsableChargeTextField" minHeight="42.0" prefHeight="42.0" promptText="e.g Recursos humanos" styleClass="textfield" />
+                                                <TextField fx:id="projectResponsableChargeTextField" minHeight="42.0" prefHeight="42.0" promptText="e.g Recursos humanos" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />
@@ -181,7 +209,10 @@
                                                       <MaterialDesignIconView fx:id="checkIconEmail" glyphName="CHECK" size="15" />
                                                    </graphic>
                                                 </Label>
-                                                <TextField fx:id="projectResponsableEmailTextField" minHeight="42.0" prefHeight="30.0" promptText="e.g jjlira@hotmail.com" styleClass="textfield" />
+                                                <TextField fx:id="projectResponsableEmailTextField" minHeight="42.0" prefHeight="30.0" promptText="e.g jjlira@hotmail.com" styleClass="textfield">
+                                                   <tooltip>
+                                                      <Tooltip id="tooltip" maxWidth="250.0" text="• Debe contener carácteres simples&#10;• Debe contener un @.&#10;• Debe contener un ." textAlignment="JUSTIFY" wrapText="true" />
+                                                   </tooltip></TextField>
                                              </children>
                                              <padding>
                                                 <Insets left="20.0" right="15.0" />

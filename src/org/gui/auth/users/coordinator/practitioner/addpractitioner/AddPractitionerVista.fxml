@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -50,7 +51,10 @@
                            <graphic>
                               <MaterialDesignIconView fx:id="checkIconName" glyphName="CHECK" size="15" />
                            </graphic></Label>
-                        <TextField fx:id="practitionerNameTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g Roberto Lira" styleClass="textfield" />
+                        <TextField fx:id="practitionerNameTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g Roberto Lira" styleClass="textfield">
+                           <tooltip>
+                              <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                           </tooltip></TextField>
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_LEFT" prefHeight="95.0" spacing="5.0">
@@ -59,14 +63,20 @@
                            <graphic>
                               <MaterialDesignIconView fx:id="checkIconEmail" glyphName="CHECK" size="15" />
                            </graphic></Label>
-                        <TextField fx:id="practitionerEmailTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g zS00000000@estudiantes.uv.mx" styleClass="textfield" />
+                        <TextField fx:id="practitionerEmailTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g zS00000000@estudiantes.uv.mx" styleClass="textfield">
+                           <tooltip>
+                              <Tooltip id="tooltip" maxWidth="250.0" text="• Debe contener carácteres simples.&#10;• Debe contener un @.&#10;• Debe contener un ." textAlignment="JUSTIFY" wrapText="true" />
+                           </tooltip></TextField>
                         <VBox alignment="CENTER_LEFT" prefHeight="57.0" spacing="5.0">
                            <children>
                               <Label styleClass="formLabel" text="TELÉFONO">
                                  <graphic>
                                     <MaterialDesignIconView fx:id="checkIconPhoneNumber" glyphName="CHECK" size="15" />
                                  </graphic></Label>
-                              <TextField fx:id="practitionerPhoneNumberTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g 2200000000" styleClass="textfield" />
+                              <TextField fx:id="practitionerPhoneNumberTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g 2200000000" styleClass="textfield">
+                                 <tooltip>
+                                    <Tooltip id="tooltip" maxWidth="200.0" text="• Debe tener solo números.&#10;• Puede ser de una longitud de 8 a 10 caracteres.&#10;" textAlignment="JUSTIFY" wrapText="true" />
+                                 </tooltip></TextField>
                            </children>
                         </VBox>
                         <VBox prefHeight="13.0" prefWidth="619.0" />
@@ -83,7 +93,10 @@
                            <graphic>
                               <MaterialDesignIconView fx:id="checkIconEnrollment" glyphName="CHECK" size="15" />
                            </graphic></Label>
-                        <TextField fx:id="practitionerEnrollmentTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g S00000000" styleClass="textfield" />
+                        <TextField fx:id="practitionerEnrollmentTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g S00000000" styleClass="textfield">
+                           <tooltip>
+                              <Tooltip id="tooltip" maxWidth="200.0" text="Puede tener números y carácteres simples.&#10;" textAlignment="JUSTIFY" wrapText="true" />
+                           </tooltip></TextField>
                      </children>
                   </VBox>
                   <Label fx:id="systemLabel" alignment="BOTTOM_CENTER" prefHeight="36.0" prefWidth="357.0" styleClass="systemLabel" textAlignment="CENTER" wrapText="true" />

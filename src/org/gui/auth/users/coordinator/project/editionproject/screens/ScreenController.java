@@ -23,11 +23,12 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.AnchorPane;
 import org.domain.Organization;
 import org.domain.Project;
+import org.gui.ValidatorController;
 import org.gui.auth.users.coordinator.project.editionproject.screens.secondscreen.textinput.TextInputController;
 import org.gui.auth.users.coordinator.project.editionproject.company.CompanyController;
 import org.util.Validator;
 
-public class ScreenController implements Initializable {
+public class ScreenController extends ValidatorController implements Initializable {
     private Project project;
     private String textListViewSelected;
     private Organization selectedOrganization;
@@ -74,12 +75,7 @@ public class ScreenController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        mediateObjetivesObservableList = FXCollections.observableArrayList();
-        resourcesObservableList = FXCollections.observableArrayList();
-        activitiesObservableList = FXCollections.observableArrayList();
-        immediateObjetivesObservableList = FXCollections.observableArrayList();
-        methodologiesObservableList = FXCollections.observableArrayList();
-        responsabilitiesObservableList = FXCollections.observableArrayList();
+        initObservableList();
         initValidatorToTextFields();
     }
 
@@ -155,73 +151,73 @@ public class ScreenController implements Initializable {
 
 
     @FXML
-    void activityAddButtonPressed(ActionEvent event) {
+    protected void activityAddButtonPressed(ActionEvent event) {
         addTextInputToListViewFromObservableList(activitiesObservableList, activitiesListView);
     }
 
     @FXML
-    void activityRemoveButtonPressed(ActionEvent event) {
+    protected void activityRemoveButtonPressed(ActionEvent event) {
         textListViewSelected = activitiesListView.getSelectionModel().getSelectedItem();
         removeTextInputFromListView(activitiesListView, textListViewSelected);
     }
 
     @FXML
-    void immediateAddButtonPressed(ActionEvent event) {
+    protected void immediateAddButtonPressed(ActionEvent event) {
         addTextInputToListViewFromObservableList(immediateObjetivesObservableList, immediateObjetivesListView);
     }
 
     @FXML
-    void immediateRemoveButtonPressed(ActionEvent event) {
+    protected void immediateRemoveButtonPressed(ActionEvent event) {
         textListViewSelected = immediateObjetivesListView.getSelectionModel().getSelectedItem();
         removeTextInputFromListView(immediateObjetivesListView, textListViewSelected);
     }
 
     @FXML
-    void mediateAddButtonPressed(ActionEvent event) {
+    protected void mediateAddButtonPressed(ActionEvent event) {
         addTextInputToListViewFromObservableList(mediateObjetivesObservableList, mediateObjetivesListView);
     }
 
     @FXML
-    void mediateRemoveButtonPressed(ActionEvent event) {
+    protected void mediateRemoveButtonPressed(ActionEvent event) {
         textListViewSelected = mediateObjetivesListView.getSelectionModel().getSelectedItem();
         removeTextInputFromListView(mediateObjetivesListView, textListViewSelected);
     }
 
     @FXML
-    void methodologyAddButtonPressed(ActionEvent event) {
+    protected void methodologyAddButtonPressed(ActionEvent event) {
         addTextInputToListViewFromObservableList(methodologiesObservableList, methodologiesListView);
     }
 
     @FXML
-    void methodologyRemoveButtonPressed(ActionEvent event) {
+    protected void methodologyRemoveButtonPressed(ActionEvent event) {
         textListViewSelected = methodologiesListView.getSelectionModel().getSelectedItem();
         removeTextInputFromListView(methodologiesListView, textListViewSelected);
     }
 
     @FXML
-    void resourcesAddButtonPressed(ActionEvent event) {
+    protected void resourcesAddButtonPressed(ActionEvent event) {
         addTextInputToListViewFromObservableList(resourcesObservableList, resourcesListView);
     }
 
     @FXML
-    void resourceRemoveButtonPressed(ActionEvent event) {
+    protected void resourceRemoveButtonPressed(ActionEvent event) {
         textListViewSelected = resourcesListView.getSelectionModel().getSelectedItem();
         removeTextInputFromListView(resourcesListView, textListViewSelected);
     }
 
     @FXML
-    void responsabilityAddButtonPressed(ActionEvent event) {
+    protected void responsabilityAddButtonPressed(ActionEvent event) {
         addTextInputToListViewFromObservableList(responsabilitiesObservableList, responsabilitiesListView);
     }
 
     @FXML
-    void responsabilityRemoveButtonPressed(ActionEvent event) {
+    protected void responsabilityRemoveButtonPressed(ActionEvent event) {
         textListViewSelected = responsabilitiesListView.getSelectionModel().getSelectedItem();
         removeTextInputFromListView(responsabilitiesListView, textListViewSelected);
     }
 
     @FXML
-    void selectCompanyButtonPressed(ActionEvent event) {
+    protected void selectCompanyButtonPressed(ActionEvent event) {
         selectCompanyButton.setDisable(true);
         CompanyController companyController = new CompanyController();
         companyController.showStage();
@@ -230,15 +226,6 @@ public class ScreenController implements Initializable {
             insertCompayInformationToLabels(selectedOrganization);
         }
         selectCompanyButton.setDisable(false);
-    }
-
-    private void addTextInputToListViewFromObservableList(ObservableList<String> observableList, ListView<String> listView) {
-        TextInputController textInputController = new TextInputController();
-        textInputController.showStage();
-        if(textInputController.getInputData() != null) {
-            observableList.add(textInputController.getInputData());
-            listView.setItems(observableList);
-        }
     }
 
     private void removeTextInputFromListView(ListView<String> listView, String stringToRemove) {
@@ -253,6 +240,15 @@ public class ScreenController implements Initializable {
         return list;
     }
 
+    private void addTextInputToListViewFromObservableList(ObservableList<String> observableList, ListView<String> listView) {
+        TextInputController textInputController = new TextInputController();
+        textInputController.showStage();
+        if(textInputController.getInputData() != null) {
+            observableList.add(textInputController.getInputData());
+            listView.setItems(observableList);
+        }
+    }
+
     private void insertCompayInformationToLabels(Organization organization) {
         companyNameLabel.setText( selectedOrganization.getName() );
         companyAddressLabel.setText( selectedOrganization.getAddress() );
@@ -263,6 +259,15 @@ public class ScreenController implements Initializable {
         companyDirectUsersLabel.setText( String.valueOf( selectedOrganization.getDirectUsers() ) );
         companyIndirectUsersLabel.setText( String.valueOf( selectedOrganization.getIndirectUsers() ) );
         companySectorLabel.setText( selectedOrganization.getSector().getSector() );
+    }
+
+    private void initObservableList() {
+        mediateObjetivesObservableList = FXCollections.observableArrayList();
+        resourcesObservableList = FXCollections.observableArrayList();
+        activitiesObservableList = FXCollections.observableArrayList();
+        immediateObjetivesObservableList = FXCollections.observableArrayList();
+        methodologiesObservableList = FXCollections.observableArrayList();
+        responsabilitiesObservableList = FXCollections.observableArrayList();
     }
 
     private void initValidatorToTextFields() {
@@ -277,41 +282,26 @@ public class ScreenController implements Initializable {
         interruptorMap.put(projectResponsableEmailTextField, false);
         interruptorMap.put(projectDescriptionTextArea, false);
         interruptorMap.put(projectPurposeTextArea, false);
-        Map<TextInputControl, Object[]> validator = new HashMap<>();
+        Map<TextInputControl, Object[]> validatorMap = new HashMap<>();
         Object[] nameConstraints = {Validator.PROJECT_NAME_PATTERN, Validator.NAME_LENGTH, checkIconName};
-        validator.put(projectNameTextField, nameConstraints);
+        validatorMap.put(projectNameTextField, nameConstraints);
         Object[] durationConstraints = {Validator.DURATION_PATTERN, Validator.DURATION_LENGTH, checkIconDuration};
-        validator.put(projectDurationTextField, durationConstraints);
+        validatorMap.put(projectDurationTextField, durationConstraints);
         Object[] scheduleConstraints = {Validator.SCHEDULE_PATTERN, Validator.SCHEDULE_LENGTH, checkIconSchedule};
-        validator.put(projectScheduleTextField, scheduleConstraints);
+        validatorMap.put(projectScheduleTextField, scheduleConstraints);
         Object[] nameResponsableConstraints = {Validator.NAME_PATTERN, Validator.NAME_LENGTH, checkIconNameResponsable};
-        validator.put(projectResponsableNameTextField, nameResponsableConstraints);
+        validatorMap.put(projectResponsableNameTextField, nameResponsableConstraints);
         Object[] chargeResponsableConstraints = {Validator.CHARGE_RESPONSABLE_PATTERN, Validator.CHARGE_RESPONSABLE_LENGTH, checkIconChargeResponsable};
-        validator.put(projectResponsableChargeTextField, chargeResponsableConstraints);
+        validatorMap.put(projectResponsableChargeTextField, chargeResponsableConstraints);
         Object[] emailResponsableConstraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH, checkIconEmail};
-        validator.put(projectResponsableEmailTextField, emailResponsableConstraints);
+        validatorMap.put(projectResponsableEmailTextField, emailResponsableConstraints);
         Object[] projectDurationConstraints = {Validator.DURATION_PATTERN, Validator.DURATION_LENGTH, checkIconDuration};
-        validator.put(projectDurationTextField,projectDurationConstraints);
+        validatorMap.put(projectDurationTextField,projectDurationConstraints);
         Object[] projectDescriptionConstraints = {Validator.LARGE_TEXT_PATTERN, Validator.LARGE_TEXT_LENGTH, checkIconGeneralDescription};
-        validator.put(projectDescriptionTextArea, projectDescriptionConstraints);
+        validatorMap.put(projectDescriptionTextArea, projectDescriptionConstraints);
         Object[] projectPurposeConstraints = {Validator.LARGE_TEXT_PATTERN, Validator.LARGE_TEXT_LENGTH, checkIconGeneralPurpose};
-        validator.put(projectPurposeTextArea, projectPurposeConstraints);
-        final int FIRST_CONTRAINT = 0;
-        final int SECOND_CONTRAINT = 1;
-        final int THIRD_CONSTRAINT_ICON = 2;
-        for (Map.Entry<TextInputControl, Object[]> entry : validator.entrySet() ) {
-            entry.getKey().textProperty().addListener( (observable, oldValue, newValue) -> {
-                if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getValue()[FIRST_CONTRAINT] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getValue()[SECOND_CONTRAINT]) ) ){
-                    interruptorMap.put(entry.getKey(), false );
-                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().clear();
-                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().add("wrongTextField");
-                } else {
-                    interruptorMap.put(entry.getKey(), true );
-                    ((MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().clear();
-                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().add("correctlyTextField");
-                }
-            });
-        }
+        validatorMap.put(projectPurposeTextArea, projectPurposeConstraints);
+        initValidatorToTextFields(validatorMap);
     }
 
 }

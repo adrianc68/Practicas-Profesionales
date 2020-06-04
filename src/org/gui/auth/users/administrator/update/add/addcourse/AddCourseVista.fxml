@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -53,7 +54,10 @@
                            <graphic>
                               <MaterialDesignIconView fx:id="checkIconName" glyphName="CHECK" size="15" />
                            </graphic></Label>
-                        <TextField fx:id="nameTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g Prácticas profesionales" styleClass="textfield" />
+                        <TextField fx:id="nameTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g Prácticas profesionales" styleClass="textfield">
+                           <tooltip>
+                              <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                           </tooltip></TextField>
                      </children>
                   </VBox>
                   <GridPane hgap="25.0" prefHeight="42.0" prefWidth="435.0">
@@ -71,7 +75,10 @@
                                  <graphic>
                                     <MaterialDesignIconView fx:id="checkIconPeriod" glyphName="CHECK" size="15" />
                                  </graphic></Label>
-                              <TextField fx:id="periodTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g AGO 2020 - DIC 2020" styleClass="textfield" />
+                              <TextField fx:id="periodTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g AGO 2020 - DIC 2020" styleClass="textfield">
+                                 <tooltip>
+                                    <Tooltip id="tooltip" maxWidth="200.0" text="Debe tener el formato:&#10;[XXX XXXX - YYY YYYY]" textAlignment="JUSTIFY" wrapText="true" />
+                                 </tooltip></TextField>
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="57.0" spacing="5.0" GridPane.columnIndex="1">
@@ -80,7 +87,10 @@
                                  <graphic>
                                     <MaterialDesignIconView fx:id="checkIconNRC" glyphName="CHECK" size="15" />
                                  </graphic></Label>
-                              <TextField fx:id="nrcTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="137.0" promptText="e.g N17043" styleClass="textfield" />
+                              <TextField fx:id="nrcTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="137.0" promptText="e.g N17043" styleClass="textfield">
+                                 <tooltip>
+                                    <Tooltip id="tooltip" maxWidth="200.0" text="Puede contener solo números y carácteres simples." textAlignment="JUSTIFY" wrapText="true" />
+                                 </tooltip></TextField>
                            </children>
                         </VBox>
                      </children>

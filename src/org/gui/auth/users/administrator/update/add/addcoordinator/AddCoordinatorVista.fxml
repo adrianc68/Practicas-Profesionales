@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -53,7 +54,10 @@
                            <graphic>
                               <MaterialDesignIconView fx:id="checkIconName" glyphName="CHECK" size="15" />
                            </graphic></Label>
-                        <TextField fx:id="nameTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g Roberto Lira" styleClass="textfield" />
+                        <TextField fx:id="nameTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g Roberto Lira" styleClass="textfield">
+                           <tooltip>
+                              <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                           </tooltip></TextField>
                      </children>
                   </VBox>
                   <VBox prefHeight="57.0" spacing="5.0">
@@ -62,14 +66,20 @@
                            <graphic>
                               <MaterialDesignIconView fx:id="checkIconEmail" glyphName="CHECK" size="15" />
                            </graphic></Label>
-                        <TextField fx:id="emailTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g uv@hotmail.com" styleClass="textfield" />
+                        <TextField fx:id="emailTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g uv@hotmail.com" styleClass="textfield">
+                           <tooltip>
+                              <Tooltip id="tooltip" maxWidth="250.0" text="• Debe contener carácteres simples.&#10;• Debe contener un @.&#10;• Debe contener un ." textAlignment="JUSTIFY" wrapText="true" />
+                           </tooltip></TextField>
                         <VBox prefHeight="57.0" spacing="5.0">
                            <children>
                               <Label styleClass="formLabel" text="TELEFONO">
                                  <graphic>
                                     <MaterialDesignIconView fx:id="checkIconPhoneNumber" glyphName="CHECK" size="15" />
                                  </graphic></Label>
-                              <TextField fx:id="phoneNumberTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g 2200000000" styleClass="textfield" />
+                              <TextField fx:id="phoneNumberTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g 2200000000" styleClass="textfield">
+                                 <tooltip>
+                                    <Tooltip id="tooltip" maxWidth="200.0" text="• Debe tener solo números.&#10;• Puede ser de una longitud de 8 a 10 caracteres.&#10;" textAlignment="JUSTIFY" wrapText="true" />
+                                 </tooltip></TextField>
                            </children>
                         </VBox>
                      </children>
@@ -100,7 +110,10 @@
                                        <graphic>
                                           <MaterialDesignIconView fx:id="checkIconStaffNumber" glyphName="CHECK" size="15" />
                                        </graphic></Label>
-                                    <TextField fx:id="staffNumberTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g P-001" styleClass="textfield" />
+                                    <TextField fx:id="staffNumberTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g P-001" styleClass="textfield">
+                                       <tooltip>
+                                          <Tooltip id="tooltip" maxWidth="200.0" text="• No debe de contener carácteres extraños a excepción del &quot;-&quot;.&#10;• Puede contener números y carácteres simples" wrapText="true" />
+                                       </tooltip></TextField>
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="57.0" prefWidth="165.0" spacing="5.0" GridPane.columnIndex="1">
@@ -109,7 +122,10 @@
                                        <graphic>
                                           <MaterialDesignIconView fx:id="checkIconCubicle" glyphName="CHECK" size="15" />
                                        </graphic></Label>
-                                    <TextField fx:id="cubicleTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g 9" styleClass="textfield" />
+                                    <TextField fx:id="cubicleTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g 9" styleClass="textfield">
+                                       <tooltip>
+                                          <Tooltip id="tooltip" maxWidth="200.0" text="Debe contener solo números enteros." textAlignment="JUSTIFY" wrapText="true" />
+                                       </tooltip></TextField>
                                  </children>
                               </VBox>
                            </children>

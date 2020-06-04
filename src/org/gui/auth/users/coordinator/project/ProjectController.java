@@ -4,36 +4,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.database.dao.ProjectDAO;
 import org.domain.Project;
+import org.gui.Controller;
 import org.gui.auth.resources.card.ProjectCard;
 import org.gui.auth.users.coordinator.project.registerproject.RegisterProjectController;
 import org.gui.auth.users.coordinator.project.removeproject.RemoveProjectController;
 import org.gui.auth.users.coordinator.project.updateproject.UpdateProjectController;
 import org.util.CSSProperties;
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class ProjectController implements Initializable {
-    private double mousePositionOnX;
-    private double mousePositionOnY;
+public class ProjectController extends Controller implements Initializable {
     private ProjectCard selectedProjectCard;
     @FXML private Label projectNameLabel;
     @FXML private Label projectDescriptionLabel;
@@ -63,29 +52,17 @@ public class ProjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass();
+        setStyleClass(rootStage, getClass().getResource("../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
         setProjectsFromDatabaseToScrollPane();
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/auth/users/coordinator/project/ProjectVista.fxml") );
-        loader.setController(this);
-        Parent root = null;
-        try{
-            root = loader.load();
-        } catch(IOException ioe) {
-            Logger.getLogger( ProjectController.class.getName() ).log(Level.WARNING, null, ioe);
-        }
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.TRANSPARENT);
-        Scene scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
-        stage.setScene(scene);
+        loadFXMLFile(getClass().getResource("/org/gui/auth/users/coordinator/project/ProjectVista.fxml"), this);
         stage.show();
     }
 
     @FXML
-    void addButtonPressed(ActionEvent event) {
+    protected void addButtonPressed(ActionEvent event) {
         rootStage.setDisable(true);
         RegisterProjectController registerProjectController = new RegisterProjectController();
         registerProjectController.showStage();
@@ -96,7 +73,7 @@ public class ProjectController implements Initializable {
     }
 
     @FXML
-    void removeButtonPressed(ActionEvent event) {
+    protected void removeButtonPressed(ActionEvent event) {
         if(selectedProjectCard != null){
             rootStage.setDisable(true);
             RemoveProjectController removeProjectController = new RemoveProjectController();
@@ -112,7 +89,7 @@ public class ProjectController implements Initializable {
     }
 
     @FXML
-    void updateButtonPressed(ActionEvent event) {
+    protected void updateButtonPressed(ActionEvent event) {
         if(selectedProjectCard != null) {
             rootStage.setDisable(true);
             UpdateProjectController updateProjectController = new UpdateProjectController();
@@ -128,22 +105,18 @@ public class ProjectController implements Initializable {
     }
 
     @FXML
-    void cancelButtonPressed(ActionEvent event) {
-        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
+    protected void cancelButtonPressed(ActionEvent event) {
         stage.close();
     }
 
     @FXML
-    void stageDragged(MouseEvent event) {
-        Stage stage = (Stage) ( ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.setX( event.getScreenX() - mousePositionOnX );
-        stage.setY( event.getScreenY() - mousePositionOnY );
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
     }
 
     @FXML
-    void stagePressed(MouseEvent event) {
-        mousePositionOnX = event.getSceneX();
-        mousePositionOnY = event.getSceneY();
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
     }
 
     private void setProjectsFromDatabaseToScrollPane() {
@@ -153,6 +126,15 @@ public class ProjectController implements Initializable {
                 addProjectInACardToScrollPane(project);
             }
         }
+    }
+
+    private void addProjectInACardToScrollPane(Project project) {
+        ProjectCard card = new ProjectCard(project);
+        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
+            selectedProjectCard = card;
+            setProjectInformationToLabelsBySelectedProject( selectedProjectCard.getProject() );
+        });
+        projectsPane.getChildren().add(card);
     }
 
     private void clearLabels() {
@@ -178,15 +160,6 @@ public class ProjectController implements Initializable {
         methodologiesListView.setItems(null);
         resourcesListView.setItems(null);
         responsabilitiesListView.setItems(null);
-    }
-
-    private void addProjectInACardToScrollPane(Project project) {
-        ProjectCard card = new ProjectCard(project);
-        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
-            selectedProjectCard = card;
-            setProjectInformationToLabelsBySelectedProject( selectedProjectCard.getProject() );
-        });
-        projectsPane.getChildren().add(card);
     }
 
     private void setProjectInformationToLabelsBySelectedProject(Project project) {
@@ -225,11 +198,6 @@ public class ProjectController implements Initializable {
         ObservableList<String> responsabilitiesObservableList = FXCollections.observableArrayList();
         responsabilitiesObservableList.addAll( project.getResponsibilities() );
         responsabilitiesListView.setItems(responsabilitiesObservableList);
-    }
-
-    private void setStyleClass() {
-        rootStage.getStylesheets().clear();
-        rootStage.getStylesheets().add(getClass().getResource("../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
     }
 
 }

@@ -4,19 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.database.dao.ProjectDAO;
 import org.domain.Project;
+import org.gui.Controller;
 import org.gui.auth.users.coordinator.project.editionproject.screens.ScreenController;
 import org.util.CSSProperties;
 import java.io.IOException;
@@ -27,9 +22,7 @@ import java.util.logging.Logger;
 import static org.gui.auth.resources.alerts.OperationAlert.showSuccessfullAlert;
 import static org.gui.auth.resources.alerts.OperationAlert.showUnsuccessfullAlert;
 
-public class UpdateProjectController implements Initializable {
-    private double mousePositionOnX;
-    private double mousePositionOnY;
+public class UpdateProjectController extends Controller implements Initializable {
     private boolean updateOperationstatus;
     private Project selectedProject;
     private AnchorPane firstScreen;
@@ -47,31 +40,19 @@ public class UpdateProjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setStyleClass(rootStage,  getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
         if(selectedProject != null) {
             screenController = new ScreenController(selectedProject);
         } else {
             screenController = new ScreenController();
         }
-        setStyleClass();
         initScreens();
         firstLoaderRadioButton.fire();
         updateOperationstatus = false;
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/auth/users/coordinator/project/updateproject/UpdateProjectVista.fxml") );
-        loader.setController(this);
-        Parent root = null;
-        try{
-            root = loader.load();
-        } catch(IOException ioe) {
-            Logger.getLogger( UpdateProjectController.class.getName() ).log(Level.WARNING, null, ioe);
-        }
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.TRANSPARENT);
-        Scene scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
-        stage.setScene(scene);
+        loadFXMLFile(getClass().getResource("/org/gui/auth/users/coordinator/project/updateproject/UpdateProjectVista.fxml"), this);
         stage.showAndWait();
     }
 
@@ -87,13 +68,43 @@ public class UpdateProjectController implements Initializable {
         return updateOperationstatus;
     }
 
-    // BAD SCREEN MANAGER ??? <--- FIX THIS
     @FXML
-    void nextButtonPressed(ActionEvent event) {
+    protected void loadFirstScreenPressed(ActionEvent event) {
+        setScreenAndButtonText(firstScreen, "Siguiente");
+    }
+
+    @FXML
+    protected void loadSecondScreenPressed(ActionEvent event) {
+        setScreenAndButtonText(secondScreen, "Siguiente");
+    }
+
+    @FXML
+    protected void loadThirdScreenPressed(ActionEvent event) {
+        setScreenAndButtonText(thirdScreen, "Actualizar");
+    }
+
+    @FXML
+    protected void cancelButtonPressed(ActionEvent event) {
+        stage.close();
+    }
+
+    @FXML
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
+    }
+
+    @FXML
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
+    }
+
+    // BAD SCREEN MANAGER <--- FIX THIS
+    @FXML
+    protected void nextButtonPressed(ActionEvent event) {
         if(projectsPane.getChildren().get(0) == thirdScreen) {
             if( screenController.verifyInputData() ) {
                 updateProjectInDatabase();
-                closeButton.fire();
+                stage.close();
             }
         } else if(projectsPane.getChildren().get(0) == secondScreen) {
             thirdLoaderRadioButton.fire();
@@ -102,40 +113,11 @@ public class UpdateProjectController implements Initializable {
         }
     }
 
-    @FXML
-    void loadFirstScreenPressed(ActionEvent event) {
-        setScreenAndButtonText(firstScreen, "Siguiente");
+    private void setScreenAndButtonText(AnchorPane anchorPane, String buttonText) {
+        nextButton.setText(buttonText);
+        projectsPane.getChildren().clear();
+        projectsPane.getChildren().add(anchorPane);
     }
-
-    @FXML
-    void loadSecondScreenPressed(ActionEvent event) {
-        setScreenAndButtonText(secondScreen, "Siguiente");
-    }
-
-    @FXML
-    void loadThirdScreenPressed(ActionEvent event) {
-        setScreenAndButtonText(thirdScreen, "Actualizar");
-    }
-
-    @FXML
-    void cancelButtonPressed(ActionEvent event) {
-        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.close();
-    }
-
-    @FXML
-    void stageDragged(MouseEvent event) {
-        Stage stage = (Stage) ( ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.setX( event.getScreenX() - mousePositionOnX );
-        stage.setY( event.getScreenY() - mousePositionOnY );
-    }
-
-    @FXML
-    void stagePressed(MouseEvent event) {
-        mousePositionOnX = event.getSceneX();
-        mousePositionOnY = event.getSceneY();
-    }
-
 
     private void updateProjectInDatabase() {
         int idProject = selectedProject.getId();
@@ -154,19 +136,10 @@ public class UpdateProjectController implements Initializable {
         }
     }
 
-    private void setScreenAndButtonText(AnchorPane anchorPane, String buttonText) {
-        nextButton.setText(buttonText);
-        projectsPane.getChildren().clear();
-        projectsPane.getChildren().add(anchorPane);
-    }
-
     private void initScreens() {
         firstScreen = loadSpecifiedScreen("/org/gui/auth/users/coordinator/project/editionproject/screens/firstscreen/FirstScreenVista.fxml");
-        setStyleClassToScreens(firstScreen);
         secondScreen = loadSpecifiedScreen("/org/gui/auth/users/coordinator/project/editionproject/screens/secondscreen/SecondScreenVista.fxml");
-        setStyleClassToScreens(secondScreen);
         thirdScreen = loadSpecifiedScreen("/org/gui/auth/users/coordinator/project/editionproject/screens/thirdscreen/ThirdScreenVista.fxml");
-        setStyleClassToScreens(thirdScreen);
         if(selectedProject != null) {
             screenController.setProjectInformationToFields();
         }
@@ -181,17 +154,9 @@ public class UpdateProjectController implements Initializable {
         } catch (IOException e) {
             Logger.getLogger( UpdateProjectController.class.getName() ).log(Level.WARNING, null, e);
         }
+        pane.getStylesheets().clear();
+        pane.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
         return pane;
-    }
-
-    private void setStyleClassToScreens(AnchorPane screen) {
-        screen.getStylesheets().clear();
-        screen.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-    }
-
-    private void setStyleClass() {
-        rootStage.getStylesheets().clear();
-        rootStage.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
     }
 
 }

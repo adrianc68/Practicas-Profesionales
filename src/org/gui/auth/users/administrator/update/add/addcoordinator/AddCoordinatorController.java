@@ -3,48 +3,37 @@ package org.gui.auth.users.administrator.update.add.addcoordinator;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.database.dao.AccessAccountDAO;
 import org.database.dao.CoordinatorDAO;
 import org.domain.Coordinator;
 import org.domain.Course;
 import org.domain.Person;
+import org.gui.ValidatorController;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
 import org.util.CSSProperties;
 import org.util.Cryptography;
 import org.util.Validator;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class AddCoordinatorController implements Initializable {
-    private double mousePositionOnX;
-    private double mousePositionOnY;
+public class AddCoordinatorController extends ValidatorController implements Initializable {
     private boolean addOperationStatus;
     private Coordinator newCoordinator;
     private Course course;
-    private Map<TextField, Boolean> interruptorMap = new HashMap<>();
     @FXML private Button closeButton;
     @FXML private TextField nameTextField;
     @FXML private TextField phoneNumberTextField;
@@ -61,7 +50,7 @@ public class AddCoordinatorController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass();
+        setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
         addOperationStatus = false;
         Person user = Auth.getInstance().getUser();
         if(user != null) {
@@ -71,25 +60,28 @@ public class AddCoordinatorController implements Initializable {
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/auth/users/administrator/update/add/addcoordinator/AddCoordinatorVista.fxml") );
-        loader.setController(this);
-        Parent root = null;
-        try{
-            root = loader.load();
-        } catch(IOException ioe) {
-            Logger.getLogger( AddCoordinatorController.class.getName() ).log(Level.WARNING, null, ioe);
-        }
-        Stage addCoordinator = new Stage();
-        addCoordinator.initModality(Modality.APPLICATION_MODAL);
-        addCoordinator.initStyle(StageStyle.TRANSPARENT);
-        Scene scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
-        addCoordinator.setScene(scene);
-        addCoordinator.showAndWait();
+        loadFXMLFile( getClass().getResource("/org/gui/auth/users/administrator/update/add/addcoordinator/AddCoordinatorVista.fxml"), this);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
     }
 
     public boolean getAddOperationStatus() {
         return addOperationStatus;
+    }
+
+    @FXML
+    void cancelButtonPressed(ActionEvent event) {
+        stage.close();
+    }
+
+    @FXML
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
+    }
+
+    @FXML
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
     }
 
     @FXML
@@ -108,25 +100,6 @@ public class AddCoordinatorController implements Initializable {
         } else {
             systemLabel.setText("¡Verifica tus datos!");
         }
-    }
-
-    @FXML
-    void cancelButtonPressed(ActionEvent event) {
-        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.close();
-    }
-
-    @FXML
-    void stageDragged(MouseEvent event) {
-        Stage stage = (Stage) ( ( (Node) event.getSource() ).getScene().getWindow() );
-        stage.setX( event.getScreenX() - mousePositionOnX );
-        stage.setY( event.getScreenY() - mousePositionOnY );
-    }
-
-    @FXML
-    void stagePressed(MouseEvent event) {
-        mousePositionOnX = event.getSceneX();
-        mousePositionOnY = event.getSceneY();
     }
 
     private void createCoordinatorObject() {
@@ -161,18 +134,6 @@ public class AddCoordinatorController implements Initializable {
         clipboard.setContent(content);
     }
 
-
-    private boolean verifyInputData() {
-        boolean dataInputValid = true;
-        for( Map.Entry<TextField, Boolean> entry : interruptorMap.entrySet() ) {
-            if( !entry.getValue() ){
-                dataInputValid = false;
-                break;
-            }
-        }
-        return dataInputValid;
-    }
-
     private void initValidatorToTextFields() {
         interruptorMap = new LinkedHashMap<>();
         interruptorMap.put(nameTextField, false);
@@ -180,7 +141,7 @@ public class AddCoordinatorController implements Initializable {
         interruptorMap.put(phoneNumberTextField, false);
         interruptorMap.put(staffNumberTextField, false);
         interruptorMap.put(cubicleTextField,false);
-        Map<TextField, Object[]> validator = new HashMap<>();
+        Map<TextInputControl, Object[]> validator = new HashMap<>();
         Object[] nameConstraints = {Validator.NAME_PATTERN, Validator.NAME_LENGTH, checkIconName};
         validator.put(nameTextField, nameConstraints);
         Object[] emailConstraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH, checkIconEmail};
@@ -191,27 +152,7 @@ public class AddCoordinatorController implements Initializable {
         validator.put(staffNumberTextField, staffNumberConstraints);
         Object[] cubicleConstraints = {Validator.NUMBER_PATTERN, Validator.NUMBER_LENGTH, checkIconCubicle};
         validator.put(cubicleTextField, cubicleConstraints);
-        final int FIRST_CONTRAINT = 0;
-        final int SECOND_CONTRAINT = 1;
-        final int THIRD_CONSTRAINT_ICON = 2;
-        for (Map.Entry<TextField, Object[]> entry : validator.entrySet() ) {
-            entry.getKey().textProperty().addListener( (observable, oldValue, newValue) -> {
-                if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getValue()[FIRST_CONTRAINT] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getValue()[SECOND_CONTRAINT]) ) ){
-                    interruptorMap.put(entry.getKey(), false );
-                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().clear();
-                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().add("wrongTextField");
-                } else {
-                    interruptorMap.put(entry.getKey(), true );
-                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().clear();
-                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().add("correctlyTextField");
-                }
-            });
-        }
-    }
-
-    private void setStyleClass() {
-        rootStage.getStylesheets().clear();
-        rootStage.getStylesheets().add(getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.initValidatorToTextFields(validator);
     }
 
 }
