@@ -30,6 +30,4 @@ Universidad Veracruzana
 - Se modificó la base de datos y la estructura del dominio, agregando un nuevo atributo a «person»
 - Se corrigió un error al hacer validaciones agregando un «HashMap».
 - Se corrigió un error al cargar datos para actualizar datos de un proyecto.
-
-### Tareas pendientes
-- [ ] Implementar herencia en controladores
+- Se implementó herencia en controladores para reutilizar código
