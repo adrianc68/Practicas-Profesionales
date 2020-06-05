@@ -89,6 +89,21 @@ public class ProjectController extends Controller implements Initializable {
     }
 
     @FXML
+    protected void cancelButtonPressed(ActionEvent event) {
+        stage.close();
+    }
+
+    @FXML
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
+    }
+
+    @FXML
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
+    }
+
+    @FXML
     protected void updateButtonPressed(ActionEvent event) {
         if(selectedProjectCard != null) {
             rootStage.setDisable(true);
@@ -102,21 +117,6 @@ public class ProjectController extends Controller implements Initializable {
             }
             rootStage.setDisable(false);
         }
-    }
-
-    @FXML
-    protected void cancelButtonPressed(ActionEvent event) {
-        stage.close();
-    }
-
-    @FXML
-    protected void stageDragged(MouseEvent event) {
-        super.stageDragged(event);
-    }
-
-    @FXML
-    protected void stagePressed(MouseEvent event) {
-        super.stagePressed(event);
     }
 
     private void setProjectsFromDatabaseToScrollPane() {

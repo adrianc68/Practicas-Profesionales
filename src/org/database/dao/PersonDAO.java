@@ -57,8 +57,6 @@ public class PersonDAO implements IPersonDAO {
         return rowsAffected > 0;
     }
 
-
-
     /***
      * Return a person from database.
      * <p>
