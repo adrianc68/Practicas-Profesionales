@@ -1,7 +1,5 @@
 package org.util;
 
-import org.database.dao.DeliveryDAO;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;

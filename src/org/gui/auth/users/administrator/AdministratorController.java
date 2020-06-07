@@ -27,7 +27,7 @@ public class AdministratorController extends Controller implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setStyleClass();
-        Person user = Auth.getInstance().getUser();
+        Person user = Auth.getInstance().getCurrentUser();
         if( user != null) {
             nameLabel.setText( user.getName() );
             periodLabel.setText( user.getCourse().getPeriod() );

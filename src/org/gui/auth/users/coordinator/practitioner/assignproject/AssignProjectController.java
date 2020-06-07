@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
-import org.database.dao.PractitionerDAO;
+import org.database.dao.ProjectDAO;
 import org.domain.Practitioner;
 import org.domain.Project;
 import org.gui.Controller;
@@ -32,7 +32,7 @@ public class AssignProjectController extends Controller implements Initializable
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
+        setStyleClass(rootStage, getClass().getResource( "../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
         assignProjectStatus = false;
         if(practitioner != null && project != null) {
             setInformationToCards();
@@ -65,7 +65,7 @@ public class AssignProjectController extends Controller implements Initializable
     @FXML
     void assignProjectButtonPressed(ActionEvent event) {
         if( practitioner != null && project != null ) {
-            assignProjectStatus = new PractitionerDAO().assignProjectToPractitioner( practitioner.getId(), project.getId() );
+            assignProjectStatus = new ProjectDAO().assignProjectToPractitioner( practitioner.getId(), project.getId() );
         }
         if(assignProjectStatus) {
             closeButton.fire();

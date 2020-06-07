@@ -52,7 +52,7 @@ public class AddProfessorController extends ValidatorController implements Initi
     public void initialize(URL location, ResourceBundle resources) {
         setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
         addOperationStatus = false;
-        Person user = Auth.getInstance().getUser();
+        Person user = Auth.getInstance().getCurrentUser();
         if(user != null) {
             course = user.getCourse();
         }
@@ -153,7 +153,7 @@ public class AddProfessorController extends ValidatorController implements Initi
         validator.put(staffNumberTextField, staffNumberConstraints);
         Object[] cubicleConstraints = {Validator.NUMBER_PATTERN, Validator.NUMBER_LENGTH, checkIconCubicle};
         validator.put(cubicleTextField, cubicleConstraints);
-        super.initValidatorToTextFields(validator);
+        super.initValidatorToTextInputControl(validator);
     }
 
 }

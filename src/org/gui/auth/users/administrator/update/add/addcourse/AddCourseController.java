@@ -116,7 +116,7 @@ public class AddCourseController extends ValidatorController implements Initiali
         validator.put(nrcTextField, nrcConstraints);
         Object[] periodConstraints = {Validator.PERIOD_PATTERN, Validator.PERIOD_LENGTH, checkIconPeriod};
         validator.put(periodTextField, periodConstraints);
-        super.initValidatorToTextFields(validator);
+        super.initValidatorToTextInputControl(validator);
     }
 
 }

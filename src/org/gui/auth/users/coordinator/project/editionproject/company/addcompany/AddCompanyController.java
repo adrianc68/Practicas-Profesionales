@@ -59,7 +59,7 @@ public class AddCompanyController extends ValidatorController implements Initial
         addOperationStatus = false;
         initValidatorToTextFields();
         initChoiceBoxAndSetValidator();
-        coordinator = ( (Coordinator) Auth.getInstance().getUser() );
+        coordinator = ( (Coordinator) Auth.getInstance().getCurrentUser() );
         if(coordinator != null) {
             course = coordinator.getCourse();
         }
@@ -184,7 +184,7 @@ public class AddCompanyController extends ValidatorController implements Initial
         validatorMap.put(companyDirectUsersTextField, directUsersContraints);
         Object[] indirectUsersConstraints = {Validator.NUMBER_PATTERN, Validator.NUMBER_LENGTH, checkIconIndirectUsers};
         validatorMap.put(companyIndirectUsersTextField, indirectUsersConstraints);
-        initValidatorToTextFields(validatorMap);
+        initValidatorToTextInputControl(validatorMap);
     }
 
 }

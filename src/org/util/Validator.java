@@ -29,18 +29,20 @@ public class Validator {
     public static final String LARGE_TEXT_PATTERN = "[a-zA-Z]{2,}+(\\ ([a-zA-Z]{1,}))*";
     public static final String CHARGE_RESPONSABLE_PATTERN = "[a-zA-Z]{2,}+(\\ ([a-zA-Z]{1,}))*";
     public static final String EMAIL_PATTERN = "[A-Za-z0-9]{1,}(\\.([A-Za-z0-9]{1,}))*@(([a-zA-Z]{2,})(\\.([a-z]{1,})){1,})";
-    public static final String SCHEDULE_PATTERN = "([\\dA-Za-z]{1,}(\\ [\\dA-Za-z]{1,})*aar)";
+    public static final String SCHEDULE_PATTERN = "[a-zA-Z]{1,}+(\\ ([a-zA-Z]{1,}))*";
     public static final String DURATION_PATTERN = "(([1-9]{1,3}[0]*)(\\.[\\d]{1,})?)";
     public static final String NUMBER_PATTERN = "([0-9]{1,})";
     public static final String NRC_PATTERN = "([0-9]{5,10})";
     public static final String PERIOD_PATTERN = "(([A-Z]{3}\\ [0-9]{4})\\ \\-\\ ([A-Z]{3}\\ [0-9]{4}))";
 
     public static boolean doesStringMatchPattern(String string, String pattern) {
-        return string.matches(pattern);
+        boolean stringMatchWithPattern = string.matches(pattern);
+        return stringMatchWithPattern;
     }
 
     public static boolean isStringLargerThanLimitOrEmpty(String string, int limit) {
-        return ( string.length() > limit || string.equals("") );
+        boolean isStringEmptyOrLarger = string.length() > limit || string.equals("");
+        return isStringEmptyOrLarger;
     }
 
 }

@@ -71,8 +71,7 @@ public class AssignProfessorController extends Controller implements Initializab
     }
 
     private void assignProfessorToDatabase() {
-        PractitionerDAO practitionerDAO = new PractitionerDAO();
-        assignOperationStatus = practitionerDAO.assignProfessorToPractitioner( practitioner.getId(), professorCardSelected.getProfessor().getId() );
+        assignOperationStatus = new ProfessorDAO().assignProfessorToPractitioner( practitioner.getId(), professorCardSelected.getProfessor().getId() );
         if(assignOperationStatus) {
             String title = "Profesor asignado";
             String contentText = "¡Se ha asignado correctamente el profesor seleccionado al practicante!";

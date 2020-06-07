@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 public class HostDAO implements IHostDAO {
     private final Database database;
-    private ResultSet resultSet;
 
     /***
      * HostDAO constructor.
@@ -38,7 +37,7 @@ public class HostDAO implements IHostDAO {
             String statement = "SELECT attempts FROM Host WHERE mac_address = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, address);
-            resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
             if( resultSet.next() ) {
                 attempts = resultSet.getInt("attempts");
             }

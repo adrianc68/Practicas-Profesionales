@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class AccessAccountDAO implements IAccessAccountDAO {
     private final Database database;
-    private ResultSet resultSet;
+
     /***
      * AccountAccess constructor.
      * This constructor initialize a connection to the database.
@@ -113,7 +113,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
             String statement = "SELECT password_recovery_code FROM AccessAccount WHERE email = ? ORDER BY id_user DESC LIMIT 1;";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, emailRecovery);
-            resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
             if( resultSet.next() ) {
                 code = resultSet.getString("password_recovery_code");
             }
@@ -123,6 +123,5 @@ public class AccessAccountDAO implements IAccessAccountDAO {
         }
         return code;
     }
-
 
 }

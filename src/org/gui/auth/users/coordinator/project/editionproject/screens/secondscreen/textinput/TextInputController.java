@@ -71,7 +71,7 @@ public class TextInputController extends ValidatorController implements Initiali
         Map<TextInputControl, Object[]> validator = new HashMap<>();
         Object[] elementConstraints = {Validator.PROJECT_MULTIVALUED_ATTRIBUTE_PATTERN, Validator.PROJECT_MULTIVALUED_ATTRIBUTES_LENGTH, checkIconInput};
         validator.put(inputTextField, elementConstraints);
-        initValidatorToTextFields(validator);
+        initValidatorToTextInputControl(validator);
     }
 
 }

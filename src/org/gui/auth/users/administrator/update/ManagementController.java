@@ -114,43 +114,6 @@ public class ManagementController extends Controller implements Initializable {
         super.stagePressed(event);
     }
 
-    private void setTableComponents() {
-        coordinatorCubicleTableColum.setCellValueFactory( new PropertyValueFactory<>("cubicle") );
-        coordinatorEmailTableColum.setCellValueFactory( new PropertyValueFactory<>("email") );
-        coordinatorNameTableColum.setCellValueFactory( new PropertyValueFactory<>("name") );
-        coordinatorPhoneNumberTableColum.setCellValueFactory( new PropertyValueFactory<>("phoneNumber") );
-        coordinatorStaffNumberTableColum.setCellValueFactory( new PropertyValueFactory<>("staffNumber") );
-        coordinatorActivityStateTableColumn.setCellValueFactory( new PropertyValueFactory<>("activityState") );
-        courseNRCTableColumn.setCellValueFactory( new PropertyValueFactory<>("NRC") );
-        courseNameTableColumn.setCellValueFactory( new PropertyValueFactory<>("name") );
-        coursePeriodTableColum.setCellValueFactory( new PropertyValueFactory<>("period") );
-        professorCubicleTableColumn.setCellValueFactory( new PropertyValueFactory<>("cubicle") );
-        professorEmailTableColumn.setCellValueFactory( new PropertyValueFactory<>("email") );
-        professorNameTableColumn.setCellValueFactory( new PropertyValueFactory<>("name") );
-        professorPhoneNumberTableColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber") );
-        professorStaffNumberTableColumn.setCellValueFactory(new PropertyValueFactory<>("staffNumber") );
-        professorActivityStateTableColumn.setCellValueFactory(new PropertyValueFactory<>("activityState") );
-        setListenersToTableView();
-    }
-
-    private void setListenersToTableView() {
-        coursesTableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue) {
-                selected = coursesTableView.getSelectionModel().getSelectedItem();
-            }
-        });
-        professorsTableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue) {
-                selected = professorsTableView.getSelectionModel().getSelectedItem();
-            }
-        });
-        coordinatorsTableView.focusedProperty().addListener( (observable, oldValue, newValue) -> {
-            if(!newValue) {
-                selected = coordinatorsTableView.getSelectionModel().getSelectedItem();
-            }
-        });
-    }
-
     private void setDataToCoordinatorTableView() {
         CoordinatorDAO coordinatorDAO = new CoordinatorDAO();
         coordinatorsObservableList = FXCollections.observableArrayList();
@@ -190,6 +153,43 @@ public class ManagementController extends Controller implements Initializable {
             coursesObservableList.remove(selected);
             coursesTableView.setItems(coursesObservableList);
         }
+    }
+
+    private void setTableComponents() {
+        coordinatorCubicleTableColum.setCellValueFactory( new PropertyValueFactory<>("cubicle") );
+        coordinatorEmailTableColum.setCellValueFactory( new PropertyValueFactory<>("email") );
+        coordinatorNameTableColum.setCellValueFactory( new PropertyValueFactory<>("name") );
+        coordinatorPhoneNumberTableColum.setCellValueFactory( new PropertyValueFactory<>("phoneNumber") );
+        coordinatorStaffNumberTableColum.setCellValueFactory( new PropertyValueFactory<>("staffNumber") );
+        coordinatorActivityStateTableColumn.setCellValueFactory( new PropertyValueFactory<>("activityState") );
+        courseNRCTableColumn.setCellValueFactory( new PropertyValueFactory<>("NRC") );
+        courseNameTableColumn.setCellValueFactory( new PropertyValueFactory<>("name") );
+        coursePeriodTableColum.setCellValueFactory( new PropertyValueFactory<>("period") );
+        professorCubicleTableColumn.setCellValueFactory( new PropertyValueFactory<>("cubicle") );
+        professorEmailTableColumn.setCellValueFactory( new PropertyValueFactory<>("email") );
+        professorNameTableColumn.setCellValueFactory( new PropertyValueFactory<>("name") );
+        professorPhoneNumberTableColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber") );
+        professorStaffNumberTableColumn.setCellValueFactory(new PropertyValueFactory<>("staffNumber") );
+        professorActivityStateTableColumn.setCellValueFactory(new PropertyValueFactory<>("activityState") );
+        setListenersToTableView();
+    }
+
+    private void setListenersToTableView() {
+        coursesTableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue) {
+                selected = coursesTableView.getSelectionModel().getSelectedItem();
+            }
+        });
+        professorsTableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue) {
+                selected = professorsTableView.getSelectionModel().getSelectedItem();
+            }
+        });
+        coordinatorsTableView.focusedProperty().addListener( (observable, oldValue, newValue) -> {
+            if(!newValue) {
+                selected = coordinatorsTableView.getSelectionModel().getSelectedItem();
+            }
+        });
     }
 
 }

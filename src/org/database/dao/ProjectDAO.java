@@ -6,8 +6,12 @@ import org.domain.Course;
 import org.domain.Project;
 import org.domain.Sector;
 import org.database.Database;
-
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,7 +22,6 @@ import java.util.logging.Logger;
 
 public class ProjectDAO implements IProjectDAO {
     private final Database database;
-    private ResultSet resultSet;
 
     public ProjectDAO() {
         database = new Database();
@@ -38,18 +41,18 @@ public class ProjectDAO implements IProjectDAO {
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "INSERT INTO Project (name, duration, schedule, general_purpose, general_description, id_company, charge_responsable, name_responsable, email_responsable) values (?,?,?,?,?,?,?,?,?)";
-            PreparedStatement insertProject = conn.prepareStatement(statement);
-            insertProject.setString(1, project.getName());
-            insertProject.setFloat(2,project.getDuration() );
-            insertProject.setString(3, project.getSchedule() );
-            insertProject.setString(4, project.getGeneralPurpose() );
-            insertProject.setString(5, project.getGeneralDescription() );
-            insertProject.setInt(6, project.getOrganization().getId() );
-            insertProject.setString(7, project.getChargeResponsable() );
-            insertProject.setString(8, project.getNameResponsable() );
-            insertProject.setString(9, project.getEmailResponsable() );
-            insertProject.executeUpdate();
-            resultSet = insertProject.executeQuery("SELECT LAST_INSERT_ID()");
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setString(1, project.getName());
+            preparedStatement.setFloat(2,project.getDuration() );
+            preparedStatement.setString(3, project.getSchedule() );
+            preparedStatement.setString(4, project.getGeneralPurpose() );
+            preparedStatement.setString(5, project.getGeneralDescription() );
+            preparedStatement.setInt(6, project.getOrganization().getId() );
+            preparedStatement.setString(7, project.getChargeResponsable() );
+            preparedStatement.setString(8, project.getNameResponsable() );
+            preparedStatement.setString(9, project.getEmailResponsable() );
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery("SELECT LAST_INSERT_ID()");
             resultSet.next();
             projectID = resultSet.getInt(1);
             project.setId(projectID);
@@ -61,12 +64,12 @@ public class ProjectDAO implements IProjectDAO {
             multivaluedAttributesStatementsMap.put("INSERT INTO Project_Resources(resource, id_project) VALUES(?,?)", project.getResources().iterator() );
             multivaluedAttributesStatementsMap.put("INSERT INTO Project_Immediate_Objetives(objetive, id_project) VALUES(?,?)", project.getImmediateObjetives().iterator() );
             for ( Map.Entry<String, Iterator> entry : multivaluedAttributesStatementsMap.entrySet() ) {
-                insertProject = conn.prepareStatement( entry.getKey() );
+                preparedStatement = conn.prepareStatement( entry.getKey() );
                 Iterator listIterator = entry.getValue();
                 while( listIterator.hasNext() ) {
-                    insertProject.setString(1, listIterator.next().toString() );
-                    insertProject.setInt(2, projectID);
-                    insertProject.executeUpdate();
+                    preparedStatement.setString(1, listIterator.next().toString() );
+                    preparedStatement.setInt(2, projectID);
+                    preparedStatement.executeUpdate();
                 }
             }
             conn.commit();
@@ -90,11 +93,11 @@ public class ProjectDAO implements IProjectDAO {
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "CALL removeProject(?, ?)";
-            CallableStatement removeProject = conn.prepareCall(statement);
-            removeProject.setInt(1, idProject );
-            removeProject.registerOutParameter(2, Types.INTEGER);
-            removeProject.execute();
-            idRemove = removeProject.getInt("idRemove");
+            CallableStatement callableStatement = conn.prepareCall(statement);
+            callableStatement.setInt(1, idProject );
+            callableStatement.registerOutParameter(2, Types.INTEGER);
+            callableStatement.execute();
+            idRemove = callableStatement.getInt("idRemove");
             conn.commit();
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -116,22 +119,22 @@ public class ProjectDAO implements IProjectDAO {
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "UPDATE Project SET name = ?, duration = ?, schedule = ?, general_purpose = ?, general_description = ?, charge_responsable = ?, name_responsable = ?, email_responsable = ? WHERE id_project = ?";
-            PreparedStatement updateProjectInformation = conn.prepareStatement(statement);
-            updateProjectInformation.setString(1, project.getName() );
-            updateProjectInformation.setFloat(2,project.getDuration() );
-            updateProjectInformation.setString(3, project.getSchedule() );
-            updateProjectInformation.setString(4, project.getGeneralPurpose() );
-            updateProjectInformation.setString(5, project.getGeneralDescription() );
-            updateProjectInformation.setString(6, project.getChargeResponsable() );
-            updateProjectInformation.setString(7, project.getNameResponsable() );
-            updateProjectInformation.setString(8, project.getEmailResponsable() );
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setString(1, project.getName() );
+            preparedStatement.setFloat(2,project.getDuration() );
+            preparedStatement.setString(3, project.getSchedule() );
+            preparedStatement.setString(4, project.getGeneralPurpose() );
+            preparedStatement.setString(5, project.getGeneralDescription() );
+            preparedStatement.setString(6, project.getChargeResponsable() );
+            preparedStatement.setString(7, project.getNameResponsable() );
+            preparedStatement.setString(8, project.getEmailResponsable() );
             int projectID = project.getId();
-            updateProjectInformation.setInt(9, projectID);
-            rowsAffected += updateProjectInformation.executeUpdate();
+            preparedStatement.setInt(9, projectID);
+            rowsAffected += preparedStatement.executeUpdate();
             String statementRemoveMultivaluedAttributes = "CALL removeMultivaluedAttributesProject(?)";
-            updateProjectInformation = conn.prepareStatement(statementRemoveMultivaluedAttributes);
-            updateProjectInformation.setInt(1, projectID);
-            rowsAffected += updateProjectInformation.executeUpdate();
+            preparedStatement = conn.prepareStatement(statementRemoveMultivaluedAttributes);
+            preparedStatement.setInt(1, projectID);
+            rowsAffected += preparedStatement.executeUpdate();
             Map<String, Iterator> multivaluedAttributesStatementsMap = new HashMap<>();
             multivaluedAttributesStatementsMap.put("INSERT INTO Project_Activities(activity, id_project) VALUES(?, ?)", project.getActivities().iterator() );
             multivaluedAttributesStatementsMap.put("INSERT INTO Project_Responsabilities(responsability, id_project) VALUES(?,?)", project.getResponsibilities().iterator() );
@@ -140,12 +143,12 @@ public class ProjectDAO implements IProjectDAO {
             multivaluedAttributesStatementsMap.put("INSERT INTO Project_Resources(resource, id_project) VALUES(?,?)", project.getResources().iterator() );
             multivaluedAttributesStatementsMap.put("INSERT INTO Project_Immediate_Objetives(objetive, id_project) VALUES(?,?)", project.getImmediateObjetives().iterator());
             for ( Map.Entry<String, Iterator> entry : multivaluedAttributesStatementsMap.entrySet() ) {
-                updateProjectInformation = conn.prepareStatement( entry.getKey() );
+                preparedStatement = conn.prepareStatement( entry.getKey() );
                 Iterator listIterator = entry.getValue();
                 while( listIterator.hasNext() ) {
-                    updateProjectInformation.setString(1, listIterator.next().toString() );
-                    updateProjectInformation.setInt(2, projectID );
-                    rowsAffected += updateProjectInformation.executeUpdate();
+                    preparedStatement.setString(1, listIterator.next().toString() );
+                    preparedStatement.setInt(2, projectID );
+                    rowsAffected += preparedStatement.executeUpdate();
                 }
             }
             conn.commit();
@@ -153,6 +156,34 @@ public class ProjectDAO implements IProjectDAO {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return rowsAffected > 0;
+    }
+
+    /***
+     * Assign a project to a Practitioner in database.
+     * <p>
+     * It's used by the coordinator when he decided which project assign to a practitioner
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @param idProject the project's ID to be assigned to practitioner
+     * @return boolean true if project was assigned
+     */
+    @Override
+    public boolean assignProjectToPractitioner(int idPractitioner, int idProject) {
+        int idProjectAssigned = 0;
+        try(Connection conn = database.getConnection()){
+            conn.setAutoCommit(false);
+            String statement = "{CALL assignProject(?, ?, ?)}";
+            CallableStatement assignProject = conn.prepareCall(statement);
+            assignProject.setInt(1, idPractitioner );
+            assignProject.setInt(2, idProject );
+            assignProject.registerOutParameter("idProject", Types.INTEGER);
+            assignProject.execute();
+            conn.commit();
+            idProjectAssigned = assignProject.getInt("idProject");
+        } catch (SQLException | NullPointerException e) {
+            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
+        }
+        return idProjectAssigned != 0;
     }
 
     /***
@@ -170,10 +201,10 @@ public class ProjectDAO implements IProjectDAO {
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "CALL selectProject(?, ?)";
-            PreparedStatement selectProject = conn.prepareStatement(statement);
-            selectProject.setInt(1, idPractitioner);
-            selectProject.setInt(2, idProject);
-            rowsAffected = selectProject.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idPractitioner);
+            preparedStatement.setInt(2, idProject);
+            rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         }catch (SQLException | NullPointerException e) {
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -240,9 +271,9 @@ public class ProjectDAO implements IProjectDAO {
     private List<Project> getProjectsByStatementAndIDPractitioner(String statement, int idPractitioner){
         List<Project> projects = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            PreparedStatement queryProjects = conn.prepareStatement(statement);
-            queryProjects.setInt(1, idPractitioner);
-            resultSet = queryProjects.executeQuery();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idPractitioner);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
                 course.setId(resultSet.getInt("COUR.id_course"));
@@ -320,8 +351,8 @@ public class ProjectDAO implements IProjectDAO {
     private List<Project> getProjectsByStatement(String statement){
         List<Project> projects = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            PreparedStatement queryProjects = conn.prepareStatement(statement);
-            resultSet = queryProjects.executeQuery();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
                 course.setId(resultSet.getInt( "COUR.id_course") );

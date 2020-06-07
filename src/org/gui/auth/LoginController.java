@@ -23,7 +23,6 @@ import javafx.scene.control.TextField;
 import org.gui.auth.users.administrator.AdministratorController;
 import org.gui.auth.users.coordinator.CoordinatorController;
 import org.gui.auth.users.practitioner.PractitionerController;
-import org.util.NetworkAddress;
 
 public class LoginController extends Controller implements Initializable {
     @FXML private TextField emailTextField;
@@ -65,41 +64,36 @@ public class LoginController extends Controller implements Initializable {
 
     @FXML
     protected void loginButtonPressed(ActionEvent event) {
-        String macAddresEncrypted = Cryptography.cryptSHA2( NetworkAddress.getLocalAdress() );
-        if( !Auth.getInstance().isAttempsLimitReached(macAddresEncrypted) ) {
-            if( login() != null) {
+            if( login() ) {
                 stage.hide();
                 showStageBySpecifiedUser();
                 clearLogIn();
+                setStyleClass();
                 stage.show();
             } else {
                 systemLabel.setText("¡Verifica tus datos!");
             }
-        } else {
-            systemLabel.setText("¡Alcanzaste el limite de intentos! ¡Espera 10 minutos!");
-        }
     }
 
-    private Person login() {
+    private boolean login() {
+        boolean isLogged;
         String emailInput = emailTextField.getText();
         String passwordInputEncrypted = Cryptography.cryptSHA2( passwordTextField.getText() );
-        String macAddressEncrypted = Cryptography.cryptSHA2( NetworkAddress.getLocalAdress() );
-        Auth auth = Auth.getInstance();
-        auth.logIn(macAddressEncrypted, emailInput, passwordInputEncrypted);
-        return auth.getUser();
+        isLogged = Auth.getInstance().logIn(emailInput, passwordInputEncrypted);
+        return isLogged;
     }
 
     private void clearLogIn() {
         Auth.getInstance().logOut();
         passwordTextField.setText("");
         emailTextField.setText("");
-        setStyleClass();
+        systemLabel.setText("");
     }
 
     // BAD USER MANAGER
     // FIX HERE
     private void showStageBySpecifiedUser() {
-        Person user = Auth.getInstance().getUser();
+        Person user = Auth.getInstance().getCurrentUser();
         if(user != null) {
             if(user instanceof Professor) {
                 System.out.println("Agregar ventana profesor");

@@ -1,5 +1,6 @@
 package org.database.dao;
 
+import org.domain.ActivityState;
 import org.domain.Person;
 
 public interface IPersonDAO {
@@ -14,5 +15,27 @@ public interface IPersonDAO {
      * @return Person an object Person.
      */
     Person getPersonByEmailAndPassword(String email, String password);
+
+    /***
+     * Change activity state to person.
+     * <p>
+     * This method changes the activity state to person. It is used to
+     * avoid the access to person.
+     * </p>
+     * @param idPractitioner
+     * @return true if any row was affected, and false if it was any row not affected.
+     */
+    boolean changeActivityStateByID(int idPractitioner);
+
+    /***
+     * Get the activity state by email and password.
+     * <p>
+     * This method it's used by system when it needs to check if person has
+     * an activity state as active to allow the user access to system.
+     * </p>
+     * @param idPerson the user to get their activity state
+     * @return ActivityState representing the activity state.
+     */
+    public ActivityState getActivityStateByID(int idPerson);
 
 }

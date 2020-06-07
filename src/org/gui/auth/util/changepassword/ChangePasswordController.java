@@ -11,7 +11,6 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
-import org.database.dao.AccessAccountDAO;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
@@ -44,17 +43,7 @@ public class ChangePasswordController extends Controller implements Initializabl
     }
 
     @FXML
-    protected void changePasswordButtonPressed(ActionEvent event) {
-        if( !passwordTextField.getText().equals("") && !confirmationPasswordTextField.getText().equals("") ) {
-            changePassword();
-        } else {
-            systemLabel.setText("¡Los campos están vacios!");
-        }
-
-    }
-
-    @FXML
-    protected void cancelButtonPressed(ActionEvent event) {
+    protected void cancelButtonPressed() {
         stage.close();
     }
 
@@ -68,11 +57,43 @@ public class ChangePasswordController extends Controller implements Initializabl
         super.stagePressed(event);
     }
 
+    @FXML
+    protected void changePasswordButtonPressed(ActionEvent event) {
+        if(!isFieldEmpty() && isPasswordsEquals() ) {
+
+            changePassword();
+        }
+    }
+
+    private boolean isFieldEmpty() {
+        boolean isFieldEmpty = true;
+        String password = passwordTextField.getText();
+        String passwordConfirmation = confirmationPasswordTextField.getText();
+        if( !password.equals("") && !passwordConfirmation.equals("") ) {
+            isFieldEmpty = false;
+        } else {
+            systemLabel.setText("¡Los campos están vacios!");
+        }
+        return isFieldEmpty;
+    }
+
+    private boolean isPasswordsEquals() {
+        boolean isPasswordFieldEqual = false;
+        String password = passwordTextField.getText();
+        String passwordConfirmation = confirmationPasswordTextField.getText();
+        if( password.equals(passwordConfirmation) ) {
+            isPasswordFieldEqual = true;
+        } else {
+            systemLabel.setText("¡Las contraseñas no coinciden!");
+        }
+        return isPasswordFieldEqual;
+    }
+
     private void changePassword() {
         String newPassword = passwordTextField.getText();
         String newPasswordConfirmation = confirmationPasswordTextField.getText();
         if( newPassword.equals(newPasswordConfirmation) ) {
-            if( Auth.getInstance().getUser() == null ) {
+            if( Auth.getInstance().getCurrentUser() == null ) {
                 changePasswordByUnloggedUser(newPassword, email);
             } else {
                 changePasswordByLoggedUser(newPassword);
@@ -84,11 +105,10 @@ public class ChangePasswordController extends Controller implements Initializabl
     }
 
     private void changePasswordByLoggedUser(String newPassword) {
-        int currentUserId = Auth.getInstance().getUser().getId();
         String passwordEncrypted = Cryptography.cryptSHA2( newPassword );
-        if ( new AccessAccountDAO().changePasswordByIdUser(passwordEncrypted, currentUserId) ) {
+        if ( Auth.getInstance().resetPassword(passwordEncrypted) ) {
             showSuccessfullAlert();
-            copyToClipboardSystem(Auth.getInstance().getUser().getEmail(), passwordTextField.getText() );
+            copyToClipboardSystem(Auth.getInstance().getCurrentUser().getEmail(), passwordTextField.getText() );
         } else {
             showUnsuccessfulAlert();
         }
@@ -96,9 +116,9 @@ public class ChangePasswordController extends Controller implements Initializabl
 
     private void changePasswordByUnloggedUser(String newPassword, String email) {
         String passwordEncrypted = Cryptography.cryptSHA2(newPassword);
-        if ( new AccessAccountDAO().changePasswordByEmail(passwordEncrypted, email) ) {
+        if ( Auth.getInstance().resetPasswordByUnloggedUser(email, passwordEncrypted) ) {
             showSuccessfullAlert();
-            copyToClipboardSystem( Auth.getInstance().getEmail() , newPassword );
+            copyToClipboardSystem( email, newPassword );
         } else {
             showUnsuccessfulAlert();
         }

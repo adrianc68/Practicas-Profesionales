@@ -23,12 +23,11 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.AnchorPane;
 import org.domain.Organization;
 import org.domain.Project;
-import org.gui.ValidatorController;
 import org.gui.auth.users.coordinator.project.editionproject.screens.secondscreen.textinput.TextInputController;
 import org.gui.auth.users.coordinator.project.editionproject.company.CompanyController;
 import org.util.Validator;
 
-public class ScreenController extends ValidatorController implements Initializable {
+public class ScreenController implements Initializable {
     private Project project;
     private String textListViewSelected;
     private Organization selectedOrganization;
@@ -301,7 +300,22 @@ public class ScreenController extends ValidatorController implements Initializab
         validatorMap.put(projectDescriptionTextArea, projectDescriptionConstraints);
         Object[] projectPurposeConstraints = {Validator.LARGE_TEXT_PATTERN, Validator.LARGE_TEXT_LENGTH, checkIconGeneralPurpose};
         validatorMap.put(projectPurposeTextArea, projectPurposeConstraints);
-        initValidatorToTextFields(validatorMap);
+        final int FIRST_CONTRAINT = 0;
+        final int SECOND_CONTRAINT = 1;
+        final int THIRD_CONSTRAINT_ICON = 2;
+        for (Map.Entry<TextInputControl, Object[]> entry : validatorMap.entrySet() ) {
+            entry.getKey().textProperty().addListener( (observable, oldValue, newValue) -> {
+                if( !Validator.doesStringMatchPattern( newValue, ( (String) entry.getValue()[FIRST_CONTRAINT] ) ) || Validator.isStringLargerThanLimitOrEmpty( newValue, ( (Integer) entry.getValue()[SECOND_CONTRAINT]) ) ){
+                    interruptorMap.put(entry.getKey(), false );
+                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().clear();
+                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().add("wrongTextField");
+                } else {
+                    interruptorMap.put(entry.getKey(), true );
+                    ((MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().clear();
+                    ( (MaterialDesignIconView) entry.getValue()[THIRD_CONSTRAINT_ICON]).getStyleClass().add("correctlyTextField");
+                }
+            });
+        }
     }
 
 }

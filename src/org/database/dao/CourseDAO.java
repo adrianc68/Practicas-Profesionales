@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 public class CourseDAO implements ICourseDAO {
     private final Database database;
-    private ResultSet resultSet;
 
     /***
      * CourseDAO constructor.
@@ -37,14 +36,14 @@ public class CourseDAO implements ICourseDAO {
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "INSERT INTO COURSE(NRC, period, name) VALUES(?,?,?)";
-            PreparedStatement insertCourse = conn.prepareStatement(statement);
-            insertCourse.setString( 1, course.getNRC() );
-            insertCourse.setString(2, course.getPeriod() );
-            insertCourse.setString(3, course.getName() );
-            insertCourse.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setString( 1, course.getNRC() );
+            preparedStatement.setString(2, course.getPeriod() );
+            preparedStatement.setString(3, course.getName() );
+            preparedStatement.executeUpdate();
             statement = "SELECT LAST_INSERT_ID()";
-            insertCourse = conn.prepareStatement(statement);
-            resultSet = insertCourse.executeQuery();
+            preparedStatement = conn.prepareStatement(statement);
+            ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             idCourse = resultSet.getInt(1);
             conn.commit();
@@ -68,9 +67,9 @@ public class CourseDAO implements ICourseDAO {
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "DELETE FROM COURSE WHERE id_course = ?";
-            PreparedStatement deleteCourse = conn.prepareStatement(statement);
-            deleteCourse.setInt( 1, idCourse );
-            rowsAffected = deleteCourse.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt( 1, idCourse );
+            rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(CourseDAO.class.getName()).log(Level.WARNING, null, e);
@@ -91,8 +90,8 @@ public class CourseDAO implements ICourseDAO {
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "SELECT COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Course AS COUR WHERE COUR.id_course = (SELECT max(id_course) FROM COURSE)";
-            PreparedStatement queryCourse = conn.prepareStatement(statement);
-            resultSet = queryCourse.executeQuery();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             course = new Course();
             course.setName(resultSet.getString("COUR.name"));
@@ -120,13 +119,13 @@ public class CourseDAO implements ICourseDAO {
             conn.setAutoCommit(false);
             String statement = "SELECT COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Course AS COUR";
             PreparedStatement queryCourse = conn.prepareStatement(statement);
-            resultSet = queryCourse.executeQuery();
+            ResultSet resultSet = queryCourse.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
-                course.setName(resultSet.getString("COUR.name"));
-                course.setPeriod(resultSet.getString("COUR.period"));
-                course.setNRC(resultSet.getString("COUR.NRC"));
-                course.setId(resultSet.getInt("COUR.id_course"));
+                course.setName( resultSet.getString("COUR.name") );
+                course.setPeriod( resultSet.getString("COUR.period") );
+                course.setNRC( resultSet.getString("COUR.NRC") );
+                course.setId( resultSet.getInt("COUR.id_course") );
                 courses.add(course);
             }
             conn.commit();
@@ -135,4 +134,5 @@ public class CourseDAO implements ICourseDAO {
         }
         return courses;
     }
+
 }

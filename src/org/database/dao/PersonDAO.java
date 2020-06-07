@@ -1,6 +1,7 @@
 package org.database.dao;
 
 import org.database.Database;
+import org.domain.ActivityState;
 import org.domain.Coordinator;
 import org.domain.Course;
 import org.domain.Person;
@@ -15,7 +16,6 @@ import java.util.logging.Logger;
 
 public class PersonDAO implements IPersonDAO {
     private Database database;
-    private ResultSet resultSet;
 
     /***
      * PersonDAO constructor.
@@ -25,17 +25,24 @@ public class PersonDAO implements IPersonDAO {
         database = new Database();
     }
 
-
-    public String getActivityStateByEmailAndPassword(String email, String password) {
-        String activityState = null;
+    /***
+     * Get the activity state by email and password.
+     * <p>
+     * This method it's used by system when it needs to check if person has
+     * an activity state as active to allow the user access to system.
+     * </p>
+     * @param idPerson the user to get their activity state
+     * @return ActivityState representing the activity state.
+     */
+    public ActivityState getActivityStateByID(int idPerson) {
+        ActivityState activityState = null;
         try( Connection conn = database.getConnection() ) {
-            String statement = "SELECT PERS.activity_state FROM Person AS PERS INNER JOIN AccessAccount AS ACA ON ACA.id_user = PERS.id_person AND ACA.email = ? AND ACA.password = ?";
+            String statement = "SELECT activity_state FROM Person WHERE id_person = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
-            preparedStatement.setString(1, email);
-            preparedStatement.setString(2, password);
-            resultSet = preparedStatement.executeQuery();
+            preparedStatement.setInt(1, idPerson);
+            ResultSet resultSet = preparedStatement.executeQuery();
             if( resultSet.next() ) {
-                activityState = resultSet.getString("PERS.activity_state");
+                activityState = ActivityState.valueOf( resultSet.getString("activity_state").toUpperCase() );
             }
         } catch (SQLException e) {
             Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, e);
@@ -43,6 +50,15 @@ public class PersonDAO implements IPersonDAO {
         return activityState;
     }
 
+    /***
+     * Change activity state to person.
+     * <p>
+     * This method changes the activity state to person. It is used to
+     * avoid the access to person.
+     * </p>
+     * @param idPractitioner
+     * @return true if any row was affected, and false if it was any row not affected.
+     */
     public boolean changeActivityStateByID(int idPractitioner) {
         int rowsAffected = 0;
         try( Connection conn = database.getConnection() ) {
@@ -75,7 +91,7 @@ public class PersonDAO implements IPersonDAO {
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
-            resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
             if( resultSet.next() ) {
                 person = getInstanceOfResultSet(resultSet);
                 Course course = getCourseOfResultSet(resultSet);

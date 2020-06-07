@@ -79,7 +79,7 @@ public class CoordinatorController extends Controller implements Initializable {
     }
 
     private void setInformationToFields() {
-        Coordinator user = (Coordinator) Auth.getInstance().getUser();
+        Coordinator user = (Coordinator) Auth.getInstance().getCurrentUser();
         if(user != null) {
             coordinatorNameLabel.setText( user.getName() );
             periodLabel.setText( user.getCourse().getPeriod() );

@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 public class ProfessorDAO implements IProfessorDAO {
     private final Database database;
-    private ResultSet resultSet;
 
     /***
      * ProfessorDAO constructor.
@@ -49,7 +48,7 @@ public class ProfessorDAO implements IProfessorDAO {
             insertProfessor.executeUpdate();
             statement = "SELECT LAST_INSERT_ID()";
             insertProfessor = conn.prepareStatement(statement);
-            resultSet = insertProfessor.executeQuery();
+            ResultSet resultSet = insertProfessor.executeQuery();
             resultSet.next();
             idProfessor = resultSet.getInt(1);
             conn.commit();
@@ -85,6 +84,56 @@ public class ProfessorDAO implements IProfessorDAO {
     }
 
     /***
+     * Assign a professor to a Practitioner in the database.
+     * <p>
+     * It's used by the coordinator when he decided assign a professor to a practitioner.
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @param idProfessor the professor's id to be assigned to practitioner
+     * @return boolean true if 1 o more than 1 rows are affected
+     */
+    @Override
+    public boolean assignProfessorToPractitioner(int idPractitioner, int idProfessor) {
+        int rowsAffected = 0;
+        try(Connection conn = database.getConnection()){
+            conn.setAutoCommit(false);
+            String statement = "UPDATE Practitioner SET id_professor = ? WHERE id_person = ?";
+            PreparedStatement assignProfessor = conn.prepareStatement(statement);
+            assignProfessor.setInt(1, idProfessor );
+            assignProfessor.setInt(2, idPractitioner );
+            rowsAffected = assignProfessor.executeUpdate();
+            conn.commit();
+        } catch (SQLException | NullPointerException e) {
+            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
+        }
+        return  rowsAffected > 0;
+    }
+
+    /***
+     * Delete a assign of professor to a Practitioner in the database.
+     * <p>
+     * It's used by the coordinator when he decided to remove a assign of professor to a practitioner.
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @return boolean true if 1 o more than 1 rows are affected
+     */
+    @Override
+    public boolean removeAssignedProfessorToPractitioner(int idPractitioner) {
+        int rowsAffected = 0;
+        try(Connection conn = database.getConnection()){
+            conn.setAutoCommit(false);
+            String statement = "UPDATE Practitioner SET id_professor = NULL WHERE id_person = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idPractitioner );
+            rowsAffected = preparedStatement.executeUpdate();
+            conn.commit();
+        } catch (SQLException | NullPointerException e) {
+            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return  rowsAffected > 0;
+    }
+
+    /***
      * Get assigned professor of a practicing from datatabase.
      * <p>
      * This method it's used as a support to take an action on a practitioner
@@ -100,7 +149,7 @@ public class ProfessorDAO implements IProfessorDAO {
             String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN Practitioner AS PRAC ON PROF.id_person = PRAC.id_professor AND PRAC.id_person = ? INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course";
             PreparedStatement queryProfessor = conn.prepareStatement(statement);
             queryProfessor.setInt(1, idPractitioner);
-            resultSet = queryProfessor.executeQuery();
+            ResultSet resultSet = queryProfessor.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
                 course.setId( resultSet.getInt("COUR.id_course") );
@@ -137,7 +186,7 @@ public class ProfessorDAO implements IProfessorDAO {
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement queryProfessors = conn.prepareStatement(statement);
-            resultSet = queryProfessors.executeQuery();
+            ResultSet resultSet = queryProfessors.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
                 course.setId( resultSet.getInt("COUR.id_course") );
@@ -176,7 +225,7 @@ public class ProfessorDAO implements IProfessorDAO {
             String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = ?";
             PreparedStatement queryProfessors = conn.prepareStatement(statement);
             queryProfessors.setInt(1, idCourse);
-            resultSet = queryProfessors.executeQuery();
+            ResultSet resultSet = queryProfessors.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
                 course.setId( resultSet.getInt("COUR.id_course") );
@@ -214,7 +263,7 @@ public class ProfessorDAO implements IProfessorDAO {
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course";
             PreparedStatement queryProfessors = conn.prepareStatement(statement);
-            resultSet = queryProfessors.executeQuery();
+            ResultSet resultSet = queryProfessors.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
                 course.setId( resultSet.getInt("COUR.id_course") );

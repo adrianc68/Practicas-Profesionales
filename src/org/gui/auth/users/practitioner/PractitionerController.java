@@ -40,7 +40,7 @@ public class PractitionerController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        practitioner = ( (Practitioner) Auth.getInstance().getUser() );
+        practitioner = ( (Practitioner) Auth.getInstance().getCurrentUser() );
         practitioner.setProject( new ProjectDAO().getAssignedProjectByPractitionerID( practitioner.getId() ));
         nameLabel.setText( practitioner.getName() );
         enrollmentLabel.setText( practitioner.getEnrollment() );

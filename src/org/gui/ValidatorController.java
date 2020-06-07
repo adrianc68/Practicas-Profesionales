@@ -21,7 +21,7 @@ public class ValidatorController extends Controller {
         return dataInputValid;
     }
 
-    protected void initValidatorToTextFields(Map<TextInputControl, Object[]> validatorMap) {
+    protected void initValidatorToTextInputControl(Map<TextInputControl, Object[]> validatorMap) {
         final int FIRST_CONTRAINT = 0;
         final int SECOND_CONTRAINT = 1;
         final int THIRD_CONSTRAINT_ICON = 2;

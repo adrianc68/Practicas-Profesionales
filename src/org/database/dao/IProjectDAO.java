@@ -35,6 +35,17 @@ public interface IProjectDAO {
     boolean updateProjectInformation(Project project);
 
     /***
+     * Assign a project to a Practitioner in database.
+     * <p>
+     * It's used by the coordinator when he decided which project assign to a practitioner
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @param idProject the project's ID to be assigned to practitioner
+     * @return boolean true if 1 o more than 1 rows are affected
+     */
+    boolean assignProjectToPractitioner(int idPractitioner, int idProject);
+
+    /***
      * Add in the datase a project selected by a Practitioner
      * <p>
      * This method is used by the practitioner to add a project selected by himself.

@@ -112,7 +112,7 @@ public class AddPractitionerController extends ValidatorController implements In
     private void generateRandomPasswordToUser(String email) {
         String randomPassword = Cryptography.generateRandomPassword();
         if ( new AccessAccountDAO().changePasswordByIdUser( Cryptography.cryptSHA2(randomPassword), newPractitioner.getId() ) ) {
-            copyToClipboardSystem(randomPassword, email);
+            copyToClipboardSystem(email, randomPassword);
             String title = "Cuenta de acceso generada";
             String contentText = "¡Se ha copiado la cuenta de acceso al portapapeles de tu sistema!";
             OperationAlert.showSuccessfullAlert(title, contentText);
@@ -145,7 +145,7 @@ public class AddPractitionerController extends ValidatorController implements In
         validator.put(practitionerEmailTextField, emailConstraints);
         validator.put(practitionerPhoneNumberTextField, phoneNumberConstraints);
         validator.put(practitionerEnrollmentTextField, enrollmentConstraints);
-        initValidatorToTextFields(validator);
+        initValidatorToTextInputControl(validator);
     }
 
 }

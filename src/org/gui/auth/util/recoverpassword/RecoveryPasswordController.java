@@ -48,32 +48,6 @@ public class RecoveryPasswordController extends ValidatorController implements I
     }
 
     @FXML
-    protected void sendCodeButtonPressed(ActionEvent event) {
-        String emailInput = emailTextField.getText();
-        if( verifyInputData() ) {
-            Auth.getInstance().generateRecoveryCode(emailInput);
-            Auth.getInstance().setEmail(emailInput);
-            isCodeSent = sendRecoveryCodeToEmail(emailInput);
-            hideEmailElementsAndShowCodeElemets();
-        } else {
-            systemLabel.setText("¡Verifica tus datos!");
-        }
-    }
-
-    @FXML
-    protected void verifyCodeButtonPressed(ActionEvent event) {
-        if(isCodeSent) {
-            String emailInput = emailTextField.getText();
-            stage.close();
-            if( Auth.getInstance().getRecoveryCode(emailInput).equals( codeTextField.getText() ) ) {
-                ChangePasswordController changePasswordController = new ChangePasswordController();
-                changePasswordController.setEmail(emailInput);
-                changePasswordController.showStage();
-            }
-        }
-    }
-
-    @FXML
     protected void cancelButtonPressed(ActionEvent event) {
         stage.close();
     }
@@ -88,16 +62,31 @@ public class RecoveryPasswordController extends ValidatorController implements I
         super.stagePressed(event);
     }
 
-    private void initValidatorToTextFields() {
-        interruptorMap = new LinkedHashMap<>();
-        interruptorMap.put(emailTextField, false);
-        Map<TextInputControl, Object[]> validatorMap = new HashMap<>();
-        Object[] elementConstraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH, checkIconEmail};
-        validatorMap.put(emailTextField, elementConstraints);
-        initValidatorToTextFields(validatorMap);
+    @FXML
+    protected void sendCodeButtonPressed(ActionEvent event) {
+        String emailInput = emailTextField.getText();
+        if( verifyInputData() ) {
+            if ( isCodeSent = generateAndSendRecoveryCodeToEmail(emailInput) ) {
+                hideCodeElementsAndShowRecoveryElements();
+            }
+        }
     }
 
-    private void hideEmailElementsAndShowCodeElemets() {
+    @FXML
+    protected void verifyCodeButtonPressed(ActionEvent event) {
+        String emailInput = emailTextField.getText();
+        String recoveryCode = codeTextField.getText();
+        if ( Auth.getInstance().getRecoveryCode(emailInput).equals(recoveryCode) ) {
+            stage.close();
+            ChangePasswordController changePasswordController = new ChangePasswordController();
+            changePasswordController.setEmail(emailInput);
+            changePasswordController.showStage();
+        } else {
+            systemLabel.setText("¡Verifica tus datos!");
+        }
+    }
+
+    private void hideCodeElementsAndShowRecoveryElements() {
         if(isCodeSent) {
             verifyCodeButton.setVisible(true);
             codeTextField.setVisible(true);
@@ -108,15 +97,16 @@ public class RecoveryPasswordController extends ValidatorController implements I
         }
     }
 
-    private boolean sendRecoveryCodeToEmail(String email) {
+    private boolean generateAndSendRecoveryCodeToEmail(String email) {
+        boolean isCodeSent;
         Auth.getInstance().generateRecoveryCode(email);
-        String subject = "Recuperar contraseña";
         String code = Auth.getInstance().getRecoveryCode(email);
+        String subject = "Recuperar contraseña";
         String contentText = "<html>\n" +
                 "<body>\n" +
-                "  <div style=\"border-style:solid;border-color:#000000;border-width:1px 1px 1px 1px;text-align:justify;background-color:#f8f8f8;width:80% !important;height:80% !important;padding:3% 3% 3% 3%;\">\n" +
+                "  <div style=\"border-style:solid;border-color:#323232;border-width:1px 1px 1px 1px;text-align:justify;background-color:#f8f8f8;width:80% !important;height:80% !important;padding:3% 3% 3% 3%;\">\n" +
                 "      <h1 style=\"color:#8a8a8a;font-family:sans-serif;text-align:left;\"> Recuperación de contraseña </h1>\n" +
-                "      <p style=\"font-family:sans-serif;\"> Recibimos una solicitud para restablecer tu contraseña del <b><u>Sistema de Prácticas Profesionales</u></b></p>\n" +
+                "      <p style=\"font-family:sans-serif;\"> Recibimos una solicitud para restablecer tu contraseña del <b>Sistema de Prácticas Profesionales</b></p>\n" +
                 "      <p style=\"font-family:sans-serif;\"> Ingresa el siguiente código en el campo de texto indicado en el sistema para recuperar tu contraseña. </p>\n" +
                 "      <div style=\"border-style:solid;border-color:#000000;border-width:1px 1px 1px 1px;background-color:#e2e2e2;display:inline-block;padding:15px 15px 15px 15px;\">" + code + "</div>\n" +
                 "      <p style=\"font-size: 15px;font-family:sans-serif;color:#ff0000\"> Si no has sido tú, <u>reportalo</u> con tu Coordinador más cercano. </p>\n" +
@@ -124,7 +114,17 @@ public class RecoveryPasswordController extends ValidatorController implements I
                 "</body>\n" +
                 "</html>\n";
         Mail mail = new Mail();
-        return mail.sendEmail(email, subject, contentText);
+        isCodeSent = mail.sendEmail(email, subject, contentText);
+        return isCodeSent;
+    }
+
+    private void initValidatorToTextFields() {
+        interruptorMap = new LinkedHashMap<>();
+        interruptorMap.put(emailTextField, false);
+        Map<TextInputControl, Object[]> validatorMap = new HashMap<>();
+        Object[] elementConstraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH, checkIconEmail};
+        validatorMap.put(emailTextField, elementConstraints);
+        initValidatorToTextInputControl(validatorMap);
     }
 
 }

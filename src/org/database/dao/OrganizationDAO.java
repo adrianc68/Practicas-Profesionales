@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 
 public class OrganizationDAO implements IOrganizationDAO {
     private final Database database;
-    private ResultSet result;
 
     public OrganizationDAO() {
         database = new Database();
@@ -49,9 +48,9 @@ public class OrganizationDAO implements IOrganizationDAO {
             preparedStatement.setInt(9, organization.getCoordinator().getId() );
             preparedStatement.setInt(10, organization.getCourse().getId() );
             preparedStatement.executeUpdate();
-            result = preparedStatement.executeQuery("SELECT LAST_INSERT_ID()");
-            result.next();
-            idCompany = result.getInt(1);
+            ResultSet resultSet = preparedStatement.executeQuery("SELECT LAST_INSERT_ID()");
+            resultSet.next();
+            idCompany = resultSet.getInt(1);
             conn.commit();
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(OrganizationDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -73,34 +72,34 @@ public class OrganizationDAO implements IOrganizationDAO {
         try(Connection conn = database.getConnection() ){
             String statement = "SELECT COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber,  COMP.id_course, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.NRC, COUR.Period, COUR.name, COUR.id_course FROM Company AS COMP INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON COMP.id_coordinator = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COMP.id_course and COUR.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
-            result = preparedStatement.executeQuery();
-            while( result.next() ){
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while( resultSet.next() ){
                 Course course = new Course();
-                course.setId( result.getInt("COUR.id_course") );
-                course.setNRC( result.getString("COUR.NRC") );
-                course.setPeriod( result.getString("COUR.period") );
-                course.setName( result.getString("COUR.name") );
+                course.setId( resultSet.getInt("COUR.id_course") );
+                course.setNRC( resultSet.getString("COUR.NRC") );
+                course.setPeriod( resultSet.getString("COUR.period") );
+                course.setName( resultSet.getString("COUR.name") );
                 Coordinator coordinator = new Coordinator();
-                coordinator.setId( result.getInt("PERSCORD.id_person") );
-                coordinator.setName( result.getString("PERSCORD.name") );
-                coordinator.setPhoneNumber( result.getString("PERSCORD.phoneNumber") );
-                coordinator.setEmail( result.getString("PERSCORD.email") );
+                coordinator.setId( resultSet.getInt("PERSCORD.id_person") );
+                coordinator.setName( resultSet.getString("PERSCORD.name") );
+                coordinator.setPhoneNumber( resultSet.getString("PERSCORD.phoneNumber") );
+                coordinator.setEmail( resultSet.getString("PERSCORD.email") );
                 coordinator.setCourse(course);
-                coordinator.setCubicle( result.getInt("CORD.cubicle") );
-                coordinator.setStaffNumber( result.getString("CORD.staff_number") );
+                coordinator.setCubicle( resultSet.getInt("CORD.cubicle") );
+                coordinator.setStaffNumber( resultSet.getString("CORD.staff_number") );
                 Organization organization = new Organization();
-                organization.setId( result.getInt("COMP.id_company") );
-                organization.setName( result.getString("COMP.name") );
-                organization.setAddress( result.getString("COMP.address") );
-                organization.setEmail( result.getString("COMP.email") );
-                organization.setState( result.getString("COMP.state") );
-                organization.setDirectUsers( result.getInt("COMP.direct_users") );
-                organization.setIndirectUsers( result.getInt("COMP.indirect_users") );
-                organization.setSector(Sector.valueOf( result.getString("COMP.Sector").toUpperCase() ) );
-                organization.setCity( result.getString("COMP.city") );
+                organization.setId( resultSet.getInt("COMP.id_company") );
+                organization.setName( resultSet.getString("COMP.name") );
+                organization.setAddress( resultSet.getString("COMP.address") );
+                organization.setEmail( resultSet.getString("COMP.email") );
+                organization.setState( resultSet.getString("COMP.state") );
+                organization.setDirectUsers( resultSet.getInt("COMP.direct_users") );
+                organization.setIndirectUsers( resultSet.getInt("COMP.indirect_users") );
+                organization.setSector(Sector.valueOf( resultSet.getString("COMP.Sector").toUpperCase() ) );
+                organization.setCity( resultSet.getString("COMP.city") );
                 organization.setCoordinator(coordinator);
                 organization.setCourse(course);
-                organization.setPhoneNumber( result.getString("COMP.phoneNumber") );
+                organization.setPhoneNumber( resultSet.getString("COMP.phoneNumber") );
                 organizations.add(organization);
             }
         } catch (SQLException | NullPointerException e) {

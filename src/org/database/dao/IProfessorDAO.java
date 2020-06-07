@@ -28,6 +28,27 @@ public interface IProfessorDAO {
     boolean removeProfessorByID(int  idProfessor);
 
     /***
+     * Assign a professor to a Practitioner in the database.
+     * <p>
+     * It's used by the coordinator when he decided assign a professor to a practitioner.
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @param idProfessor the professor's id to be assigned to practitioner
+     * @return boolean true if project was assigned
+     */
+    boolean assignProfessorToPractitioner(int idPractitioner, int idProfessor);
+
+    /***
+     * Delete a assign of professor to a Practitioner in the database.
+     * <p>
+     * It's used by the coordinator when he decided to remove a assign of professor to a practitioner.
+     * </p>
+     * @param idPractitioner the practitioner's ID
+     * @return boolean true if 1 o more than 1 rows are affected
+     */
+    boolean removeAssignedProfessorToPractitioner(int idPractitioner);
+
+    /***
      * Get assigned professor of a practicing from datatabase.
      * <p>
      * This method it's used as a support to take an action on a practitioner

@@ -12,14 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ActivityDAO implements IActivityDAO {
-    /***
-     * Constant for the connection to the database
-     */
     private final Database database;
-    /***
-     * Query results
-     */
-    private ResultSet resultSet;
 
     /***
      * ActivityDAO constructor.
@@ -43,15 +36,15 @@ public class ActivityDAO implements IActivityDAO {
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "INSERT INTO Activity(name, description, deadline, id_professor) VALUES (?,?,?,?)";
-            PreparedStatement insertActivity = conn.prepareStatement(statement);
-            insertActivity.setString(1, activity.getName());
-            insertActivity.setString(2, activity.getDescription());
-            insertActivity.setDate(3, activity.getDeadline());
-            insertActivity.setInt(4, activity.getProfessor().getId());
-            insertActivity.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setString(1, activity.getName());
+            preparedStatement.setString(2, activity.getDescription());
+            preparedStatement.setDate(3, activity.getDeadline());
+            preparedStatement.setInt(4, activity.getProfessor().getId());
+            preparedStatement.executeUpdate();
             statement = "SELECT LAST_INSERT_ID()";
-            insertActivity = conn.prepareStatement(statement);
-            resultSet = insertActivity.executeQuery();
+            preparedStatement = conn.prepareStatement(statement);
+            ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             idActivity = resultSet.getInt(1);
             conn.commit();
@@ -75,9 +68,9 @@ public class ActivityDAO implements IActivityDAO {
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "DELETE FROM Activity WHERE id_activity = ?";
-            PreparedStatement removeActivity = conn.prepareStatement(statement);
-            removeActivity.setInt(1, idActivity );
-            rowsAffected = removeActivity.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idActivity );
+            rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(ActivityDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -97,8 +90,8 @@ public class ActivityDAO implements IActivityDAO {
         List<Activity> activities = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT ACT.id_activity, ACT.name, ACT.description, ACT.deadline FROM activity AS ACT INNER JOIN professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN person AS PER ON PER.id_person = PROF.id_person INNER JOIN course AS COUR ON COUR.id_course = PER.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
-            PreparedStatement queryActivity = conn.prepareStatement(statement);
-            resultSet = queryActivity.executeQuery();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while( resultSet.next() ) {
                 Activity activity = new Activity();
                 activity.setName(resultSet.getString("ACT.name"));
@@ -128,9 +121,9 @@ public class ActivityDAO implements IActivityDAO {
         List<Activity> activities = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT ACT.id_activity, ACT.name, ACT.description, ACT.deadline FROM Activity AS ACT WHERE ACT.id_professor = ?";
-            PreparedStatement queryActivity = conn.prepareStatement(statement);
-            queryActivity.setInt(1, idProfessor );
-            ResultSet result = queryActivity.executeQuery();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idProfessor );
+            ResultSet result = preparedStatement.executeQuery();
             while( result.next() ) {
                 Activity activity = new Activity();
                 activity.setName(result.getString("ACT.name"));

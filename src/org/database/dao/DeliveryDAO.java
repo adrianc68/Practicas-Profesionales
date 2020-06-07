@@ -5,9 +5,6 @@ import org.domain.Activity;
 import org.domain.Course;
 import org.domain.Delivery;
 import org.domain.Professor;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +16,6 @@ import java.util.logging.Logger;
 
 public class DeliveryDAO implements IDeliveryDAO {
     private final Database database;
-    private ResultSet resultSet;
 
     /***
      * DeliveryDAO constructor.
@@ -43,14 +39,14 @@ public class DeliveryDAO implements IDeliveryDAO {
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "CALL addDelivery(?,?,?)";
-            PreparedStatement addDelivery = conn.prepareStatement(statement);
-            addDelivery.setInt(1,idActivity);
-            addDelivery.setInt( 2, delivery.getPractitioner().getId() );
-            addDelivery.setString(3, delivery.getDocumentPath() );
-            addDelivery.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1,idActivity);
+            preparedStatement.setInt( 2, delivery.getPractitioner().getId() );
+            preparedStatement.setString(3, delivery.getDocumentPath() );
+            preparedStatement.executeUpdate();
             statement = "SELECT LAST_INSERT_ID()";
-            addDelivery = conn.prepareStatement(statement);
-            resultSet = addDelivery.executeQuery();
+            preparedStatement = conn.prepareStatement(statement);
+            ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             idDelivery = resultSet.getInt(1);
             conn.commit();
@@ -76,11 +72,11 @@ public class DeliveryDAO implements IDeliveryDAO {
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "UPDATE Delivery SET observation = ?, score = ? WHERE id_delivery = ?";
-            PreparedStatement updateDeliveryInformation = conn.prepareStatement(statement);
-            updateDeliveryInformation.setString(1, observation);
-            updateDeliveryInformation.setFloat(2, score);
-            updateDeliveryInformation.setInt(3, idDelivery);
-            rowsAffected = updateDeliveryInformation.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setString(1, observation);
+            preparedStatement.setFloat(2, score);
+            preparedStatement.setInt(3, idDelivery);
+            rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException | NullPointerException e) {
             Logger.getLogger(DeliveryDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -123,7 +119,7 @@ public class DeliveryDAO implements IDeliveryDAO {
             conn.setAutoCommit(false);
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setInt(1, id);
-            resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
                 course.setId(resultSet.getInt( "COUR.id_course") );
