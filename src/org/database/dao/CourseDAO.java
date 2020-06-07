@@ -72,7 +72,7 @@ public class CourseDAO implements ICourseDAO {
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(CourseDAO.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger( CourseDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return rowsAffected > 0;
     }
@@ -100,7 +100,7 @@ public class CourseDAO implements ICourseDAO {
             course.setId(resultSet.getInt("COUR.id_course"));
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(CourseDAO.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger( CourseDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return course;
     }
@@ -130,7 +130,7 @@ public class CourseDAO implements ICourseDAO {
             }
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(CourseDAO.class.getName()).log(Level.WARNING, null, e);
+            Logger.getLogger( CourseDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return courses;
     }

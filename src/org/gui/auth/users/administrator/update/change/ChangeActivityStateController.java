@@ -8,11 +8,13 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.database.dao.PersonDAO;
+import org.domain.ActivityState;
 import org.domain.Person;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.CSSProperties;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ChangeActivityStateController extends Controller implements Initializable {
@@ -31,7 +33,7 @@ public class ChangeActivityStateController extends Controller implements Initial
         if( user != null) {
             userLabel.setText( user.getName() );
             // T-O Ternary Operator here!!
-            stateLabel.setText( ( user.getActivityState().equals("Activo") ) ? "Inactivo" : "Activo");
+            stateLabel.setText( ( user.getActivityState() == ActivityState.ACTIVE ) ? "Inactivo" : "Activo");
         }
     }
 
@@ -64,7 +66,7 @@ public class ChangeActivityStateController extends Controller implements Initial
     }
 
     @FXML
-    protected void changeActivityStateButtonPressed(ActionEvent event) {
+    protected void changeActivityStateButtonPressed(ActionEvent event) throws SQLException {
         if( user != null ) {
             stage.close();
             if ( new PersonDAO().changeActivityStateByID( user.getId() ) ) {

@@ -3,6 +3,8 @@ package org.database.dao;
 import org.domain.ActivityState;
 import org.domain.Person;
 
+import java.sql.SQLException;
+
 public interface IPersonDAO {
     /***
      * Return a person from database.
@@ -36,6 +38,6 @@ public interface IPersonDAO {
      * @param idPerson the user to get their activity state
      * @return ActivityState representing the activity state.
      */
-    public ActivityState getActivityStateByID(int idPerson);
+    ActivityState getActivityStateByID(int idPerson);
 
 }

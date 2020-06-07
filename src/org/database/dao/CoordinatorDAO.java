@@ -1,6 +1,7 @@
 package org.database.dao;
 
 import org.database.Database;
+import org.domain.ActivityState;
 import org.domain.Coordinator;
 import org.domain.Course;
 import java.sql.Connection;
@@ -52,8 +53,8 @@ public class CoordinatorDAO implements ICoordinatorDAO{
             resultSet.next();
             idCoordinator = resultSet.getInt(1);
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return idCoordinator;
     }
@@ -77,8 +78,8 @@ public class CoordinatorDAO implements ICoordinatorDAO{
             preparedStatement.setInt( 1, idCoordinator );
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return rowsAffected > 0;
     }
@@ -113,13 +114,13 @@ public class CoordinatorDAO implements ICoordinatorDAO{
                 coordinator.setCubicle( resultSet.getInt("CORD.cubicle") );
                 coordinator.setStaffNumber( resultSet.getString("CORD.staff_number") );
                 coordinator.setId( resultSet.getInt("CORD.id_person") );
-                coordinator.setActivityState( resultSet.getString("PERSCORD.activity_state") );
+                coordinator.setActivityState( ActivityState.valueOf( resultSet.getString("PERSCORD.activity_state").toUpperCase() ) );
                 coordinator.setCourse(course);
                 coordinators.add(coordinator);
             }
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return coordinators;
     }
@@ -150,7 +151,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
                 coordinator.setName( resultSet.getString("PERSCORD.name") );
                 coordinator.setPhoneNumber( resultSet.getString("PERSCORD.phoneNumber") );
                 coordinator.setEmail( resultSet.getString("PERSCORD.email") );
-                coordinator.setActivityState( resultSet.getString("PERSCORD.activity_state") );
+                coordinator.setActivityState( ActivityState.valueOf( resultSet.getString("PERSCORD.activity_state").toUpperCase() ) );
                 coordinator.setCubicle( resultSet.getInt("CORD.cubicle") );
                 coordinator.setStaffNumber( resultSet.getString("CORD.staff_number") );
                 coordinator.setId( resultSet.getInt("CORD.id_person") );
@@ -158,8 +159,8 @@ public class CoordinatorDAO implements ICoordinatorDAO{
                 coordinators.add(coordinator);
             }
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return coordinators;
     }

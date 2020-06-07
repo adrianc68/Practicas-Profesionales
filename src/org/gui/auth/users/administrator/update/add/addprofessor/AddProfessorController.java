@@ -25,6 +25,7 @@ import org.util.CSSProperties;
 import org.util.Cryptography;
 import org.util.Validator;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -85,7 +86,7 @@ public class AddProfessorController extends ValidatorController implements Initi
     }
 
     @FXML
-    protected void saveButtonPressed(ActionEvent event) {
+    protected void saveButtonPressed(ActionEvent event) throws SQLException {
         if( verifyInputData() ) {
             registerProfessor();
             closeButton.fire();
@@ -102,7 +103,7 @@ public class AddProfessorController extends ValidatorController implements Initi
         }
     }
 
-    private void generateRandomPasswordToUser(String email) {
+    private void generateRandomPasswordToUser(String email) throws SQLException {
         String randomPassword = Cryptography.generateRandomPassword();
         if ( new AccessAccountDAO().changePasswordByIdUser( Cryptography.cryptSHA2(randomPassword), newProfessor.getId() ) ) {
             copyToClipboardSystem(randomPassword, email);

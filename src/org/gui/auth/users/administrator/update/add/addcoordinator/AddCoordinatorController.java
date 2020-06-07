@@ -1,5 +1,6 @@
 package org.gui.auth.users.administrator.update.add.addcoordinator;
 
+import com.mysql.cj.exceptions.CJCommunicationsException;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import org.database.dao.AccessAccountDAO;
 import org.database.dao.CoordinatorDAO;
+import org.database.dao.DeliveryDAO;
 import org.domain.Coordinator;
 import org.domain.Course;
 import org.domain.Person;
@@ -24,16 +26,20 @@ import org.util.Auth;
 import org.util.CSSProperties;
 import org.util.Cryptography;
 import org.util.Validator;
+
+import java.net.ConnectException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AddCoordinatorController extends ValidatorController implements Initializable {
     private boolean addOperationStatus;
     private Coordinator newCoordinator;
-    private Course course;
     @FXML private Button closeButton;
     @FXML private TextField nameTextField;
     @FXML private TextField phoneNumberTextField;
@@ -52,10 +58,6 @@ public class AddCoordinatorController extends ValidatorController implements Ini
     public void initialize(URL location, ResourceBundle resources) {
         setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
         addOperationStatus = false;
-        Person user = Auth.getInstance().getCurrentUser();
-        if(user != null) {
-            course = user.getCourse();
-        }
         initValidatorToTextFields();
     }
 
@@ -70,7 +72,7 @@ public class AddCoordinatorController extends ValidatorController implements Ini
     }
 
     @FXML
-    void cancelButtonPressed(ActionEvent event) {
+    protected void cancelButtonPressed(ActionEvent event) {
         stage.close();
     }
 
@@ -87,44 +89,61 @@ public class AddCoordinatorController extends ValidatorController implements Ini
     @FXML
     void saveButtonPressed(ActionEvent event) {
         if( verifyInputData() ) {
-            createCoordinatorObject();
-            closeButton.fire();
-            if(newCoordinator.getId() != 0) {
-                addOperationStatus = true;
-                generateRandomPasswordToUser( emailTextField.getText() );
-            } else {
-                String title = "¡Error en el registro del coordinador!";
-                String contentText = "¡No se pudo realizar el registro del coordinador!";
-                OperationAlert.showUnsuccessfullAlert(title, contentText);
+            stage.close();
+            addCoordinator();
+            if(addOperationStatus) {
+                generateRandomPassword();
             }
         } else {
             systemLabel.setText("¡Verifica tus datos!");
         }
     }
 
-    private void createCoordinatorObject() {
+
+    private void addCoordinator() {
+        Person user = Auth.getInstance().getCurrentUser();
+        // T-O Ternary Operator here!
+        Course course = ( user != null) ? user.getCourse() : null ;
         newCoordinator = new Coordinator();
-        newCoordinator.setCourse(course);
+        newCoordinator.setCourse( course );
         newCoordinator.setName( nameTextField.getText() );
         newCoordinator.setPhoneNumber( phoneNumberTextField.getText() );
         newCoordinator.setEmail( emailTextField.getText() );
-        newCoordinator.setCubicle( Integer.valueOf( cubicleTextField.getText() ) );
+        newCoordinator.setCubicle( Integer.parseInt( cubicleTextField.getText() ) );
         newCoordinator.setStaffNumber( staffNumberTextField.getText() );
-        newCoordinator.setId( new CoordinatorDAO().addCoordinator(newCoordinator) );
+//        try {
+            newCoordinator.setId( new CoordinatorDAO().addCoordinator(newCoordinator) );
+//        } catch (SQLException sqlException) {
+//            String title = "¡Error al conectar con la base de datos!";
+//            String contentText = "¡No se pudo realizar una conexión a la base de datos! ¡Intentalo más tarde!";
+//            OperationAlert.showUnsuccessfullAlert(title, contentText);
+//            Logger.getLogger( AddCoordinatorController.class.getName() ).log(Level.WARNING, null, sqlException);
+//        }
+        addOperationStatus = (newCoordinator.getId() != 0);
     }
 
-    private void generateRandomPasswordToUser(String email) {
-        String randomPassword = Cryptography.generateRandomPassword();
-        if ( new AccessAccountDAO().changePasswordByIdUser( Cryptography.cryptSHA2(randomPassword), newCoordinator.getId() ) ) {
-            copyToClipboardSystem(randomPassword, email);
-            String title = "Cuenta de acceso generada";
-            String contentText = "¡Se ha copiado la cuenta de acceso al portapapeles de tu sistema!";
-            OperationAlert.showSuccessfullAlert(title, contentText);
-        } else {
-            String title = "¡Error al obtener la cuenta de acceso!";
-            String contentText = "¡No se pudo copiar la cuenta de acceso al portapapeles de tu sistema! \n¡Usar el modulo para recuperar contraseña!";
-            OperationAlert.showUnsuccessfullAlert(title, contentText);
-        }
+    private void generateRandomPassword() {
+        String randomPasswordEncrypted = Cryptography.cryptSHA2( Cryptography.generateRandomPassword() );
+        String email = emailTextField.getText();
+        boolean isGeneratedRandomPassword = false;
+//        try {
+            isGeneratedRandomPassword = new AccessAccountDAO().changePasswordByIdUser( randomPasswordEncrypted, newCoordinator.getId() );
+//        } catch (SQLException sqlException) {
+//            String title = "¡Se generó un problema al generar una contraseña aleatoria a tu cuenta de acceso!";
+//            String contentText = "¡Hubo un problema al intentar generar la contraseña!\nUsa el modulo de recuperar contraseña para recuperarla.";
+//            OperationAlert.showUnsuccessfullAlert(title, contentText);
+//            Logger.getLogger( AddCoordinatorController.class.getName() ).log(Level.WARNING, null, sqlException);
+//        } finally {
+            if(isGeneratedRandomPassword) {
+                showSuccessfullAlertFromPasswordGenerated(email, randomPasswordEncrypted);
+            }
+    }
+
+    private void showSuccessfullAlertFromPasswordGenerated(String email, String password) {
+        copyToClipboardSystem(password, email);
+        String title = "Cuenta de acceso generada";
+        String contentText = "¡Se ha generado una contraseña a la cuenta de acceso y se ha copiado a tu sistema!";
+        OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
     private void copyToClipboardSystem(String password, String email) {

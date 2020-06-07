@@ -27,7 +27,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
      * </p>
      * @param password the password to set
      * @param idUser the id user to change password
-     * @return
+     * @return true if any row was affected otherwise it returns false
      */
     @Override
     public boolean changePasswordByIdUser(String password, int idUser) {
@@ -40,8 +40,8 @@ public class AccessAccountDAO implements IAccessAccountDAO {
             preparedStatement.setInt(2, idUser);
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
-            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return rowsAffected > 0;
     }
@@ -65,8 +65,8 @@ public class AccessAccountDAO implements IAccessAccountDAO {
             preparedStatement.setString(1, emailRecovery);
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
-            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return rowsAffected > 0;
     }
@@ -91,8 +91,8 @@ public class AccessAccountDAO implements IAccessAccountDAO {
             preparedStatement.setString(2, email);
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
-            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return rowsAffected > 0;
     }
@@ -118,8 +118,8 @@ public class AccessAccountDAO implements IAccessAccountDAO {
                 code = resultSet.getString("password_recovery_code");
             }
             conn.commit();
-        } catch (SQLException e) {
-            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return code;
     }

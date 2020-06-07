@@ -1,5 +1,7 @@
 package org.database.dao;
 
+import java.sql.SQLException;
+
 public interface IHostDAO {
     /***
      * Get attempts done by mac address.

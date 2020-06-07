@@ -42,8 +42,8 @@ public class HostDAO implements IHostDAO {
                 attempts = resultSet.getInt("attempts");
             }
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( HostDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( HostDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return attempts;
     }
@@ -67,8 +67,8 @@ public class HostDAO implements IHostDAO {
             callableStatement.setString(1, address);
             executed = callableStatement.execute();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( HostDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( HostDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return executed;
     }
@@ -92,8 +92,8 @@ public class HostDAO implements IHostDAO {
             callableStatement.setString(1, address);
             executed = callableStatement.execute();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( HostDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( HostDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return executed;
     }

@@ -1,6 +1,7 @@
 package org.database.dao;
 
 import org.database.Database;
+import org.domain.ActivityState;
 import org.domain.Course;
 import org.domain.Delivery;
 import org.domain.Practitioner;
@@ -96,20 +97,20 @@ public class PractitionerDAO implements IPractitionerDAO {
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT PRAC.id_person, PRAC.enrollment, PERS.name, PERS.phoneNumber, PERS.email, PERS.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Practitioner AS PRAC INNER JOIN Person AS PERS ON PRAC.id_person = PERS.id_person INNER JOIN Course AS COUR ON PERS.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
-            ResultSet result = preparedStatement.executeQuery();
-            while( result.next() ) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while( resultSet.next() ) {
                 Course course = new Course();
-                course.setId( result.getInt("COUR.id_course")) ;
-                course.setName( result.getString("COUR.name") );
-                course.setNRC( result.getString("COUR.NRC") );
-                course.setPeriod( result.getString("COUR.period") );
+                course.setId( resultSet.getInt("COUR.id_course")) ;
+                course.setName( resultSet.getString("COUR.name") );
+                course.setNRC( resultSet.getString("COUR.NRC") );
+                course.setPeriod( resultSet.getString("COUR.period") );
                 Practitioner practitioner = new Practitioner();
-                practitioner.setName( result.getString("PERS.name") );
-                practitioner.setPhoneNumber( result.getString("PERS.phoneNumber") );
-                practitioner.setEmail( result.getString("PERS.email") );
-                practitioner.setActivityState( result.getString("PERS.activity_state") );
-                practitioner.setId( result.getInt("PRAC.id_person") );
-                practitioner.setEnrollment( result.getString("PRAC.enrollment") );
+                practitioner.setName( resultSet.getString("PERS.name") );
+                practitioner.setPhoneNumber( resultSet.getString("PERS.phoneNumber") );
+                practitioner.setEmail( resultSet.getString("PERS.email") );
+                practitioner.setActivityState( ActivityState.valueOf( resultSet.getString("PERS.activity_state").toUpperCase() ) );
+                practitioner.setId( resultSet.getInt("PRAC.id_person") );
+                practitioner.setEnrollment( resultSet.getString("PRAC.enrollment") );
                 practitioner.setCourse(course);
                 List<Project> selectedProjects = new ArrayList<>();
                 List<Delivery> deliveries = new ArrayList<>();

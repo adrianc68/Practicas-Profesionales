@@ -50,7 +50,7 @@ public class DeliveryDAO implements IDeliveryDAO {
             resultSet.next();
             idDelivery = resultSet.getInt(1);
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
+        } catch (SQLException e) {
             Logger.getLogger( DeliveryDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return idDelivery;
@@ -78,8 +78,8 @@ public class DeliveryDAO implements IDeliveryDAO {
             preparedStatement.setInt(3, idDelivery);
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(DeliveryDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException e) {
+            Logger.getLogger( DeliveryDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return  rowsAffected > 0;
     }
@@ -150,8 +150,8 @@ public class DeliveryDAO implements IDeliveryDAO {
                 deliveries.add(delivery);
                 conn.commit();
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(DeliveryDAO.class.getName()).log(Level.WARNING, null, e);
+        } catch (SQLException e) {
+            Logger.getLogger( DeliveryDAO.class.getName() ).log(Level.WARNING, null, e);
         }
         return deliveries;
     }

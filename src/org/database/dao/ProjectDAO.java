@@ -74,7 +74,7 @@ public class ProjectDAO implements IProjectDAO {
             }
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return projectID;
     }
@@ -100,7 +100,7 @@ public class ProjectDAO implements IProjectDAO {
             idRemove = callableStatement.getInt("idRemove");
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return idRemove != 0;
     }
@@ -153,7 +153,7 @@ public class ProjectDAO implements IProjectDAO {
             }
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return rowsAffected > 0;
     }
@@ -181,7 +181,7 @@ public class ProjectDAO implements IProjectDAO {
             conn.commit();
             idProjectAssigned = assignProject.getInt("idProject");
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
+            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return idProjectAssigned != 0;
     }
@@ -207,7 +207,7 @@ public class ProjectDAO implements IProjectDAO {
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         }catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return rowsAffected > 0;
     }
@@ -343,7 +343,7 @@ public class ProjectDAO implements IProjectDAO {
                 projects.add(project);
             }
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return projects;
     }
@@ -422,7 +422,7 @@ public class ProjectDAO implements IProjectDAO {
                 projects.add(project);
             }
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return projects;
     }

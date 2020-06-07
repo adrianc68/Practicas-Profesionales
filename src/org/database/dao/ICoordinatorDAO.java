@@ -1,6 +1,8 @@
 package org.database.dao;
 
 import org.domain.Coordinator;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ICoordinatorDAO {

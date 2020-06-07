@@ -20,6 +20,7 @@ import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.CSSProperties;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class RemoveObjectController extends Controller implements Initializable {
@@ -71,7 +72,7 @@ public class RemoveObjectController extends Controller implements Initializable 
     }
 
     @FXML
-    protected void removeButtonPressed(ActionEvent event) {
+    protected void removeButtonPressed(ActionEvent event) throws SQLException {
         if(confirmationTextField.getText().equals("ELIMINAR")){
             removeObjectFromDatabase();
             stage.close();
@@ -98,7 +99,7 @@ public class RemoveObjectController extends Controller implements Initializable 
     }
 
     //BAD USER MANAGER >>>>>> FIX THIS!!
-    private void removeObjectFromDatabase() {
+    private void removeObjectFromDatabase() throws SQLException {
         if(object instanceof Coordinator) {
             CoordinatorDAO coordinatorDAO = new CoordinatorDAO();
             statusRemoveOperation = coordinatorDAO.removeCoordinatorByID( ( (Coordinator) object).getId() );

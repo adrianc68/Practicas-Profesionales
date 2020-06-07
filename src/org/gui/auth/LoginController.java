@@ -23,13 +23,21 @@ import javafx.scene.control.TextField;
 import org.gui.auth.users.administrator.AdministratorController;
 import org.gui.auth.users.coordinator.CoordinatorController;
 import org.gui.auth.users.practitioner.PractitionerController;
+import org.util.exceptions.InactiveUserException;
+import org.util.exceptions.LimitReachedException;
+import org.util.exceptions.UserNotFoundException;
 
 public class LoginController extends Controller implements Initializable {
-    @FXML private TextField emailTextField;
-    @FXML private PasswordField passwordTextField;
-    @FXML private Label systemLabel;
-    @FXML private Button closeButton;
-    @FXML private AnchorPane rootStage;
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private PasswordField passwordTextField;
+    @FXML
+    private Label systemLabel;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private AnchorPane rootStage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -37,7 +45,7 @@ public class LoginController extends Controller implements Initializable {
     }
 
     public void showStage() {
-        loadFXMLFile( getClass().getResource("/org/gui/auth/LoginVista.fxml"), this);
+        loadFXMLFile(getClass().getResource("/org/gui/auth/LoginVista.fxml"), this);
         stage.show();
     }
 
@@ -64,22 +72,24 @@ public class LoginController extends Controller implements Initializable {
 
     @FXML
     protected void loginButtonPressed(ActionEvent event) {
-            if( login() ) {
-                stage.hide();
-                showStageBySpecifiedUser();
-                clearLogIn();
-                setStyleClass();
-                stage.show();
-            } else {
-                systemLabel.setText("¡Verifica tus datos!");
-            }
+        if ( login() ) {
+            stage.hide();
+            showStageBySpecifiedUser();
+            clearLogIn();
+            setStyleClass();
+            stage.show();
+        }
     }
 
     private boolean login() {
-        boolean isLogged;
+        boolean isLogged = false;
         String emailInput = emailTextField.getText();
-        String passwordInputEncrypted = Cryptography.cryptSHA2( passwordTextField.getText() );
-        isLogged = Auth.getInstance().logIn(emailInput, passwordInputEncrypted);
+        String passwordInputEncrypted = Cryptography.cryptSHA2(passwordTextField.getText());
+        try {
+            isLogged = Auth.getInstance().logIn(emailInput, passwordInputEncrypted);
+        } catch (UserNotFoundException | LimitReachedException | InactiveUserException e) {
+            systemLabel.setText( e.getMessage() );
+        }
         return isLogged;
     }
 
@@ -94,16 +104,16 @@ public class LoginController extends Controller implements Initializable {
     // FIX HERE
     private void showStageBySpecifiedUser() {
         Person user = Auth.getInstance().getCurrentUser();
-        if(user != null) {
-            if(user instanceof Professor) {
+        if (user != null) {
+            if (user instanceof Professor) {
                 System.out.println("Agregar ventana profesor");
-            } else if(user instanceof Coordinator) {
+            } else if (user instanceof Coordinator) {
                 CoordinatorController coordinatorController = new CoordinatorController();
                 coordinatorController.showStage();
-            } else if(user instanceof Practitioner) {
+            } else if (user instanceof Practitioner) {
                 PractitionerController practitionerController = new PractitionerController();
                 practitionerController.showStage();
-            } else{
+            } else {
                 AdministratorController administratorController = new AdministratorController();
                 administratorController.showStage();
             }
@@ -111,7 +121,7 @@ public class LoginController extends Controller implements Initializable {
     }
 
     private void setStyleClass() {
-        setStyleClass(rootStage, getClass().getResource("resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage, getClass().getResource( "resources/" + CSSProperties.readTheme().getTheme()).toExternalForm() );
     }
 
 }

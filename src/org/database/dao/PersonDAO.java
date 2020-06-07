@@ -7,6 +7,7 @@ import org.domain.Course;
 import org.domain.Person;
 import org.domain.Practitioner;
 import org.domain.Professor;
+import org.util.NetworkAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,8 +45,8 @@ public class PersonDAO implements IPersonDAO {
             if( resultSet.next() ) {
                 activityState = ActivityState.valueOf( resultSet.getString("activity_state").toUpperCase() );
             }
-        } catch (SQLException e) {
-            Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return activityState;
     }
@@ -66,10 +67,9 @@ public class PersonDAO implements IPersonDAO {
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setInt(1, idPractitioner);
             rowsAffected = preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
-        System.out.println(rowsAffected);
         return rowsAffected > 0;
     }
 
@@ -87,7 +87,7 @@ public class PersonDAO implements IPersonDAO {
     public Person getPersonByEmailAndPassword(String email, String password) {
         Person person = null;
         try( Connection conn = database.getConnection() ) {
-            String statement = "SELECT PERS.id_person, PERS.name, PERS.email, PERS.phoneNumber, PERS.activity_state, COUR.id_course, COUR.name, COUR.NRC, COUR.period, CORD.cubicle, CORD.staff_number, PROF.cubicle, PROF.staff_number, PRAC.enrollment FROM AccessAccount AS ACA INNER JOIN Person AS PERS ON ACA.id_user = PERS.id_person AND ACA.email = ? AND ACA.password = ? AND PERS.activity_state = 1 INNER JOIN Course AS COUR ON PERS.id_course =  COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course) LEFT JOIN Coordinator AS CORD ON PERS.id_person = CORD.id_person LEFT JOIN Professor AS PROF ON PERS.id_person = PROF.id_person LEFT JOIN Practitioner AS PRAC ON PERS.id_person = PRAC.id_person";
+            String statement = "SELECT PERS.id_person, PERS.name, PERS.email, PERS.phoneNumber, PERS.activity_state, COUR.id_course, COUR.name, COUR.NRC, COUR.period, CORD.cubicle, CORD.staff_number, PROF.cubicle, PROF.staff_number, PRAC.enrollment FROM AccessAccount AS ACA INNER JOIN Person AS PERS ON ACA.id_user = PERS.id_person AND ACA.email = ? AND ACA.password = ? INNER JOIN Course AS COUR ON PERS.id_course =  COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course) LEFT JOIN Coordinator AS CORD ON PERS.id_person = CORD.id_person LEFT JOIN Professor AS PROF ON PERS.id_person = PROF.id_person LEFT JOIN Practitioner AS PRAC ON PERS.id_person = PRAC.id_person";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
@@ -99,11 +99,11 @@ public class PersonDAO implements IPersonDAO {
                 person.setPhoneNumber( resultSet.getString("PERS.phoneNumber") );
                 person.setEmail( resultSet.getString("PERS.email") );
                 person.setId( resultSet.getInt("PERS.id_person") );
-                person.setActivityState( resultSet.getString("PERS.activity_state") );
+                person.setActivityState( ActivityState.valueOf( resultSet.getString("PERS.activity_state").toUpperCase() ) );
                 person.setCourse(course);
             }
-        } catch (SQLException e) {
-            Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            Logger.getLogger( NetworkAddress.class.getName() ).log(Level.SEVERE, null, sqlException);
         }
         return person;
     }

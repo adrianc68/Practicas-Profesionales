@@ -17,13 +17,13 @@ import org.util.CSSProperties;
 import org.util.Validator;
 import org.util.mail.Mail;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 public class RecoveryPasswordController extends ValidatorController implements Initializable {
-    private boolean isCodeSent;
     @FXML private Button sendCodeButton;
     @FXML private Button verifyCodeButton;
     @FXML private TextField emailTextField;
@@ -63,17 +63,19 @@ public class RecoveryPasswordController extends ValidatorController implements I
     }
 
     @FXML
-    protected void sendCodeButtonPressed(ActionEvent event) {
+    protected void sendCodeButtonPressed(ActionEvent event) throws SQLException {
         String emailInput = emailTextField.getText();
         if( verifyInputData() ) {
-            if ( isCodeSent = generateAndSendRecoveryCodeToEmail(emailInput) ) {
+            if ( generateAndSendRecoveryCodeToEmail(emailInput) ) {
                 hideCodeElementsAndShowRecoveryElements();
+            } else {
+                systemLabel.setText("¡Verifica tus datos!");
             }
         }
     }
 
     @FXML
-    protected void verifyCodeButtonPressed(ActionEvent event) {
+    protected void verifyCodeButtonPressed(ActionEvent event) throws SQLException {
         String emailInput = emailTextField.getText();
         String recoveryCode = codeTextField.getText();
         if ( Auth.getInstance().getRecoveryCode(emailInput).equals(recoveryCode) ) {
@@ -87,17 +89,13 @@ public class RecoveryPasswordController extends ValidatorController implements I
     }
 
     private void hideCodeElementsAndShowRecoveryElements() {
-        if(isCodeSent) {
             verifyCodeButton.setVisible(true);
             codeTextField.setVisible(true);
             sendCodeButton.setVisible(false);
             emailTextField.setVisible(false);
-        } else {
-            systemLabel.setText("¡Verifica tus datos!");
-        }
     }
 
-    private boolean generateAndSendRecoveryCodeToEmail(String email) {
+    private boolean generateAndSendRecoveryCodeToEmail(String email) throws SQLException {
         boolean isCodeSent;
         Auth.getInstance().generateRecoveryCode(email);
         String code = Auth.getInstance().getRecoveryCode(email);

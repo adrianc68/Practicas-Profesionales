@@ -22,6 +22,7 @@ import org.util.Cryptography;
 import org.util.Validator;
 import org.gui.auth.resources.alerts.OperationAlert;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class AddPractitionerController extends ValidatorController implements In
     }
 
     @FXML
-    protected void saveButtonPressed(ActionEvent event) {
+    protected void saveButtonPressed(ActionEvent event) throws SQLException {
         if( verifyInputData() ) {
             registerPractitioner();
             closeButton.fire();
@@ -109,7 +110,7 @@ public class AddPractitionerController extends ValidatorController implements In
         newPractitioner.setId( practitionerDAO.addPractitioner(newPractitioner) );
     }
 
-    private void generateRandomPasswordToUser(String email) {
+    private void generateRandomPasswordToUser(String email) throws SQLException {
         String randomPassword = Cryptography.generateRandomPassword();
         if ( new AccessAccountDAO().changePasswordByIdUser( Cryptography.cryptSHA2(randomPassword), newPractitioner.getId() ) ) {
             copyToClipboardSystem(email, randomPassword);

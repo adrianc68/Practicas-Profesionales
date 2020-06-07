@@ -1,6 +1,9 @@
 package org.database.dao;
 
+import java.sql.SQLException;
+
 public interface IAccessAccountDAO {
+
     /***
      * Change a password to person
      * <p>
@@ -9,7 +12,7 @@ public interface IAccessAccountDAO {
      * </p>
      * @param password the password to set
      * @param idUser the id user to change password
-     * @return
+     * @return true if any row was affected otherwise it returns false
      */
     boolean changePasswordByIdUser(String password, int idUser);
 

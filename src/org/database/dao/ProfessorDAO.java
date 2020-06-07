@@ -1,6 +1,7 @@
 package org.database.dao;
 
 import org.database.Database;
+import org.domain.ActivityState;
 import org.domain.Course;
 import org.domain.Professor;
 import java.sql.Connection;
@@ -104,7 +105,7 @@ public class ProfessorDAO implements IProfessorDAO {
             rowsAffected = assignProfessor.executeUpdate();
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
+            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return  rowsAffected > 0;
     }
@@ -128,7 +129,7 @@ public class ProfessorDAO implements IProfessorDAO {
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(PractitionerDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return  rowsAffected > 0;
     }
@@ -160,7 +161,7 @@ public class ProfessorDAO implements IProfessorDAO {
                 professor.setName( resultSet.getString("PERSPROF.name") );
                 professor.setPhoneNumber( resultSet.getString("PERSPROF.phoneNumber") );
                 professor.setEmail( resultSet.getString("PERSPROF.email") );
-                professor.setActivityState( resultSet.getString("PERSPROF.activity_state") );
+                professor.setActivityState(  ActivityState.valueOf( resultSet.getString("PERSPROF.activity_state").toUpperCase() )  );
                 professor.setId( resultSet.getInt("PROF.id_person") );
                 professor.setCubicle( resultSet.getInt("PROF.cubicle") );
                 professor.setStaffNumber( resultSet.getString("PROF.staff_number") );
@@ -196,7 +197,7 @@ public class ProfessorDAO implements IProfessorDAO {
                 Professor professor = new Professor();
                 professor.setName( resultSet.getString("PERSPROF.name") );
                 professor.setPhoneNumber( resultSet.getString("PERSPROF.phoneNumber") );
-                professor.setActivityState( resultSet.getString("PERSPROF.activity_state") );
+                professor.setActivityState( ActivityState.valueOf( resultSet.getString("PERSPROF.activity_state").toUpperCase() ) );
                 professor.setEmail( resultSet.getString("PERSPROF.email") );
                 professor.setId( resultSet.getInt("PROF.id_person") );
                 professor.setCubicle( resultSet.getInt("PROF.cubicle") );
@@ -236,7 +237,7 @@ public class ProfessorDAO implements IProfessorDAO {
                 professor.setName( resultSet.getString("PERSPROF.name") );
                 professor.setPhoneNumber( resultSet.getString("PERSPROF.phoneNumber") );
                 professor.setEmail( resultSet.getString("PERSPROF.email") );
-                professor.setActivityState( resultSet.getString("PERSPROF.activity_state") );
+                professor.setActivityState( ActivityState.valueOf( resultSet.getString("PERSPROF.activity_state").toUpperCase() ) );
                 professor.setId( resultSet.getInt("PROF.id_person") );
                 professor.setCubicle( resultSet.getInt("PROF.cubicle") );
                 professor.setStaffNumber( resultSet.getString("PROF.staff_number") );
@@ -274,7 +275,7 @@ public class ProfessorDAO implements IProfessorDAO {
                 professor.setName( resultSet.getString("PERSPROF.name") );
                 professor.setPhoneNumber( resultSet.getString("PERSPROF.phoneNumber") );
                 professor.setEmail( resultSet.getString("PERSPROF.email") );
-                professor.setActivityState( resultSet.getString("PERSPROF.activity_state") );
+                professor.setActivityState( ActivityState.valueOf( resultSet.getString("PERSPROF.activity_state").toUpperCase() ) );
                 professor.setId( resultSet.getInt("PROF.id_person") );
                 professor.setCubicle( resultSet.getInt("PROF.cubicle") );
                 professor.setStaffNumber( resultSet.getString("PROF.staff_number") );

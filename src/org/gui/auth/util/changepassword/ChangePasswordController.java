@@ -17,6 +17,7 @@ import org.util.Auth;
 import org.util.CSSProperties;
 import org.util.Cryptography;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ChangePasswordController extends Controller implements Initializable {
@@ -58,7 +59,7 @@ public class ChangePasswordController extends Controller implements Initializabl
     }
 
     @FXML
-    protected void changePasswordButtonPressed(ActionEvent event) {
+    protected void changePasswordButtonPressed(ActionEvent event) throws SQLException {
         if(!isFieldEmpty() && isPasswordsEquals() ) {
 
             changePassword();
@@ -89,7 +90,7 @@ public class ChangePasswordController extends Controller implements Initializabl
         return isPasswordFieldEqual;
     }
 
-    private void changePassword() {
+    private void changePassword() throws SQLException {
         String newPassword = passwordTextField.getText();
         String newPasswordConfirmation = confirmationPasswordTextField.getText();
         if( newPassword.equals(newPasswordConfirmation) ) {
@@ -104,7 +105,7 @@ public class ChangePasswordController extends Controller implements Initializabl
         }
     }
 
-    private void changePasswordByLoggedUser(String newPassword) {
+    private void changePasswordByLoggedUser(String newPassword) throws SQLException {
         String passwordEncrypted = Cryptography.cryptSHA2( newPassword );
         if ( Auth.getInstance().resetPassword(passwordEncrypted) ) {
             showSuccessfullAlert();
@@ -114,7 +115,7 @@ public class ChangePasswordController extends Controller implements Initializabl
         }
     }
 
-    private void changePasswordByUnloggedUser(String newPassword, String email) {
+    private void changePasswordByUnloggedUser(String newPassword, String email) throws SQLException {
         String passwordEncrypted = Cryptography.cryptSHA2(newPassword);
         if ( Auth.getInstance().resetPasswordByUnloggedUser(email, passwordEncrypted) ) {
             showSuccessfullAlert();

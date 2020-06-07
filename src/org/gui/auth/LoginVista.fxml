@@ -66,7 +66,7 @@
                      </children>
                   </GridPane>
                   <Label alignment="TOP_CENTER" onMousePressed="#passwordRecoveryButtonPressed" prefHeight="37.0" prefWidth="269.0" styleClass="recoveryLabel" text="¿Has olvidado tu contraseña? Recupera tu contraseña haciendo clic aquí." textAlignment="CENTER" underline="true" wrapText="true" />
-                  <Label fx:id="systemLabel" styleClass="systemLabel" textFill="RED" />
+                  <Label fx:id="systemLabel" alignment="CENTER" prefHeight="73.0" prefWidth="342.0" styleClass="systemLabel" textAlignment="CENTER" textFill="RED" wrapText="true" />
                   <Label styleClass="lastLevelLabel" text="Universidad Veracruzana 2020 Copyright © Todos los derechos reservados" translateY="180.0">
                      <font>
                         <Font size="9.0" />

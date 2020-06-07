@@ -53,7 +53,7 @@ public class OrganizationDAO implements IOrganizationDAO {
             idCompany = resultSet.getInt(1);
             conn.commit();
         } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(OrganizationDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger( OrganizationDAO.class.getName() ).log(Level.SEVERE, null, e);
         }
         return idCompany;
     }

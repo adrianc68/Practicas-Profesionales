@@ -6,7 +6,7 @@ public class Person {
     protected String phoneNumber;
     protected String email;
     protected Course course;
-    protected String activityState;
+    protected ActivityState activityState;
 
     public int getId() {
         return id;
@@ -48,11 +48,11 @@ public class Person {
         this.course = course;
     }
 
-    public String getActivityState() {
+    public ActivityState getActivityState() {
         return activityState;
     }
 
-    public void setActivityState(String activityState) {
+    public void setActivityState(ActivityState activityState) {
         this.activityState = activityState;
     }
 
@@ -64,7 +64,7 @@ public class Person {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", course=" + course +
-                ", activityState='" + activityState + '\'' +
+                ", activityState='" + activityState.getStatus() + '\'' +
                 '}';
     }
 
