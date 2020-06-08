@@ -9,17 +9,20 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
-import org.database.dao.PractitionerDAO;
 import org.database.dao.ProfessorDAO;
 import org.domain.Practitioner;
 import org.domain.Professor;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.ProfessorCard;
+import org.gui.auth.users.coordinator.practitioner.assignproject.AssignProjectController;
 import org.util.CSSProperties;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AssignProfessorController extends Controller implements Initializable {
     private boolean assignOperationStatus;
@@ -56,7 +59,7 @@ public class AssignProfessorController extends Controller implements Initializab
     }
 
     @FXML
-    void closeButtonPressed(ActionEvent event) {
+    protected void closeButtonPressed(ActionEvent event) {
         stage.close();
     }
 
@@ -70,17 +73,22 @@ public class AssignProfessorController extends Controller implements Initializab
         super.stagePressed(event);
     }
 
-    private void assignProfessorToDatabase() {
-        assignOperationStatus = new ProfessorDAO().assignProfessorToPractitioner( practitioner.getId(), professorCardSelected.getProfessor().getId() );
-        if(assignOperationStatus) {
-            String title = "Profesor asignado";
-            String contentText = "¡Se ha asignado correctamente el profesor seleccionado al practicante!";
-            OperationAlert.showSuccessfullAlert(title, contentText);
-        } else {
-            String title = "¡No se pudo realizar la asignación";
-            String contentText = "¡No se pudo realizar la asignación del profesor al practicante!";
-            OperationAlert.showUnsuccessfullAlert(title, contentText);
+    private void assignProfessorTo() {
+        try {
+            assignOperationStatus = new ProfessorDAO().assignProfessorToPractitioner( practitioner.getId(), professorCardSelected.getProfessor().getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AssignProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
+        if(assignOperationStatus) {
+            showSuccessfullAlert();
+        }
+    }
+
+    private void showSuccessfullAlert() {
+        String title = "Profesor asignado";
+        String contentText = "¡Se ha asignado correctamente el profesor seleccionado al practicante!";
+        OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
     private void addProfessorInACardToScrollPane(Professor professor) {
@@ -88,13 +96,18 @@ public class AssignProfessorController extends Controller implements Initializab
         card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
             professorCardSelected = card;
             stage.close();
-            assignProfessorToDatabase();
+            assignProfessorTo();
         });
         professorsPane.getChildren().add(card);
     }
 
     private void setProfessorsToScrollPaneFromDatabase() {
-        List<Professor> professors = new ProfessorDAO().getAllProfessorsFromLastCourse();
+        List<Professor> professors = null;
+        try {
+            professors = new ProfessorDAO().getAllProfessorsFromLastCourse();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
         if(professors != null) {
             for ( Professor professor : professors ) {
                 addProfessorInACardToScrollPane(professor);

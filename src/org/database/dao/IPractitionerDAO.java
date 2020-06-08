@@ -1,6 +1,8 @@
 package org.database.dao;
 
 import org.domain.Practitioner;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IPractitionerDAO {
@@ -12,7 +14,7 @@ public interface IPractitionerDAO {
      * @param practitioner to be added to database
      * @return int the practitioner's id
      */
-    int addPractitioner(Practitioner practitioner);
+    int addPractitioner(Practitioner practitioner) throws SQLException;
 
     /***
      * Delete a Practitioner from database.
@@ -22,7 +24,7 @@ public interface IPractitionerDAO {
      * @param idPractitioner the practitioner's ID
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean removePractitioner(int idPractitioner);
+    boolean removePractitioner(int idPractitioner) throws SQLException;
 
     /***
      * Get all practitioners and their assigned projects from the actual/last course
@@ -32,6 +34,6 @@ public interface IPractitionerDAO {
      * </p>
      * @return List<Practitioner> a list with practitioners of the actual/last course from database
      */
-    List<Practitioner> getAllPractitionersFromLastCourse();
+    List<Practitioner> getAllPractitionersFromLastCourse() throws SQLException;
 
 }

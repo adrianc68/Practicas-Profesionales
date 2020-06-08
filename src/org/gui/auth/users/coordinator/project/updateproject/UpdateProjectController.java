@@ -12,15 +12,16 @@ import javafx.scene.layout.AnchorPane;
 import org.database.dao.ProjectDAO;
 import org.domain.Project;
 import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.users.coordinator.project.editionproject.screens.ScreenController;
 import org.util.CSSProperties;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.gui.auth.resources.alerts.OperationAlert.showSuccessfullAlert;
-import static org.gui.auth.resources.alerts.OperationAlert.showUnsuccessfullAlert;
 
 public class UpdateProjectController extends Controller implements Initializable {
     private boolean updateOperationstatus;
@@ -123,16 +124,16 @@ public class UpdateProjectController extends Controller implements Initializable
         int idProject = selectedProject.getId();
         selectedProject = screenController.getNewProject();
         selectedProject.setId(idProject);
-        ProjectDAO projectDAO = new ProjectDAO();
-        updateOperationstatus = projectDAO.updateProjectInformation(selectedProject);
+        try {
+            updateOperationstatus = new ProjectDAO().updateProjectInformation(selectedProject);
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( UpdateProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
         if(updateOperationstatus) {
             String title = "Proyecto actualizado";
             String contentText = "¡Se actualizó correctamente el proyecto!";
             showSuccessfullAlert(title, contentText);
-        } else {
-            String title = "No se pudo actualizar el proyecto";
-            String contentText = "¡No se pudo eliminar el proyecto!";
-            showUnsuccessfullAlert(title, contentText);
         }
     }
 

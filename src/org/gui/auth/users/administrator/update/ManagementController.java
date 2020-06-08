@@ -3,6 +3,8 @@ package org.gui.auth.users.administrator.update;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
@@ -22,6 +24,7 @@ import org.domain.Course;
 import org.domain.Person;
 import org.domain.Professor;
 import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.users.administrator.update.add.AddController;
 import org.gui.auth.users.administrator.update.change.ChangeActivityStateController;
 import org.gui.auth.users.administrator.update.remove.RemoveObjectController;
@@ -70,6 +73,21 @@ public class ManagementController extends Controller implements Initializable {
     }
 
     @FXML
+    protected void closeButtonPressed(ActionEvent event) {
+        stage.close();
+    }
+
+    @FXML
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
+    }
+
+    @FXML
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
+    }
+
+    @FXML
     protected void changeActivityStateButtonPressed(ActionEvent event) throws SQLException {
         if( selected != null &&  !(selected instanceof Course) ) {
             ChangeActivityStateController changeActivityStateController = new ChangeActivityStateController();
@@ -104,21 +122,6 @@ public class ManagementController extends Controller implements Initializable {
         selected = null;
     }
 
-    @FXML
-    protected void closeButtonPressed(ActionEvent event) {
-        stage.close();
-    }
-
-    @FXML
-    protected void stageDragged(MouseEvent event) {
-        super.stageDragged(event);
-    }
-
-    @FXML
-    protected void stagePressed(MouseEvent event) {
-        super.stagePressed(event);
-    }
-
     private void setDataToCoordinatorTableView() throws SQLException {
         CoordinatorDAO coordinatorDAO = new CoordinatorDAO();
         coordinatorsObservableList = FXCollections.observableArrayList();
@@ -129,14 +132,24 @@ public class ManagementController extends Controller implements Initializable {
     private void setDataToProfessorTableView() {
         ProfessorDAO professorDAO = new ProfessorDAO();
         professorsObservableList = FXCollections.observableArrayList();
-        professorsObservableList.addAll( professorDAO.getAllProfessors() );
+        try {
+            professorsObservableList.addAll( professorDAO.getAllProfessors() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( ManagementController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
         professorsTableView.setItems(professorsObservableList);
     }
 
     private void setDataToCourseTableView() {
         CourseDAO courseDAO = new CourseDAO();
         coursesObservableList = FXCollections.observableArrayList();
-        coursesObservableList.addAll( courseDAO.getAllCourses() );
+        try {
+            coursesObservableList.addAll( courseDAO.getAllCourses() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( ManagementController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
         coursesTableView.setItems(coursesObservableList);
     }
 

@@ -16,7 +16,7 @@ public interface IPersonDAO {
      * @param password the password to be compared with data from database
      * @return Person an object Person.
      */
-    Person getPersonByEmailAndPassword(String email, String password);
+    Person getPersonByEmailAndPassword(String email, String password) throws SQLException;
 
     /***
      * Change activity state to person.
@@ -27,7 +27,7 @@ public interface IPersonDAO {
      * @param idPractitioner
      * @return true if any row was affected, and false if it was any row not affected.
      */
-    boolean changeActivityStateByID(int idPractitioner);
+    boolean changeActivityStateByID(int idPractitioner) throws SQLException;
 
     /***
      * Get the activity state by email and password.
@@ -38,6 +38,6 @@ public interface IPersonDAO {
      * @param idPerson the user to get their activity state
      * @return ActivityState representing the activity state.
      */
-    ActivityState getActivityStateByID(int idPerson);
+    ActivityState getActivityStateByID(int idPerson) throws SQLException;
 
 }

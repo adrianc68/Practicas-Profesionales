@@ -7,6 +7,8 @@ import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.runners.MethodSorters;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -15,7 +17,7 @@ public class ProfessorDAOTest {
     private final int idPractitioner = 3;
 
     @Test
-    void addProfessor() {
+    void addProfessor() throws SQLException {
         Professor professor = new Professor();
         professor.setName("Rafael Lira Santos");
         professor.setPhoneNumber("2281569492");
@@ -33,13 +35,13 @@ public class ProfessorDAOTest {
     }
 
     @Test
-    void getAssignedProfessorByPractitionerID() {
+    void getAssignedProfessorByPractitionerID() throws SQLException {
         ProfessorDAO professorDAO = new ProfessorDAO();
         assertNull( professorDAO.getAssignedProfessorByPractitionerID(idPractitioner) );
     }
 
     @Test
-    public void getAllProfessorsFromLastCourse() {
+    public void getAllProfessorsFromLastCourse() throws SQLException {
         ProfessorDAO professorDAO = new ProfessorDAO();
         int expected = 1;
         int actual = professorDAO.getAllProfessorsFromLastCourse().size();
@@ -47,7 +49,7 @@ public class ProfessorDAOTest {
     }
 
     @Test
-    void removeProfessor() {
+    void removeProfessor() throws SQLException {
         ProfessorDAO professorDAO = new ProfessorDAO();
         boolean actual = professorDAO.removeProfessorByID(1);
         assertTrue(actual);

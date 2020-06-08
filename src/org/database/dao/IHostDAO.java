@@ -12,7 +12,7 @@ public interface IHostDAO {
      * @param address the host that is using the system.
      * @return int representing the attemps done by host.
      */
-    int getAttemptsByMacAddress(String address);
+    int getAttemptsByMacAddress(String address) throws SQLException;
 
     /***
      * Send the host's address
@@ -23,7 +23,7 @@ public interface IHostDAO {
      * @param address the host's address
      * @return boolean if any row was affected on database and false if any row was no affected.
      */
-    boolean sendActualMacAddress(String address);
+    boolean sendActualMacAddress(String address) throws SQLException;
 
     /***
      * Reset the attempt's done by host.
@@ -34,5 +34,5 @@ public interface IHostDAO {
      * @param address the host's address
      * @return true if any row was affected on database and false if any row was not affected.
      */
-    boolean resetAttempts(String address);
+    boolean resetAttempts(String address) throws SQLException;
 }

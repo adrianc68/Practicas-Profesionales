@@ -18,10 +18,13 @@ import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.CSSProperties;
 import org.util.Validator;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AddCourseController extends ValidatorController implements Initializable {
     private boolean addOperationStatus;
@@ -65,34 +68,20 @@ public class AddCourseController extends ValidatorController implements Initiali
 
     @FXML
     protected void stagePressed(MouseEvent event) {
-        stagePressed(event);
+        super.stagePressed(event);
     }
 
     @FXML
     void saveButtonPressed(ActionEvent event) {
         if( verifyInputData() ) {
             registerCourse();
-            stage.close();
-            if( newCourse.getId() != 0){
+            if( addOperationStatus ){
+                stage.close();
                 showSuccessfullAlert();
-            } else {
-                showUnsuccessfullAlert();
             }
         } else {
             systemLabel.setText("¡Verifica tus datos!");
         }
-    }
-
-    private void showSuccessfullAlert() {
-        String title = "¡Se ha registrado un nuevo curso!";
-        String contentText = "Se ha registrado correctamente el nuevo curso. Verificar en la lista.";
-        OperationAlert.showSuccessfullAlert(title, contentText);
-    }
-
-    private void showUnsuccessfullAlert() {
-        String title = "¡No se ha podido registrar el curso!";
-        String contentText = "¡No se ha podido registrar el curso, contactar con el administrdor!";
-        OperationAlert.showUnsuccessfullAlert(title, contentText);
     }
 
     private void registerCourse() {
@@ -101,7 +90,19 @@ public class AddCourseController extends ValidatorController implements Initiali
         newCourse.setNRC( nrcTextField.getText() );
         newCourse.setPeriod( periodTextField.getText() );
         CourseDAO courseDAO = new CourseDAO();
-        newCourse.setId( courseDAO.addCourse(newCourse) );
+        try {
+            newCourse.setId( courseDAO.addCourse(newCourse) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddCourseController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        addOperationStatus = (newCourse.getId() != 0);
+    }
+
+    private void showSuccessfullAlert() {
+        String title = "¡Se ha registrado un nuevo curso!";
+        String contentText = "Se ha registrado correctamente el nuevo curso. Verificar en la lista.";
+        OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
     private void initValidatorToTextFields() {

@@ -8,8 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ActivityDAO implements IActivityDAO {
     private final Database database;
@@ -31,7 +29,7 @@ public class ActivityDAO implements IActivityDAO {
      * @return int representing the activity's id.
      */
     @Override
-    public int addActivity(Activity activity) {
+    public int addActivity(Activity activity) throws SQLException {
         int idActivity = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -48,8 +46,8 @@ public class ActivityDAO implements IActivityDAO {
             resultSet.next();
             idActivity = resultSet.getInt(1);
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ActivityDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return idActivity;
     }
@@ -63,7 +61,7 @@ public class ActivityDAO implements IActivityDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean removeActivityByID(int idActivity) {
+    public boolean removeActivityByID(int idActivity) throws SQLException {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -72,8 +70,8 @@ public class ActivityDAO implements IActivityDAO {
             preparedStatement.setInt(1, idActivity );
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ActivityDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -86,7 +84,7 @@ public class ActivityDAO implements IActivityDAO {
      * @return List<activities> a list with activities of the actual/last course from database
      */
     @Override
-    public List<Activity> getAllActivitiesFromLastCourse() {
+    public List<Activity> getAllActivitiesFromLastCourse() throws SQLException {
         List<Activity> activities = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT ACT.id_activity, ACT.name, ACT.description, ACT.deadline FROM activity AS ACT INNER JOIN professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN person AS PER ON PER.id_person = PROF.id_person INNER JOIN course AS COUR ON COUR.id_course = PER.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
@@ -102,8 +100,8 @@ public class ActivityDAO implements IActivityDAO {
                 activity.setProfessor(null);
                 activities.add(activity);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ActivityDAO.class.getName()).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return activities;
     }
@@ -117,7 +115,7 @@ public class ActivityDAO implements IActivityDAO {
      * @return List<activities> a list with activities looking for Professor.
      */
     @Override
-    public List<Activity> getAllActivitiesByProfessorID(int idProfessor){
+    public List<Activity> getAllActivitiesByProfessorID(int idProfessor) throws SQLException {
         List<Activity> activities = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT ACT.id_activity, ACT.name, ACT.description, ACT.deadline FROM Activity AS ACT WHERE ACT.id_professor = ?";
@@ -134,8 +132,8 @@ public class ActivityDAO implements IActivityDAO {
                 activity.setProfessor(null);
                 activities.add(activity);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(ActivityDAO.class.getName()).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return activities;
     }

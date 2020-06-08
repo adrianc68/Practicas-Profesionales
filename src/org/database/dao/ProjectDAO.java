@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ProjectDAO implements IProjectDAO {
     private final Database database;
@@ -36,9 +34,9 @@ public class ProjectDAO implements IProjectDAO {
      * @return int representing the project's ID
      */
     @Override
-    public int addProject(Project project) {
+    public int addProject(Project project) throws SQLException {
         int projectID = 0;
-        try(Connection conn = database.getConnection()){
+        try( Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "INSERT INTO Project (name, duration, schedule, general_purpose, general_description, id_company, charge_responsable, name_responsable, email_responsable) values (?,?,?,?,?,?,?,?,?)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
@@ -73,8 +71,8 @@ public class ProjectDAO implements IProjectDAO {
                 }
             }
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return projectID;
     }
@@ -88,7 +86,7 @@ public class ProjectDAO implements IProjectDAO {
      * @return boolean true if project was removed.
      */
     @Override
-    public boolean removeProjectByID(int idProject) {
+    public boolean removeProjectByID(int idProject) throws SQLException {
         int idRemove = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -99,8 +97,8 @@ public class ProjectDAO implements IProjectDAO {
             callableStatement.execute();
             idRemove = callableStatement.getInt("idRemove");
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return idRemove != 0;
     }
@@ -114,9 +112,9 @@ public class ProjectDAO implements IProjectDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean updateProjectInformation(Project project) {
+    public boolean updateProjectInformation(Project project) throws SQLException {
         int rowsAffected = 0;
-        try(Connection conn = database.getConnection()){
+        try( Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "UPDATE Project SET name = ?, duration = ?, schedule = ?, general_purpose = ?, general_description = ?, charge_responsable = ?, name_responsable = ?, email_responsable = ? WHERE id_project = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
@@ -152,8 +150,8 @@ public class ProjectDAO implements IProjectDAO {
                 }
             }
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -168,9 +166,9 @@ public class ProjectDAO implements IProjectDAO {
      * @return boolean true if project was assigned
      */
     @Override
-    public boolean assignProjectToPractitioner(int idPractitioner, int idProject) {
+    public boolean assignProjectToPractitioner(int idPractitioner, int idProject) throws SQLException {
         int idProjectAssigned = 0;
-        try(Connection conn = database.getConnection()){
+        try( Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "{CALL assignProject(?, ?, ?)}";
             CallableStatement assignProject = conn.prepareCall(statement);
@@ -180,8 +178,8 @@ public class ProjectDAO implements IProjectDAO {
             assignProject.execute();
             conn.commit();
             idProjectAssigned = assignProject.getInt("idProject");
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return idProjectAssigned != 0;
     }
@@ -196,9 +194,9 @@ public class ProjectDAO implements IProjectDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean addSelectedProjectByPractitionerID(int idPractitioner, int idProject) {
+    public boolean addSelectedProjectByPractitionerID(int idPractitioner, int idProject) throws SQLException {
         int rowsAffected = 0;
-        try(Connection conn = database.getConnection()){
+        try( Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "CALL selectProject(?, ?)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
@@ -206,8 +204,8 @@ public class ProjectDAO implements IProjectDAO {
             preparedStatement.setInt(2, idProject);
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        }catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
+        }catch (SQLException sqlException) {
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -221,7 +219,7 @@ public class ProjectDAO implements IProjectDAO {
      * @return an List which contain the projects selected by a practitioner.
      */
     @Override
-    public List<Project> getSelectedProjectsByPractitionerID(int idPractitioner) {
+    public List<Project> getSelectedProjectsByPractitionerID(int idPractitioner) throws SQLException {
         String statement = "SELECT PSP.id_person, PROJ.id_project, PROJ.name, PROJ.duration, PROJ.schedule, PROJ.general_purpose, PROJ.general_description, PROJ.id_company, PROJ.charge_responsable, PROJ.name_responsable, PROJ.email_responsable, COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM (SELECT selected_project, id_person FROM Practitioner_Selected_Projects WHERE id_person = ?) AS PSP INNER JOIN Project AS PROJ ON PROJ.id_project = PROJ.id_project AND PSP.selected_project = PROJ.id_project INNER JOIN Company AS COMP ON  PROJ.id_company = COMP.id_company INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON COMP.id_coordinator = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COUR.id_course";
         return getProjectsByStatementAndIDPractitioner(statement, idPractitioner);
     }
@@ -235,7 +233,7 @@ public class ProjectDAO implements IProjectDAO {
      * @return a Project of a Practitioner.
      */
     @Override
-    public Project getAssignedProjectByPractitionerID(int idPractitioner) {
+    public Project getAssignedProjectByPractitionerID(int idPractitioner) throws SQLException {
         String statement = "SELECT PROJ.id_project, PROJ.name, PROJ.duration, PROJ.schedule, PROJ.general_purpose, PROJ.general_description, PROJ.id_company, PROJ.charge_responsable, PROJ.name_responsable, PROJ.email_responsable, COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM (SELECT id_person, id_project FROM Practitioner WHERE id_person = ?) AS PRAC INNER JOIN Project AS PROJ ON PRAC.id_project = PROJ.id_project INNER JOIN Company AS COMP ON  PROJ.id_company = COMP.id_company INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON COMP.id_coordinator = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COUR.id_course";
         List<Project> projects = getProjectsByStatementAndIDPractitioner(statement, idPractitioner);
         Project project = ( projects.isEmpty() ) ? null : projects.get(0);
@@ -250,7 +248,7 @@ public class ProjectDAO implements IProjectDAO {
      * @return List<Project> a list containing the available projects
      */
     @Override
-    public List<Project> getAllAvailableProjectsFromLastCourse() {
+    public List<Project> getAllAvailableProjectsFromLastCourse() throws SQLException {
         String statement = "SELECT PROJ.id_project, PROJ.name, PROJ.duration, PROJ.schedule, PROJ.general_purpose, PROJ.general_description, PROJ.id_company, PROJ.charge_responsable, PROJ.name_responsable, PROJ.email_responsable, COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Project AS PROJ INNER JOIN Company AS COMP ON  PROJ.id_company = COMP.id_company INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON COMP.id_coordinator = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COUR.id_course and COUR.id_course = (SELECT max(id_course) FROM Course) WHERE PROJ.id_project NOT IN (SELECT id_project FROM (SELECT count(id_project) AS counter, id_project FROM Practitioner GROUP BY id_project HAVING counter = 3) AS Count)";
         return getProjectsByStatement(statement);
     }
@@ -263,12 +261,12 @@ public class ProjectDAO implements IProjectDAO {
      * @return List<Project> a list containing all projects of the actual/last course
      */
     @Override
-    public List<Project> getAllProjectsFromLastCourse() {
+    public List<Project> getAllProjectsFromLastCourse() throws SQLException {
         String statement = "SELECT PROJ.id_project, PROJ.name, PROJ.duration, PROJ.schedule, PROJ.general_purpose, PROJ.general_description, PROJ.id_company, PROJ.charge_responsable, PROJ.name_responsable, PROJ.email_responsable, COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Project AS PROJ INNER JOIN Company AS COMP ON  PROJ.id_company = COMP.id_company INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON CORD.id_person = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COUR.id_course and COUR.id_course = (SELECT max(id_course) FROM Course)";
         return getProjectsByStatement(statement);
     }
 
-    private List<Project> getProjectsByStatementAndIDPractitioner(String statement, int idPractitioner){
+    private List<Project> getProjectsByStatementAndIDPractitioner(String statement, int idPractitioner) throws SQLException {
         List<Project> projects = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
@@ -342,13 +340,13 @@ public class ProjectDAO implements IProjectDAO {
                 project.setImmediateObjetives(immediateObjetives);
                 projects.add(project);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return projects;
     }
 
-    private List<Project> getProjectsByStatement(String statement){
+    private List<Project> getProjectsByStatement(String statement) throws SQLException {
         List<Project> projects = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
@@ -421,8 +419,8 @@ public class ProjectDAO implements IProjectDAO {
                 project.setImmediateObjetives(immediateObjetives);
                 projects.add(project);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProjectDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return projects;
     }

@@ -17,6 +17,8 @@ public class Validator {
     public static final int PROJECT_MULTIVALUED_ATTRIBUTES_LENGTH = 35;
     public static  final int DURATION_LENGTH = 5;
     public static final int NUMBER_LENGTH = 11;
+    public static final int RECOVERY_CODE_LENGTH = 8;
+    public static final String RECOVERY_CODE_PATTERN = "[a-zA-Z0-9]{8}";
     public static final String STAFF_NUMBER_PATTERN = "([a-zA-Z0-9\\-]{3,})";
     public static final String ENROLLMENT_PATTERN = "S([\\d]{8})";
     public static final String PHONE_NUMBER_PATTERN = "([\\d]){8,10}";

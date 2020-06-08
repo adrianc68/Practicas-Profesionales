@@ -1,6 +1,8 @@
 package org.database.dao;
 
 import org.domain.Project;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IProjectDAO {
@@ -12,7 +14,7 @@ public interface IProjectDAO {
      * @param project the project to be added to database
      * @return int representing the project's ID
      */
-    int addProject(Project project);
+    int addProject(Project project) throws SQLException;
 
     /***
      * Remove a project from database.
@@ -22,7 +24,7 @@ public interface IProjectDAO {
      * @param idProject the project's id to be removed from database.
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean removeProjectByID(int idProject);
+    boolean removeProjectByID(int idProject) throws SQLException;
 
     /***
      * Update the project information from a existing project in database.
@@ -32,7 +34,7 @@ public interface IProjectDAO {
      * @param project the project with updated information.
      * @return boolean true if project was removed.
      */
-    boolean updateProjectInformation(Project project);
+    boolean updateProjectInformation(Project project) throws SQLException;
 
     /***
      * Assign a project to a Practitioner in database.
@@ -43,7 +45,7 @@ public interface IProjectDAO {
      * @param idProject the project's ID to be assigned to practitioner
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean assignProjectToPractitioner(int idPractitioner, int idProject);
+    boolean assignProjectToPractitioner(int idPractitioner, int idProject) throws SQLException;
 
     /***
      * Add in the datase a project selected by a Practitioner
@@ -54,7 +56,7 @@ public interface IProjectDAO {
      * @param idProject project's id to set.
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean addSelectedProjectByPractitionerID(int idPractitioner, int idProject);
+    boolean addSelectedProjectByPractitionerID(int idPractitioner, int idProject) throws SQLException;
 
     /***
      * Get the projects selected by a practitioner.
@@ -64,7 +66,7 @@ public interface IProjectDAO {
      * @param idPractitioner the practitioner's ID
      * @return an List which contain the projects selected by a practitioner.
      */
-    List<Project> getSelectedProjectsByPractitionerID(int idPractitioner);
+    List<Project> getSelectedProjectsByPractitionerID(int idPractitioner) throws SQLException;
 
     /***
      * Get the assigned project of a practitioner.
@@ -74,7 +76,7 @@ public interface IProjectDAO {
      * @param idPractitioner the practitioner's ID
      * @return a Project of a Practitioner.
      */
-    Project getAssignedProjectByPractitionerID(int idPractitioner);
+    Project getAssignedProjectByPractitionerID(int idPractitioner) throws SQLException;
 
     /***
      * Get all unassigned projects or available of the actual/last course from the database.
@@ -83,7 +85,7 @@ public interface IProjectDAO {
      * </p>
      * @return List<Project> a list containing the available projects
      */
-    List<Project> getAllAvailableProjectsFromLastCourse();
+    List<Project> getAllAvailableProjectsFromLastCourse() throws SQLException;
 
     /***
      * Get all projects of the actual/last course from the database.
@@ -92,6 +94,6 @@ public interface IProjectDAO {
      * </p>
      * @return List<Project> a list containing all projects of the actual/last course
      */
-    List<Project> getAllProjectsFromLastCourse();
+    List<Project> getAllProjectsFromLastCourse() throws SQLException;
 
 }

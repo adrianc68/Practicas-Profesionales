@@ -1,6 +1,8 @@
 package org.database.dao;
 
 import org.domain.Professor;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IProfessorDAO {
@@ -14,7 +16,7 @@ public interface IProfessorDAO {
      * @param professor the professor to be added to database.
      * @return int representing the professor's id.
      */
-    int addProfessor(Professor professor);
+    int addProfessor(Professor professor) throws SQLException;
 
     /***
      * Remove a professor from course.
@@ -25,7 +27,7 @@ public interface IProfessorDAO {
      * @param idProfessor professor's id to be removed.
      * @return boolean true if professor was deleted from database.
      */
-    boolean removeProfessorByID(int  idProfessor);
+    boolean removeProfessorByID(int  idProfessor) throws SQLException;
 
     /***
      * Assign a professor to a Practitioner in the database.
@@ -36,7 +38,7 @@ public interface IProfessorDAO {
      * @param idProfessor the professor's id to be assigned to practitioner
      * @return boolean true if project was assigned
      */
-    boolean assignProfessorToPractitioner(int idPractitioner, int idProfessor);
+    boolean assignProfessorToPractitioner(int idPractitioner, int idProfessor) throws SQLException;
 
     /***
      * Delete a assign of professor to a Practitioner in the database.
@@ -46,7 +48,7 @@ public interface IProfessorDAO {
      * @param idPractitioner the practitioner's ID
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean removeAssignedProfessorToPractitioner(int idPractitioner);
+    boolean removeAssignedProfessorToPractitioner(int idPractitioner) throws SQLException;
 
     /***
      * Get assigned professor of a practicing from datatabase.
@@ -57,7 +59,7 @@ public interface IProfessorDAO {
      * @param idPractitioner practitioner's id to get his assigned professor.
      * @return Professor professor assigned to a specific practitioner.
      */
-    Professor getAssignedProfessorByPractitionerID(int idPractitioner);
+    Professor getAssignedProfessorByPractitionerID(int idPractitioner) throws SQLException;
 
     /***
      * Get all professors from last/actual course
@@ -66,7 +68,7 @@ public interface IProfessorDAO {
      * </p>
      * @return List<Professor> a list with all professors from last course.
      */
-    List<Professor> getAllProfessorsFromLastCourse();
+    List<Professor> getAllProfessorsFromLastCourse() throws SQLException;
 
     /***
      * Get all professors by a specified course
@@ -76,7 +78,7 @@ public interface IProfessorDAO {
      * </p>
      * @return List<Professor> a list with all professors from specified course
      */
-    List<Professor> getAllProfessorsByCourseID(int idCourse);
+    List<Professor> getAllProfessorsByCourseID(int idCourse) throws SQLException;
 
     /***
      * Get all professors by every course.
@@ -86,7 +88,7 @@ public interface IProfessorDAO {
      * </p>
      * @return List<Professor> a list with all professors from specified course
      */
-     List<Professor> getAllProfessors();
+     List<Professor> getAllProfessors() throws SQLException;
 
 
 }

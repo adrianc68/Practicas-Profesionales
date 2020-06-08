@@ -5,6 +5,8 @@ import org.domain.Course;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.runners.MethodSorters;
+
+import java.sql.SQLException;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +15,7 @@ class CourseDAOTest {
     private int idCourse = 0;
 
     @Test
-    void addCourse() {
+    void addCourse() throws SQLException {
         Course course = new Course();
         course.setName("Practicas Profesionales");
         course.setNRC("N192127");
@@ -25,14 +27,14 @@ class CourseDAOTest {
     }
 
     @Test
-    void removeCourseByID() {
+    void removeCourseByID() throws SQLException {
         CourseDAO courseDAO = new CourseDAO();
         boolean result = courseDAO.removeCourseByID(idCourse);
         assertTrue(result);
     }
 
     @Test
-    void getLastCourse() {
+    void getLastCourse() throws SQLException {
         int expectedID = 1;
         CourseDAO courseDAO = new CourseDAO();
         Course course = courseDAO.getLastCourse();
@@ -41,7 +43,7 @@ class CourseDAOTest {
     }
 
     @Test
-    void getAllCourses() {
+    void getAllCourses() throws SQLException {
         CourseDAO courseDAO = new CourseDAO();
         List<Course> courses = courseDAO.getAllCourses();
         int result = courses.size();

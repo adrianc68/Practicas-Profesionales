@@ -15,10 +15,14 @@ import org.database.dao.DeliveryDAO;
 import org.database.dao.ProfessorDAO;
 import org.domain.Activity;
 import org.domain.Practitioner;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.ActivityCard;
+import org.gui.auth.users.administrator.update.remove.RemoveObjectController;
+import org.gui.auth.users.coordinator.project.editionproject.company.addcompany.AddCompanyController;
 import org.util.Auth;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -36,7 +40,12 @@ public class ActivityController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         practitioner = ( (Practitioner) Auth.getInstance().getCurrentUser() );
-        practitioner.setProfessor( new ProfessorDAO().getAssignedProfessorByPractitionerID( practitioner.getId() ) );
+        try {
+            practitioner.setProfessor( new ProfessorDAO().getAssignedProfessorByPractitionerID( practitioner.getId() ) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( ActivityController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
         if(practitioner.getProfessor() != null ) {
             setActivitiesFromDatabaseToScrollPane();
         }
@@ -63,12 +72,18 @@ public class ActivityController implements Initializable {
     }
 
     private void setActivitiesFromDatabaseToScrollPane() {
-        List<Activity> activityList = new ActivityDAO().getAllActivitiesByProfessorID( practitioner.getProfessor().getId() );
-        if( activityList != null ) {
-            for (Activity activity : activityList) {
-                activity.setDeliveries( new DeliveryDAO().getAllDeliveriesByPractitionerID(practitioner.getId() ) );
-                addActivityToScrollPane(activity);
+        List<Activity> activityList;
+        try {
+            activityList = new ActivityDAO().getAllActivitiesByProfessorID( practitioner.getProfessor().getId() );
+            if( activityList != null ) {
+                for (Activity activity : activityList) {
+                    activity.setDeliveries( new DeliveryDAO().getAllDeliveriesByPractitionerID(practitioner.getId() ) );
+                    addActivityToScrollPane(activity);
+                }
             }
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( ActivityController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
     }
 

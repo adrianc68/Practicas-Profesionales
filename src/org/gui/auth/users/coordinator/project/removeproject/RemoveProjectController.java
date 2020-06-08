@@ -12,10 +12,13 @@ import javafx.stage.Modality;
 import org.database.dao.ProjectDAO;
 import org.domain.Project;
 import org.gui.Controller;
-import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.CSSProperties;
+import org.gui.auth.resources.alerts.OperationAlert;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RemoveProjectController extends Controller implements Initializable {
     private boolean removeOperationStatus;
@@ -66,20 +69,28 @@ public class RemoveProjectController extends Controller implements Initializable
     @FXML
     protected void removeButtonPressed(ActionEvent event) {
         if( confirmationTextField.getText().equals("ELIMINAR") ){
-            ProjectDAO projectDAO = new ProjectDAO();
-            removeOperationStatus = projectDAO.removeProjectByID( project.getId() );
-            closeButton.fire();
+            removeProject();
+            stage.close();
             if(removeOperationStatus) {
-                String title = "Eliminado correctamente.";
-                String contentText = "¡Se ha eliminado correctamente el proyecto";
-                OperationAlert.showSuccessfullAlert(title, contentText);
-            } else {
-                String title = "No se pudo eliminar el proyecto";
-                String contentText = "¡No se pudo eliminar el proyecto!";
-                OperationAlert.showUnsuccessfullAlert(title, contentText);
+                showSucessfullAlert();
             }
         } else {
             systemLabel.setText("¡Verifica tus datos!");
+        }
+    }
+
+    private void showSucessfullAlert() {
+        String title = "Eliminado correctamente.";
+        String contentText = "¡Se ha eliminado correctamente el proyecto";
+        OperationAlert.showSuccessfullAlert(title, contentText);
+    }
+
+    private void removeProject() {
+        try {
+            removeOperationStatus = new ProjectDAO().removeProjectByID( project.getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( RemoveProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
     }
 

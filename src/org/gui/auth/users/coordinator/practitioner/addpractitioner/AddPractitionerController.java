@@ -13,10 +13,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import org.database.dao.AccessAccountDAO;
-import org.database.dao.CourseDAO;
 import org.database.dao.PractitionerDAO;
+import org.domain.Course;
+import org.domain.Person;
 import org.domain.Practitioner;
 import org.gui.ValidatorController;
+import org.util.Auth;
 import org.util.CSSProperties;
 import org.util.Cryptography;
 import org.util.Validator;
@@ -27,6 +29,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 
 
@@ -67,24 +71,6 @@ public class AddPractitionerController extends ValidatorController implements In
     }
 
     @FXML
-    protected void saveButtonPressed(ActionEvent event) throws SQLException {
-        if( verifyInputData() ) {
-            registerPractitioner();
-            closeButton.fire();
-            if(newPractitioner.getId() != 0) {
-                addOperationStatus = true;
-                generateRandomPasswordToUser( practitionerEmailTextField.getText() );
-            } else {
-                String title = "¡Error en el registro del practicante!";
-                String contentText = "¡No se pudo realizar el registro del practicante!";
-                OperationAlert.showUnsuccessfullAlert(title, contentText);
-            }
-        } else {
-            systemLabel.setText("¡Verifica tus datos!");
-        }
-    }
-
-    @FXML
     protected void cancelButtonPressed(ActionEvent event) {
         stage.close();
     }
@@ -99,29 +85,58 @@ public class AddPractitionerController extends ValidatorController implements In
         super.stagePressed(event);
     }
 
+    @FXML
+    protected void saveButtonPressed(ActionEvent event) {
+        if( verifyInputData() ) {
+            stage.close();
+            registerPractitioner();
+            if( addOperationStatus ) {
+                generateRandomPasswordToUser();
+            }
+        } else {
+            systemLabel.setText("¡Verifica tus datos!");
+        }
+    }
+
     private void registerPractitioner() {
+        Person currentUser = Auth.getInstance().getCurrentUser();
+        // T-O Ternary Operator here !!!
+        Course course = ( currentUser != null) ? currentUser.getCourse() : null ;
         newPractitioner = new Practitioner();
         newPractitioner.setName( practitionerNameTextField.getText() );
         newPractitioner.setPhoneNumber( practitionerPhoneNumberTextField.getText() );
         newPractitioner.setEmail( practitionerEmailTextField.getText() );
         newPractitioner.setEnrollment( practitionerEnrollmentTextField.getText() );
-        newPractitioner.setCourse( new CourseDAO().getLastCourse() );
-        PractitionerDAO practitionerDAO = new PractitionerDAO();
-        newPractitioner.setId( practitionerDAO.addPractitioner(newPractitioner) );
+        newPractitioner.setCourse(course);
+        try {
+            newPractitioner.setId( new PractitionerDAO().addPractitioner(newPractitioner) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddPractitionerController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        addOperationStatus = (newPractitioner.getId() != 0);
     }
 
-    private void generateRandomPasswordToUser(String email) throws SQLException {
+    private void generateRandomPasswordToUser() {
+        boolean isRandomPasswordGenerated = false;
         String randomPassword = Cryptography.generateRandomPassword();
-        if ( new AccessAccountDAO().changePasswordByIdUser( Cryptography.cryptSHA2(randomPassword), newPractitioner.getId() ) ) {
-            copyToClipboardSystem(email, randomPassword);
-            String title = "Cuenta de acceso generada";
-            String contentText = "¡Se ha copiado la cuenta de acceso al portapapeles de tu sistema!";
-            OperationAlert.showSuccessfullAlert(title, contentText);
-        } else {
-            String title = "¡Error al obtener la cuenta de acceso!";
-            String contentText = "¡No se pudo copiar la cuenta de acceso al portapapeles de tu sistema! \n¡Usar el modulo para recuperar contraseña!";
-            OperationAlert.showUnsuccessfullAlert(title, contentText);
+        String email = practitionerEmailTextField.getText();
+        try {
+            isRandomPasswordGenerated = new AccessAccountDAO().changePasswordByIdUser( Cryptography.cryptSHA2(randomPassword), newPractitioner.getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddPractitionerController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
+        if(isRandomPasswordGenerated) {
+            copyToClipboardSystem(email, randomPassword);
+            showSuccessfullAlertFromPasswordGenerated();
+        }
+    }
+
+    private void showSuccessfullAlertFromPasswordGenerated() {
+        String title = "Cuenta de acceso generada";
+        String contentText = "¡Se ha generado una contraseña a la cuenta de acceso y se ha copiado a tu sistema!";
+        OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
     private void copyToClipboardSystem(String email, String password) {

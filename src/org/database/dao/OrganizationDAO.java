@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class OrganizationDAO implements IOrganizationDAO {
     private final Database database;
@@ -31,7 +29,7 @@ public class OrganizationDAO implements IOrganizationDAO {
      * @return int representing the organization's id
      */
     @Override
-    public int addOrganization(Organization organization) {
+    public int addOrganization(Organization organization) throws SQLException {
         int idCompany = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -52,8 +50,8 @@ public class OrganizationDAO implements IOrganizationDAO {
             resultSet.next();
             idCompany = resultSet.getInt(1);
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( OrganizationDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return idCompany;
     }
@@ -67,7 +65,7 @@ public class OrganizationDAO implements IOrganizationDAO {
      * @return List<Company>
      */
     @Override
-    public List<Organization> getAllCompaniesFromLastCourse()  {
+    public List<Organization> getAllCompaniesFromLastCourse() throws SQLException {
         List<Organization> organizations = new ArrayList<>();
         try(Connection conn = database.getConnection() ){
             String statement = "SELECT COMP.id_company, COMP.name, COMP.address, COMP.email, COMP.state, COMP.direct_users, COMP.indirect_users, COMP.sector, COMP.city, COMP.phoneNumber,  COMP.id_course, CORD.cubicle, CORD.staff_number, PERSCORD.id_person, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, COUR.NRC, COUR.Period, COUR.name, COUR.id_course FROM Company AS COMP INNER JOIN Coordinator AS CORD ON COMP.id_coordinator = CORD.id_person INNER JOIN Person AS PERSCORD ON COMP.id_coordinator = PERSCORD.id_person INNER JOIN Course AS COUR ON COMP.id_course = COMP.id_course and COUR.id_course = (SELECT max(id_course) FROM Course)";
@@ -102,8 +100,8 @@ public class OrganizationDAO implements IOrganizationDAO {
                 organization.setPhoneNumber( resultSet.getString("COMP.phoneNumber") );
                 organizations.add(organization);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( OrganizationDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return organizations;
     }

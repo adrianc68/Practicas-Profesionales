@@ -9,6 +9,8 @@ import org.domain.Sector;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.sql.SQLException;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,7 +40,7 @@ public class OrganizationDAOTest {
     }
 
     @Test
-    public void testAddCompany() {
+    public void testAddCompany() throws SQLException {
         Organization organization = new Organization();
         organization.setName("Microsoft");
         organization.setAddress("Republica de Uruguay 13 Centro de Mexico");
@@ -61,7 +63,7 @@ public class OrganizationDAOTest {
     }
 
     @Test
-    public void testAddCompanyWithLongAttributes() {
+    public void testAddCompanyWithLongAttributes() throws SQLException {
         Organization organization = new Organization();
         organization.setName("Microsoft con union a Huawei Technologies como Compañia Ilimitada y Pixar Inc");
         organization.setAddress("Republica de Uruguay 13 Centro de Mexico");
@@ -85,7 +87,7 @@ public class OrganizationDAOTest {
     }
 
     @Test
-    public void testGetAllCompaniesFromLastCourse() {
+    public void testGetAllCompaniesFromLastCourse() throws SQLException {
         OrganizationDAO organizationDAO = new OrganizationDAO();
         List<Organization> companiesFromLastCourse = organizationDAO.getAllCompaniesFromLastCourse();
         assertNotNull(companiesFromLastCourse);

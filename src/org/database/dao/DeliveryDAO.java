@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DeliveryDAO implements IDeliveryDAO {
     private final Database database;
@@ -34,7 +32,7 @@ public class DeliveryDAO implements IDeliveryDAO {
      * @return int representing the delivery's id
      */
     @Override
-    public int addDeliveryToActivity(Delivery delivery, int idActivity) {
+    public int addDeliveryToActivity(Delivery delivery, int idActivity) throws SQLException {
         int idDelivery = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -50,8 +48,8 @@ public class DeliveryDAO implements IDeliveryDAO {
             resultSet.next();
             idDelivery = resultSet.getInt(1);
             conn.commit();
-        } catch (SQLException e) {
-            Logger.getLogger( DeliveryDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return idDelivery;
     }
@@ -67,7 +65,7 @@ public class DeliveryDAO implements IDeliveryDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean evaluateDeliveryOfActivity(int idDelivery, float score, String observation) {
+    public boolean evaluateDeliveryOfActivity(int idDelivery, float score, String observation) throws SQLException {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -78,8 +76,8 @@ public class DeliveryDAO implements IDeliveryDAO {
             preparedStatement.setInt(3, idDelivery);
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
-            Logger.getLogger( DeliveryDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return  rowsAffected > 0;
     }
@@ -94,7 +92,7 @@ public class DeliveryDAO implements IDeliveryDAO {
      * @return List<Delivery> A list containing deliveries
      */
     @Override
-    public List<Delivery> getAllDeliveriesByActivity(int idActivity) {
+    public List<Delivery> getAllDeliveriesByActivity(int idActivity) throws SQLException {
         String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path, ACT.id_activity, ACT.name, ACT.description, ACT.deadline, COUR.id_course, COUR.NRC, COUR.name, COUR.PERIOD, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PROF.cubicle, PROF.staff_number FROM delivery AS DEL INNER JOIN Activity AS ACT ON DEL.id_activity = ? INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
         return getAllDeliveryByStatementAndID(statement, idActivity);
     }
@@ -108,12 +106,12 @@ public class DeliveryDAO implements IDeliveryDAO {
      * @return List<Delivery> A delivery list of practitioner.
      */
     @Override
-    public List<Delivery> getAllDeliveriesByPractitionerID(int idPractitioner) {
+    public List<Delivery> getAllDeliveriesByPractitionerID(int idPractitioner) throws SQLException {
         String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path, ACT.id_activity, ACT.name, ACT.description, ACT.deadline, COUR.id_course, COUR.NRC, COUR.name, COUR.PERIOD, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PROF.cubicle, PROF.staff_number FROM delivery AS DEL INNER JOIN Activity AS ACT ON DEL.id_activity = ACT.id_activity AND DEL.id_practitioner = ? INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
         return getAllDeliveryByStatementAndID(statement, idPractitioner);
     }
 
-    private List<Delivery> getAllDeliveryByStatementAndID(String statement, int id) {
+    private List<Delivery> getAllDeliveryByStatementAndID(String statement, int id) throws SQLException {
         List<Delivery> deliveries = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             conn.setAutoCommit(false);
@@ -150,8 +148,8 @@ public class DeliveryDAO implements IDeliveryDAO {
                 deliveries.add(delivery);
                 conn.commit();
             }
-        } catch (SQLException e) {
-            Logger.getLogger( DeliveryDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return deliveries;
     }

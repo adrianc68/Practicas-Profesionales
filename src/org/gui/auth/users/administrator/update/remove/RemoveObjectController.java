@@ -22,6 +22,8 @@ import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RemoveObjectController extends Controller implements Initializable {
     private boolean statusRemoveOperation;
@@ -73,13 +75,11 @@ public class RemoveObjectController extends Controller implements Initializable 
 
     @FXML
     protected void removeButtonPressed(ActionEvent event) throws SQLException {
-        if(confirmationTextField.getText().equals("ELIMINAR")){
+        if( confirmationTextField.getText().equals("ELIMINAR") ){
             removeObjectFromDatabase();
-            stage.close();
             if(statusRemoveOperation) {
+                stage.close();
                 showSucessfullAlert();
-            } else {
-                showUnsuccessfullAlert();
             }
         } else {
             systemLabel.setText("¡Verifica los datos!");
@@ -92,23 +92,32 @@ public class RemoveObjectController extends Controller implements Initializable 
         OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
-    private void showUnsuccessfullAlert() {
-        String title = "No se ha podido eliminar";
-        String contentText = "¡No se pudo eliminar el seleccionado!";
-        OperationAlert.showUnsuccessfullAlert(title, contentText);
-    }
-
     //BAD USER MANAGER >>>>>> FIX THIS!!
-    private void removeObjectFromDatabase() throws SQLException {
+    private void removeObjectFromDatabase() {
         if(object instanceof Coordinator) {
             CoordinatorDAO coordinatorDAO = new CoordinatorDAO();
-            statusRemoveOperation = coordinatorDAO.removeCoordinatorByID( ( (Coordinator) object).getId() );
+            try {
+                statusRemoveOperation = coordinatorDAO.removeCoordinatorByID( ( (Coordinator) object).getId() );
+            } catch (SQLException sqlException) {
+                OperationAlert.showLostConnectionAlert();
+                Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+            }
         } else if(object instanceof Professor) {
             ProfessorDAO professorDAO = new ProfessorDAO();
-            statusRemoveOperation = professorDAO.removeProfessorByID( ( (Professor) object).getId() );
+            try {
+                statusRemoveOperation = professorDAO.removeProfessorByID( ( (Professor) object).getId() );
+            } catch (SQLException sqlException) {
+                OperationAlert.showLostConnectionAlert();
+                Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+            }
         } else if(object instanceof Course){
             CourseDAO courseDAO = new CourseDAO();
-            statusRemoveOperation = courseDAO.removeCourseByID( ( (Course) object).getId() );
+            try {
+                statusRemoveOperation = courseDAO.removeCourseByID( ( (Course) object).getId() );
+            } catch (SQLException sqlException) {
+                OperationAlert.showLostConnectionAlert();
+                Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+            }
         } else {
             systemLabel.setText("¡No se puede eliminar!");
         }

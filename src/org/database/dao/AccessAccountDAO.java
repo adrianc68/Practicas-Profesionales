@@ -5,8 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AccessAccountDAO implements IAccessAccountDAO {
     private final Database database;
@@ -30,7 +28,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
      * @return true if any row was affected otherwise it returns false
      */
     @Override
-    public boolean changePasswordByIdUser(String password, int idUser) {
+    public boolean changePasswordByIdUser(String password, int idUser) throws SQLException {
         int rowsAffected = 0;
         try( Connection conn = database.getConnection() ) {
             conn.setAutoCommit(false);
@@ -41,7 +39,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -56,7 +54,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
      * @return true if any row was affected and false if any row was not affected.
      */
     @Override
-    public boolean generatePasswordRecoveryCodeByEmail(String emailRecovery) {
+    public boolean generatePasswordRecoveryCodeByEmail(String emailRecovery) throws SQLException {
         int rowsAffected = 0;
         try( Connection conn = database.getConnection() ) {
             conn.setAutoCommit(false);
@@ -66,7 +64,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -81,7 +79,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
      * @return true if any row was affected and false if any row was no affected.
      */
     @Override
-    public boolean changePasswordByEmail(String password, String email) {
+    public boolean changePasswordByEmail(String password, String email) throws SQLException {
         int rowsAffected = 0;
         try( Connection conn = database.getConnection() ) {
             conn.setAutoCommit(false);
@@ -92,7 +90,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -106,7 +104,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
      * @return String representing the recovery code.
      */
     @Override
-    public String getRecoveryCodeByEmail(String emailRecovery) {
+    public String getRecoveryCodeByEmail(String emailRecovery) throws SQLException {
         String code = null;
         try( Connection conn = database.getConnection() ) {
             conn.setAutoCommit(false);
@@ -119,7 +117,7 @@ public class AccessAccountDAO implements IAccessAccountDAO {
             }
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( AccessAccountDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return code;
     }

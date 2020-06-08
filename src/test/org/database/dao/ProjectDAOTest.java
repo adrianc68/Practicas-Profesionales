@@ -7,6 +7,8 @@ import org.domain.Project;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,7 +25,7 @@ public class ProjectDAOTest {
     private final int idPractitioner = 3;
 
     @Test
-    public void addProject() {
+    public void addProject() throws SQLException {
         Project project = new Project();
         project.setName("Implementacion de metodologia de desarollo de software");
         project.setDuration(420);
@@ -52,7 +54,7 @@ public class ProjectDAOTest {
     }
 
     @Test
-    public void bUpdateProjectInformation() {
+    public void bUpdateProjectInformation() throws SQLException {
         Project project = new Project();
         project.setName("Implementación de metodologia de desarollo SCRUM");
         project.setDuration(420);
@@ -86,7 +88,7 @@ public class ProjectDAOTest {
     }
 
     @Test
-    public void getSelectedProjectsByPractitionerID() {
+    public void getSelectedProjectsByPractitionerID() throws SQLException {
         ProjectDAO projectDAO = new ProjectDAO();
         int expected = 0;
         int result = projectDAO.getSelectedProjectsByPractitionerID(idPractitioner).size();
@@ -94,7 +96,7 @@ public class ProjectDAOTest {
     }
 
     @Test
-    public void getAssignedProjectByPractitionerID() {
+    public void getAssignedProjectByPractitionerID() throws SQLException {
         ProjectDAO projectDAO = new ProjectDAO();
         Project project = projectDAO.getAssignedProjectByPractitionerID(idPractitioner);
         int expected = 1;
@@ -119,7 +121,7 @@ public class ProjectDAOTest {
     }
 
     @Test
-    public void removeProjectByID() {
+    public void removeProjectByID() throws SQLException {
         ProjectDAO projectDAO = new ProjectDAO();
         assertTrue(projectDAO.removeProjectByID(idProject));
     }

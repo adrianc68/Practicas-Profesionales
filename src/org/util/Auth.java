@@ -8,6 +8,7 @@ import org.domain.Person;
 import org.util.exceptions.InactiveUserException;
 import org.util.exceptions.LimitReachedException;
 import org.util.exceptions.UserNotFoundException;
+import java.sql.SQLException;
 
 public class Auth {
     private static Auth instance;
@@ -24,7 +25,7 @@ public class Auth {
         return currentUser;
     }
 
-    public boolean logIn(String email, String password) throws UserNotFoundException, LimitReachedException, InactiveUserException {
+    public boolean logIn(String email, String password) throws UserNotFoundException, LimitReachedException, InactiveUserException, SQLException {
         boolean isLogged;
         checkAttemptsLimit();
         sendMacAddress();
@@ -40,7 +41,7 @@ public class Auth {
         currentUser = null;
     }
 
-    private Person getCurrentUser(String email, String password) throws UserNotFoundException {
+    private Person getCurrentUser(String email, String password) throws UserNotFoundException, SQLException {
         Person person = new PersonDAO().getPersonByEmailAndPassword(email, password);
         if(person == null) {
             throw new UserNotFoundException("¡Revisa tus datos! ¡Puede ser incorrecta el usuario o la contraseña");
@@ -48,7 +49,7 @@ public class Auth {
         return person;
     }
 
-    private void checkAttemptsLimit() throws LimitReachedException {
+    private void checkAttemptsLimit() throws LimitReachedException, SQLException {
         final int ATTEMPTS_LIMIT = 5;
         boolean isAttempsLimitReached = new HostDAO().getAttemptsByMacAddress( getMacAddress() ) == ATTEMPTS_LIMIT;
         if(isAttempsLimitReached) {
@@ -56,23 +57,11 @@ public class Auth {
         }
     }
 
-    private void checkActivityState(Person currentUser) throws InactiveUserException {
+    private void checkActivityState(Person currentUser) throws InactiveUserException, SQLException {
         ActivityState activityState = new PersonDAO().getActivityStateByID( currentUser.getId() );
         if( activityState == ActivityState.INACTIVE ){
             throw new InactiveUserException("¡Tu estado es inactivo! ¡Contacta con el coordinador o director!");
         }
-    }
-
-    private boolean sendMacAddress() {
-        boolean isMacAddressSent;
-        isMacAddressSent = new HostDAO().sendActualMacAddress( getMacAddress() );
-        return isMacAddressSent;
-    }
-
-    private boolean resetAttempts() {
-        boolean isAttemptsReset;
-        isAttemptsReset = new HostDAO().resetAttempts( getMacAddress() );
-        return isAttemptsReset;
     }
 
     private String getMacAddress() {
@@ -80,24 +69,35 @@ public class Auth {
         return macAddressEncrypted;
     }
 
+    private boolean sendMacAddress() throws SQLException {
+        boolean isMacAddressSent;
+        isMacAddressSent = new HostDAO().sendActualMacAddress( getMacAddress() );
+        return isMacAddressSent;
+    }
 
-    public boolean generateRecoveryCode(String email) {
+    private boolean resetAttempts() throws SQLException {
+        boolean isAttemptsReset;
+        isAttemptsReset = new HostDAO().resetAttempts( getMacAddress() );
+        return isAttemptsReset;
+    }
+
+    public boolean generateRecoveryCode(String email) throws SQLException {
         boolean isCodeGenerated = new AccessAccountDAO().generatePasswordRecoveryCodeByEmail( email );
         return isCodeGenerated;
     }
 
-    public String getRecoveryCode(String email) {
+    public String getRecoveryCode(String email) throws SQLException {
         String recoveryCode = new AccessAccountDAO().getRecoveryCodeByEmail(email);
         return recoveryCode;
     }
 
-    public boolean resetPassword(String newPassword) {
+    public boolean resetPassword(String newPassword) throws SQLException {
         int currentUserId = Auth.getInstance().getCurrentUser().getId();
         boolean isPasswordChanged = new AccessAccountDAO().changePasswordByIdUser(newPassword, currentUserId);
         return isPasswordChanged;
     }
 
-    public boolean resetPasswordByUnloggedUser(String email, String newPassword) {
+    public boolean resetPasswordByUnloggedUser(String email, String newPassword) throws SQLException {
         boolean isPasswordChanged = new AccessAccountDAO().changePasswordByEmail(newPassword, email);
         return isPasswordChanged;
     }

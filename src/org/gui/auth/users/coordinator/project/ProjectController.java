@@ -13,14 +13,19 @@ import javafx.scene.layout.FlowPane;
 import org.database.dao.ProjectDAO;
 import org.domain.Project;
 import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.ProjectCard;
+import org.gui.auth.users.coordinator.practitioner.PractitionerController;
 import org.gui.auth.users.coordinator.project.registerproject.RegisterProjectController;
 import org.gui.auth.users.coordinator.project.removeproject.RemoveProjectController;
 import org.gui.auth.users.coordinator.project.updateproject.UpdateProjectController;
 import org.util.CSSProperties;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProjectController extends Controller implements Initializable {
     private ProjectCard selectedProjectCard;
@@ -120,7 +125,13 @@ public class ProjectController extends Controller implements Initializable {
     }
 
     private void setProjectsFromDatabaseToScrollPane() {
-        List<Project> projects = new ProjectDAO().getAllProjectsFromLastCourse();
+        List<Project> projects = null;
+        try {
+            projects = new ProjectDAO().getAllProjectsFromLastCourse();
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( ProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
         if(projects != null) {
             for ( Project project : projects ) {
                 addProjectInACardToScrollPane(project);

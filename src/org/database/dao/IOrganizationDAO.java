@@ -1,6 +1,8 @@
 package org.database.dao;
 
 import org.domain.Organization;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IOrganizationDAO {
@@ -13,7 +15,7 @@ public interface IOrganizationDAO {
      * @param organization the organization that you want to add to database
      * @return int representing the organization's id
      */
-    int addOrganization(Organization organization);
+    int addOrganization(Organization organization) throws SQLException;
 
     /***
      * Return all organizations from the actual/last course.
@@ -23,6 +25,6 @@ public interface IOrganizationDAO {
      * </p>
      * @return List<Company>
      */
-    List<Organization> getAllCompaniesFromLastCourse();
+    List<Organization> getAllCompaniesFromLastCourse() throws SQLException;
 
 }

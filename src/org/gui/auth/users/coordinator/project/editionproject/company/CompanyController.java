@@ -11,12 +11,16 @@ import javafx.stage.Modality;
 import org.database.dao.OrganizationDAO;
 import org.domain.Organization;
 import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.OrganizationCard;
 import org.gui.auth.users.coordinator.project.editionproject.company.addcompany.AddCompanyController;
 import org.util.CSSProperties;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CompanyController extends Controller implements Initializable {
     private OrganizationCard selectedOrganizationCard;
@@ -67,7 +71,13 @@ public class CompanyController extends Controller implements Initializable {
     }
 
     private void setCompanyToScrollPaneFromDatabase() {
-        List<Organization> companies = new OrganizationDAO().getAllCompaniesFromLastCourse();
+        List<Organization> companies = null;
+        try {
+            companies = new OrganizationDAO().getAllCompaniesFromLastCourse();
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( CompanyController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
         if(companies != null) {
             for ( Organization organization : companies ) {
                 addCompanyInACardToScrollPane(organization);

@@ -16,16 +16,19 @@ import org.domain.Coordinator;
 import org.domain.Course;
 import org.domain.Sector;
 import org.gui.ValidatorController;
+import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.users.administrator.update.add.addcoordinator.AddCoordinatorController;
 import org.util.Auth;
 import org.util.CSSProperties;
 import org.util.Validator;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import static org.gui.auth.resources.alerts.OperationAlert.showSuccessfullAlert;
-import static org.gui.auth.resources.alerts.OperationAlert.showUnsuccessfullAlert;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AddCompanyController extends ValidatorController implements Initializable {
     private boolean addOperationStatus;
@@ -96,21 +99,40 @@ public class AddCompanyController extends ValidatorController implements Initial
     @FXML
     protected void saveButtonPressed(ActionEvent event) {
         if( verifyInputData() ) {
-            newOrganization = new Organization();
-            newOrganization.setName( companyNameTextField.getText() );
-            newOrganization.setAddress( companyAddressTextField.getText() );
-            newOrganization.setPhoneNumber( companyPhoneNumberTextField.getText() );
-            newOrganization.setEmail( companyEmailTextField.getText() );
-            newOrganization.setSector( getSectorFromField(companySectorChoiceBox.getSelectionModel().getSelectedItem() ) );
-            newOrganization.setCity( companyCityTextField.getText() );
-            newOrganization.setState( companyStateTextField.getText() );
-            newOrganization.setDirectUsers( Integer.valueOf( companyDirectUsersTextField.getText() ) );
-            newOrganization.setIndirectUsers( Integer.valueOf( companyIndirectUsersTextField.getText() ) );
-            newOrganization.setCoordinator(coordinator);
-            newOrganization.setCourse(course);
+            stage.close();
             addOrganizationToDatabase();
-            closeButton.fire();
         }
+    }
+
+    private void addOrganizationToDatabase() {
+        newOrganization = new Organization();
+        newOrganization.setName( companyNameTextField.getText() );
+        newOrganization.setAddress( companyAddressTextField.getText() );
+        newOrganization.setPhoneNumber( companyPhoneNumberTextField.getText() );
+        newOrganization.setEmail( companyEmailTextField.getText() );
+        newOrganization.setSector( getSectorFromField(companySectorChoiceBox.getSelectionModel().getSelectedItem() ) );
+        newOrganization.setCity( companyCityTextField.getText() );
+        newOrganization.setState( companyStateTextField.getText() );
+        newOrganization.setDirectUsers( Integer.valueOf( companyDirectUsersTextField.getText() ) );
+        newOrganization.setIndirectUsers( Integer.valueOf( companyIndirectUsersTextField.getText() ) );
+        newOrganization.setCoordinator(coordinator);
+        newOrganization.setCourse(course);
+        try {
+            newOrganization.setId( new OrganizationDAO().addOrganization(newOrganization) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddCompanyController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        addOperationStatus = (newOrganization.getId() != 0);
+        if(addOperationStatus) {
+            showSuccessfullAlert();
+        }
+    }
+
+    private void showSuccessfullAlert() {
+        String title = "Se agregó la organizacion";
+        String contentText = "¡Se ha agregado la organizacion con exito";
+        OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
     private Sector getSectorFromField(String value) {
@@ -122,23 +144,6 @@ public class AddCompanyController extends ValidatorController implements Initial
             }
         }
         return sectorRequired;
-    }
-
-    private void addOrganizationToDatabase() {
-        OrganizationDAO organizationDAO = new OrganizationDAO();
-        int idCompany;
-        idCompany = organizationDAO.addOrganization(newOrganization);
-        newOrganization.setId( idCompany );
-        if(idCompany != 0) {
-            addOperationStatus = true;
-            String title = "Se agregó la organizacion";
-            String contentText = "¡Se ha agregado la organizacion con exito";
-            showSuccessfullAlert(title, contentText);
-        } else {
-            String title = "No se pudo agregar la organizacion";
-            String contentText = "¡No se pudo agregar la organizacion!";
-            showUnsuccessfullAlert(title, contentText);
-        }
     }
 
     private void initChoiceBoxAndSetValidator() {

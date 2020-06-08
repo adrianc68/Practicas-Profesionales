@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AddProfessorController extends ValidatorController implements Initializable {
     private boolean addOperationStatus;
@@ -86,50 +88,59 @@ public class AddProfessorController extends ValidatorController implements Initi
     }
 
     @FXML
-    protected void saveButtonPressed(ActionEvent event) throws SQLException {
+    protected void saveButtonPressed(ActionEvent event) {
         if( verifyInputData() ) {
-            registerProfessor();
-            closeButton.fire();
-            if(newProfessor.getId() != 0) {
-                addOperationStatus = true;
-                generateRandomPasswordToUser( emailTextField.getText() );
-            } else {
-                String title = "¡Error en el registro del profesor!";
-                String contentText = "¡No se pudo realizar el registro del coordinador!";
-                OperationAlert.showUnsuccessfullAlert(title, contentText);
+            addProfessor();
+            if(addOperationStatus) {
+                stage.close();
+                generateRandomPassword();
             }
         } else {
             systemLabel.setText("¡Verifica tus datos!");
         }
     }
 
-    private void generateRandomPasswordToUser(String email) throws SQLException {
-        String randomPassword = Cryptography.generateRandomPassword();
-        if ( new AccessAccountDAO().changePasswordByIdUser( Cryptography.cryptSHA2(randomPassword), newProfessor.getId() ) ) {
-            copyToClipboardSystem(randomPassword, email);
-            String title = "Cuenta de acceso generada";
-            String contentText = "¡Se ha copiado la cuenta de acceso al portapapeles de tu sistema!";
-            OperationAlert.showSuccessfullAlert(title, contentText);
-        } else {
-            String title = "¡Error al obtener la cuenta de acceso!";
-            String contentText = "¡No se pudo copiar la cuenta de acceso al portapapeles de tu sistema! \n¡Usar el modulo para recuperar contraseña!";
-            OperationAlert.showUnsuccessfullAlert(title, contentText);
-        }
-    }
-
-    private void registerProfessor() {
+    private void addProfessor() {
         newProfessor = new Professor();
         newProfessor.setCourse(course);
         newProfessor.setName( nameTextField.getText() );
         newProfessor.setPhoneNumber( phoneNumberTextField.getText() );
         newProfessor.setEmail( emailTextField.getText() );
-        newProfessor.setCubicle( Integer.valueOf( cubicleTextField.getText() ) );
+        newProfessor.setCubicle( Integer.parseInt( cubicleTextField.getText() ) );
         newProfessor.setStaffNumber( staffNumberTextField.getText() );
         ProfessorDAO professorDAO = new ProfessorDAO();
-        newProfessor.setId( professorDAO.addProfessor(newProfessor) );
+        try {
+            newProfessor.setId( professorDAO.addProfessor(newProfessor) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddProfessorController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        addOperationStatus = (newProfessor.getId() != 0);
     }
 
-    private void copyToClipboardSystem(String password, String email) {
+    private void generateRandomPassword() {
+        boolean isRandomPasswordGenerated = false;
+        String randomPassword = Cryptography.generateRandomPassword();
+        String email = emailTextField.getText();
+        try {
+            isRandomPasswordGenerated = new AccessAccountDAO().changePasswordByIdUser( Cryptography.cryptSHA2(randomPassword), newProfessor.getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddProfessorController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        if(isRandomPasswordGenerated) {
+            copyToClipboardSystem(email, randomPassword);
+            showSuccessfullAlertFromPasswordGenerated();
+        }
+    }
+
+    private void showSuccessfullAlertFromPasswordGenerated() {
+        String title = "Cuenta de acceso generada";
+        String contentText = "¡Se ha generado una contraseña a la cuenta de acceso y se ha copiado a tu sistema!";
+        OperationAlert.showSuccessfullAlert(title, contentText);
+    }
+
+    private void copyToClipboardSystem(String email, String password) {
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
         content.putString(email + ":" + password);

@@ -10,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ProfessorDAO implements IProfessorDAO {
     private final Database database;
@@ -34,7 +32,7 @@ public class ProfessorDAO implements IProfessorDAO {
      * @return int representing the professor's id.
      */
     @Override
-    public int addProfessor(Professor professor) {
+    public int addProfessor(Professor professor) throws SQLException {
         int idProfessor = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -53,8 +51,8 @@ public class ProfessorDAO implements IProfessorDAO {
             resultSet.next();
             idProfessor = resultSet.getInt(1);
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return idProfessor;
     }
@@ -69,7 +67,7 @@ public class ProfessorDAO implements IProfessorDAO {
      * @return boolean true if professor was deleted from database.
      */
     @Override
-    public boolean removeProfessorByID(int idProfessor) {
+    public boolean removeProfessorByID(int idProfessor) throws SQLException {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -78,8 +76,8 @@ public class ProfessorDAO implements IProfessorDAO {
             deleteProfessor.setInt( 1, idProfessor );
             rowsAffected = deleteProfessor.executeUpdate();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+           throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -94,7 +92,7 @@ public class ProfessorDAO implements IProfessorDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean assignProfessorToPractitioner(int idPractitioner, int idProfessor) {
+    public boolean assignProfessorToPractitioner(int idPractitioner, int idProfessor) throws SQLException {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -104,8 +102,8 @@ public class ProfessorDAO implements IProfessorDAO {
             assignProfessor.setInt(2, idPractitioner );
             rowsAffected = assignProfessor.executeUpdate();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return  rowsAffected > 0;
     }
@@ -119,7 +117,7 @@ public class ProfessorDAO implements IProfessorDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean removeAssignedProfessorToPractitioner(int idPractitioner) {
+    public boolean removeAssignedProfessorToPractitioner(int idPractitioner) throws SQLException {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -128,8 +126,8 @@ public class ProfessorDAO implements IProfessorDAO {
             preparedStatement.setInt(1, idPractitioner );
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return  rowsAffected > 0;
     }
@@ -144,7 +142,7 @@ public class ProfessorDAO implements IProfessorDAO {
      * @return Professor professor assigned to a specific practitioner.
      */
     @Override
-    public Professor getAssignedProfessorByPractitionerID(int idPractitioner) {
+    public Professor getAssignedProfessorByPractitionerID(int idPractitioner) throws SQLException {
         Professor professor = null;
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN Practitioner AS PRAC ON PROF.id_person = PRAC.id_professor AND PRAC.id_person = ? INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course";
@@ -167,8 +165,8 @@ public class ProfessorDAO implements IProfessorDAO {
                 professor.setStaffNumber( resultSet.getString("PROF.staff_number") );
                 professor.setCourse(course);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return professor;
     }
@@ -182,7 +180,7 @@ public class ProfessorDAO implements IProfessorDAO {
      * @return List<Professor> a list with all professors from last course.
      */
     @Override
-    public List<Professor> getAllProfessorsFromLastCourse() {
+    public List<Professor> getAllProfessorsFromLastCourse() throws SQLException {
         List<Professor> professors = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
@@ -205,8 +203,8 @@ public class ProfessorDAO implements IProfessorDAO {
                 professor.setCourse(course);
                 professors.add(professor);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return professors;
     }
@@ -220,7 +218,7 @@ public class ProfessorDAO implements IProfessorDAO {
      * @return List<Professor> a list with all professors from specified course
      */
     @Override
-    public List<Professor> getAllProfessorsByCourseID(int idCourse) {
+    public List<Professor> getAllProfessorsByCourseID(int idCourse) throws SQLException {
         List<Professor> professors = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = ?";
@@ -244,8 +242,8 @@ public class ProfessorDAO implements IProfessorDAO {
                 professor.setCourse(course);
                 professors.add(professor);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return professors;
     }
@@ -259,7 +257,7 @@ public class ProfessorDAO implements IProfessorDAO {
      * @return List<Professor> a list with all professors from specified course
      */
     @Override
-    public List<Professor> getAllProfessors() {
+    public List<Professor> getAllProfessors() throws SQLException {
         List<Professor> professors = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course";
@@ -282,8 +280,8 @@ public class ProfessorDAO implements IProfessorDAO {
                 professor.setCourse(course);
                 professors.add(professor);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( ProfessorDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return professors;
     }

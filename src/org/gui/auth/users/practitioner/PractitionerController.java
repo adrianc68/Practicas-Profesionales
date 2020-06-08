@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.database.dao.ProjectDAO;
 import org.domain.Practitioner;
+import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.users.administrator.update.remove.RemoveObjectController;
 import org.gui.auth.users.practitioner.activity.ActivityController;
 import org.gui.auth.users.practitioner.project.myproject.MyProjectController;
 import org.gui.auth.users.practitioner.project.selectproject.SelectProjectController;
@@ -19,6 +21,7 @@ import org.gui.auth.util.changepassword.ChangePasswordController;
 import org.util.Auth;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +44,12 @@ public class PractitionerController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         practitioner = ( (Practitioner) Auth.getInstance().getCurrentUser() );
-        practitioner.setProject( new ProjectDAO().getAssignedProjectByPractitionerID( practitioner.getId() ));
+        try {
+            practitioner.setProject( new ProjectDAO().getAssignedProjectByPractitionerID( practitioner.getId() ));
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( PractitionerController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
         nameLabel.setText( practitioner.getName() );
         enrollmentLabel.setText( practitioner.getEnrollment() );
         periodLabel.setText( practitioner.getCourse().getPeriod() );

@@ -1,6 +1,8 @@
 package org.database.dao;
 
 import org.domain.Course;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ICourseDAO {
@@ -12,7 +14,7 @@ public interface ICourseDAO {
      * @param course
      * @return int representing course's id
      */
-    int addCourse(Course course);
+    int addCourse(Course course) throws SQLException;
     /***
      * Remove a course related to professional practices
      * <p>
@@ -21,7 +23,7 @@ public interface ICourseDAO {
      * @param idCourse
      * @return true if course was removed from database.
      */
-    boolean removeCourseByID(int idCourse);
+    boolean removeCourseByID(int idCourse) throws SQLException;
 
     /***
      * Get the last course.
@@ -30,7 +32,7 @@ public interface ICourseDAO {
      * </p>
      * @return
      */
-    Course getLastCourse();
+    Course getLastCourse() throws SQLException;
 
     /***
      * Get all the courses from the system.
@@ -39,6 +41,6 @@ public interface ICourseDAO {
      * </p>
      * @return List<Course> a list containing all the courses
      */
-    List<Course> getAllCourses();
+    List<Course> getAllCourses() throws SQLException;
 
 }

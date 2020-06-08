@@ -31,7 +31,7 @@ public class CourseDAO implements ICourseDAO {
      * @return int representing course's id
      */
     @Override
-    public int addCourse(Course course) {
+    public int addCourse(Course course) throws SQLException {
         int idCourse = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -47,8 +47,8 @@ public class CourseDAO implements ICourseDAO {
             resultSet.next();
             idCourse = resultSet.getInt(1);
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger(CourseDAO.class.getName()).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return idCourse;
     }
@@ -62,7 +62,7 @@ public class CourseDAO implements ICourseDAO {
      * @return true if course was removed from database.
      */
     @Override
-    public boolean removeCourseByID(int idCourse) {
+    public boolean removeCourseByID(int idCourse) throws SQLException {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -71,8 +71,8 @@ public class CourseDAO implements ICourseDAO {
             preparedStatement.setInt( 1, idCourse );
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( CourseDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -85,7 +85,7 @@ public class CourseDAO implements ICourseDAO {
      * @return
      */
     @Override
-    public Course getLastCourse() {
+    public Course getLastCourse() throws SQLException {
         Course course = null;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -99,8 +99,8 @@ public class CourseDAO implements ICourseDAO {
             course.setNRC(resultSet.getString("COUR.NRC"));
             course.setId(resultSet.getInt("COUR.id_course"));
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( CourseDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return course;
     }
@@ -113,7 +113,7 @@ public class CourseDAO implements ICourseDAO {
      * @return List<Course> a list containing all the courses
      */
     @Override
-    public List<Course> getAllCourses() {
+    public List<Course> getAllCourses() throws SQLException {
         List<Course> courses = new ArrayList<>();
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -129,8 +129,8 @@ public class CourseDAO implements ICourseDAO {
                 courses.add(course);
             }
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( CourseDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return courses;
     }

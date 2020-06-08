@@ -16,6 +16,8 @@ import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ChangeActivityStateController extends Controller implements Initializable {
     private Person user;
@@ -66,21 +68,28 @@ public class ChangeActivityStateController extends Controller implements Initial
     }
 
     @FXML
-    protected void changeActivityStateButtonPressed(ActionEvent event) throws SQLException {
+    protected void changeActivityStateButtonPressed(ActionEvent event) {
         if( user != null ) {
-            stage.close();
-            if ( new PersonDAO().changeActivityStateByID( user.getId() ) ) {
-                String title = "Cambio de estado de actividad realizado.";
-                String contentText = "¡Se ha cambiado el estado de actividad del usuario!";
-                OperationAlert.showSuccessfullAlert(title, contentText);
-                changeStatusOperation = true;
-            } else {
-                String title = "No se pudo cambiar el estado de actividad";
-                String contentText = "¡No se pudo realizar el cambio de estado del usuario!";
-                OperationAlert.showUnsuccessfullAlert(title, contentText);
-            }
+            changeActivity(user);
         } else {
             systemLabel.setText("¡Verifica tus datos!");
+        }
+    }
+
+    private void changeActivity(Person user) {
+        boolean isActivityStateChanged = false;
+        try {
+            isActivityStateChanged = new PersonDAO().changeActivityStateByID( user.getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( ChangeActivityStateController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        if(isActivityStateChanged) {
+            stage.close();
+            String title = "Cambio de estado de actividad realizado.";
+            String contentText = "¡Se ha cambiado el estado de actividad del usuario!";
+            OperationAlert.showSuccessfullAlert(title, contentText);
+            changeStatusOperation = true;
         }
     }
 

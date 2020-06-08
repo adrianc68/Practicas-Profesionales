@@ -7,13 +7,10 @@ import org.domain.Course;
 import org.domain.Person;
 import org.domain.Practitioner;
 import org.domain.Professor;
-import org.util.NetworkAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class PersonDAO implements IPersonDAO {
     private Database database;
@@ -35,7 +32,7 @@ public class PersonDAO implements IPersonDAO {
      * @param idPerson the user to get their activity state
      * @return ActivityState representing the activity state.
      */
-    public ActivityState getActivityStateByID(int idPerson) {
+    public ActivityState getActivityStateByID(int idPerson) throws SQLException {
         ActivityState activityState = null;
         try( Connection conn = database.getConnection() ) {
             String statement = "SELECT activity_state FROM Person WHERE id_person = ?";
@@ -46,7 +43,7 @@ public class PersonDAO implements IPersonDAO {
                 activityState = ActivityState.valueOf( resultSet.getString("activity_state").toUpperCase() );
             }
         } catch (SQLException sqlException) {
-            Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return activityState;
     }
@@ -60,7 +57,7 @@ public class PersonDAO implements IPersonDAO {
      * @param idPractitioner
      * @return true if any row was affected, and false if it was any row not affected.
      */
-    public boolean changeActivityStateByID(int idPractitioner) {
+    public boolean changeActivityStateByID(int idPractitioner) throws SQLException {
         int rowsAffected = 0;
         try( Connection conn = database.getConnection() ) {
             String statement = "UPDATE Person SET activity_state = CASE WHEN (activity_state = 1) THEN 2 ELSE 1 END WHERE id_person = ?";
@@ -68,7 +65,7 @@ public class PersonDAO implements IPersonDAO {
             preparedStatement.setInt(1, idPractitioner);
             rowsAffected = preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
-            Logger.getLogger( PersonDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -84,7 +81,7 @@ public class PersonDAO implements IPersonDAO {
      * @return Person an object Person.
      */
     @Override
-    public Person getPersonByEmailAndPassword(String email, String password) {
+    public Person getPersonByEmailAndPassword(String email, String password) throws SQLException {
         Person person = null;
         try( Connection conn = database.getConnection() ) {
             String statement = "SELECT PERS.id_person, PERS.name, PERS.email, PERS.phoneNumber, PERS.activity_state, COUR.id_course, COUR.name, COUR.NRC, COUR.period, CORD.cubicle, CORD.staff_number, PROF.cubicle, PROF.staff_number, PRAC.enrollment FROM AccessAccount AS ACA INNER JOIN Person AS PERS ON ACA.id_user = PERS.id_person AND ACA.email = ? AND ACA.password = ? INNER JOIN Course AS COUR ON PERS.id_course =  COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course) LEFT JOIN Coordinator AS CORD ON PERS.id_person = CORD.id_person LEFT JOIN Professor AS PROF ON PERS.id_person = PROF.id_person LEFT JOIN Practitioner AS PRAC ON PERS.id_person = PRAC.id_person";
@@ -103,7 +100,7 @@ public class PersonDAO implements IPersonDAO {
                 person.setCourse(course);
             }
         } catch (SQLException sqlException) {
-            Logger.getLogger( NetworkAddress.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return person;
     }

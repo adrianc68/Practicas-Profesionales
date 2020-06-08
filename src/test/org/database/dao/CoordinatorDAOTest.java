@@ -7,6 +7,8 @@ import org.domain.Coordinator;
 import org.domain.Course;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
+
+import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -34,7 +36,7 @@ public class CoordinatorDAOTest {
     }
 
     @Test
-    public void aAddCoordinator() {
+    public void aAddCoordinator() throws SQLException {
         coordinator = new Coordinator();
         coordinator.setName("Rafael Lira Santos");
         coordinator.setPhoneNumber("2281569492");
@@ -52,7 +54,7 @@ public class CoordinatorDAOTest {
     }
 
     @Test
-    public void bGetAllCoordinators() {
+    public void bGetAllCoordinators() throws SQLException {
         CoordinatorDAO coordinatorDAO = new CoordinatorDAO();
         List<Coordinator> coordinators = coordinatorDAO.getAllCoordinatorsByCourseID(1);
         int actual = coordinators.size();
@@ -61,7 +63,7 @@ public class CoordinatorDAOTest {
     }
 
     @Test
-    public void cRemoveCoordinator() {
+    public void cRemoveCoordinator() throws SQLException {
         CoordinatorDAO coordinatorDAO = new CoordinatorDAO();
         boolean actual = coordinatorDAO.removeCoordinatorByID(coordinator.getId());
         assertTrue(actual);

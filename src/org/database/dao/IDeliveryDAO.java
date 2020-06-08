@@ -1,6 +1,8 @@
 package org.database.dao;
 
 import org.domain.Delivery;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IDeliveryDAO {
@@ -12,7 +14,7 @@ public interface IDeliveryDAO {
      * @param delivery, idActivity
      * @return int representing the delivery's id
      */
-    int addDeliveryToActivity(Delivery delivery, int idActivity);
+    int addDeliveryToActivity(Delivery delivery, int idActivity) throws SQLException;
 
     /***
      * Evaluate an activity in database.
@@ -24,7 +26,7 @@ public interface IDeliveryDAO {
      * @param observation the observations
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean evaluateDeliveryOfActivity(int idDelivery, float score, String observation);
+    boolean evaluateDeliveryOfActivity(int idDelivery, float score, String observation) throws SQLException;
 
     /***
      * Get all deliveries from activities from database.
@@ -35,7 +37,7 @@ public interface IDeliveryDAO {
      * @param idActivity
      * @return List<Delivery> A list containing deliveries
      */
-    List<Delivery> getAllDeliveriesByActivity(int idActivity);
+    List<Delivery> getAllDeliveriesByActivity(int idActivity) throws SQLException;
 
     /***
      * Get activitie's delivery of practitioner from database.
@@ -45,6 +47,6 @@ public interface IDeliveryDAO {
      * @param idPractitioner
      * @return List<Delivery> A delivery list of practitioner.
      */
-    List<Delivery> getAllDeliveriesByPractitionerID(int idPractitioner);
+    List<Delivery> getAllDeliveriesByPractitionerID(int idPractitioner) throws SQLException;
 
 }

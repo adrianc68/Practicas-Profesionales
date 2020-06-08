@@ -12,9 +12,11 @@ import org.database.dao.ProjectDAO;
 import org.domain.Project;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.users.administrator.update.add.addcoordinator.AddCoordinatorController;
 import org.util.CSSProperties;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -103,18 +105,17 @@ public class RegisterProjectController extends Controller implements Initializab
 
     private void addProjectToDatabase() {
         newProject = screenController.getNewProject();
-        int idProject = 0;
-        idProject = new ProjectDAO().addProject(newProject);
-        newProject.setId(idProject);
-        if(idProject != 0) {
-            addOperationStatus = true;
+        try {
+            newProject.setId( new ProjectDAO().addProject(newProject) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        addOperationStatus = (newProject.getId() != 0);
+        if(addOperationStatus) {
             String title = "Se agregó el proyecto.";
             String contentText = "¡Se ha agregado al sistema el nuevo proyecto.";
             OperationAlert.showSuccessfullAlert(title, contentText);
-        } else {
-            String title = "No se pudo agregar el proyecto";
-            String contentText = "¡No se pudo agregar el nuevo proyecto al sistema!";
-            OperationAlert.showUnsuccessfullAlert(title, contentText);
         }
     }
 

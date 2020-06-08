@@ -15,7 +15,10 @@ import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.CSSProperties;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RemovePractitionerController extends Controller implements Initializable {
     private boolean removeOperationStatus;
@@ -49,27 +52,7 @@ public class RemovePractitionerController extends Controller implements Initiali
     }
 
     @FXML
-    void removeButtonPressed(ActionEvent event) {
-        if(confirmationTextField.getText().equals("ELIMINAR")){
-            PractitionerDAO practitionerDAO = new PractitionerDAO();
-            removeOperationStatus = practitionerDAO.removePractitioner( practitionerToBeRemoved.getId() );
-            closeButton.fire();
-            if(removeOperationStatus) {
-                String title = "Practicante eliminado";
-                String contentText = "¡Se elimino el practicante correctamente!";
-                OperationAlert.showSuccessfullAlert(title, contentText);
-            } else {
-                String title = "¡No se pudo eliminar al practicante!";
-                String contentText = "¡No se pudo eliminar al practicante! ¡Intentar más tarde!";
-                OperationAlert.showUnsuccessfullAlert(title, contentText);
-            }
-        } else {
-            systemLabel.setText("¡Verifica tus datos!");
-        }
-    }
-
-    @FXML
-    void cancelButtonPressed(ActionEvent event) {
+    protected void cancelButtonPressed(ActionEvent event) {
         stage.close();
     }
 
@@ -81,6 +64,34 @@ public class RemovePractitionerController extends Controller implements Initiali
     @FXML
     protected void stagePressed(MouseEvent event) {
         super.stagePressed(event);
+    }
+
+    @FXML
+    void removeButtonPressed(ActionEvent event) {
+        if(confirmationTextField.getText().equals("ELIMINAR")){
+            stage.close();
+            removePractitioner();
+        } else {
+            systemLabel.setText("¡Verifica tus datos!");
+        }
+    }
+
+    private void removePractitioner() {
+        try {
+            removeOperationStatus = new PractitionerDAO().removePractitioner( practitionerToBeRemoved.getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( RemovePractitionerController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        if(removeOperationStatus) {
+            showSucessfullAlert();
+        }
+    }
+
+    private void showSucessfullAlert() {
+        String title = "Practicante eliminado";
+        String contentText = "¡Se elimino el practicante correctamente!";
+        OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
 }

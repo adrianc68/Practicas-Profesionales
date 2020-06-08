@@ -6,8 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class HostDAO implements IHostDAO {
     private final Database database;
@@ -30,7 +28,7 @@ public class HostDAO implements IHostDAO {
      * @return int representing the attemps done by host.
      */
     @Override
-    public int getAttemptsByMacAddress(String address) {
+    public int getAttemptsByMacAddress(String address) throws SQLException {
         int attempts = -1;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -43,7 +41,7 @@ public class HostDAO implements IHostDAO {
             }
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( HostDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return attempts;
     }
@@ -58,7 +56,7 @@ public class HostDAO implements IHostDAO {
      * @return boolean if any row was affected on database and false if any row was no affected.
      */
     @Override
-    public boolean sendActualMacAddress(String address) {
+    public boolean sendActualMacAddress(String address) throws SQLException {
         boolean executed = false;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -68,7 +66,7 @@ public class HostDAO implements IHostDAO {
             executed = callableStatement.execute();
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( HostDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return executed;
     }
@@ -83,7 +81,7 @@ public class HostDAO implements IHostDAO {
      * @return true if any row was affected on database and false if any row was not affected.
      */
     @Override
-    public boolean resetAttempts(String address) {
+    public boolean resetAttempts(String address) throws SQLException {
         boolean executed = false;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -93,7 +91,7 @@ public class HostDAO implements IHostDAO {
             executed = callableStatement.execute();
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( HostDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return executed;
     }

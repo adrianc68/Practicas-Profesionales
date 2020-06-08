@@ -1,6 +1,5 @@
 package org.gui.auth.users.administrator.update.add.addcoordinator;
 
-import com.mysql.cj.exceptions.CJCommunicationsException;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +15,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import org.database.dao.AccessAccountDAO;
 import org.database.dao.CoordinatorDAO;
-import org.database.dao.DeliveryDAO;
 import org.domain.Coordinator;
 import org.domain.Course;
 import org.domain.Person;
@@ -26,8 +24,6 @@ import org.util.Auth;
 import org.util.CSSProperties;
 import org.util.Cryptography;
 import org.util.Validator;
-
-import java.net.ConnectException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -56,13 +52,13 @@ public class AddCoordinatorController extends ValidatorController implements Ini
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme()).toExternalForm());
         addOperationStatus = false;
         initValidatorToTextFields();
     }
 
     public void showStage() {
-        loadFXMLFile( getClass().getResource("/org/gui/auth/users/administrator/update/add/addcoordinator/AddCoordinatorVista.fxml"), this);
+        loadFXMLFile(getClass().getResource("/org/gui/auth/users/administrator/update/add/addcoordinator/AddCoordinatorVista.fxml"), this);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
     }
@@ -88,10 +84,10 @@ public class AddCoordinatorController extends ValidatorController implements Ini
 
     @FXML
     void saveButtonPressed(ActionEvent event) {
-        if( verifyInputData() ) {
-            stage.close();
+        if (verifyInputData() ) {
             addCoordinator();
-            if(addOperationStatus) {
+            if (addOperationStatus) {
+                stage.close();
                 generateRandomPassword();
             }
         } else {
@@ -99,54 +95,49 @@ public class AddCoordinatorController extends ValidatorController implements Ini
         }
     }
 
-
     private void addCoordinator() {
         Person user = Auth.getInstance().getCurrentUser();
         // T-O Ternary Operator here!
-        Course course = ( user != null) ? user.getCourse() : null ;
+        Course course = (user != null) ? user.getCourse() : null;
         newCoordinator = new Coordinator();
-        newCoordinator.setCourse( course );
+        newCoordinator.setCourse(course);
         newCoordinator.setName( nameTextField.getText() );
-        newCoordinator.setPhoneNumber( phoneNumberTextField.getText() );
+        newCoordinator.setPhoneNumber( phoneNumberTextField.getText()) ;
         newCoordinator.setEmail( emailTextField.getText() );
-        newCoordinator.setCubicle( Integer.parseInt( cubicleTextField.getText() ) );
+        newCoordinator.setCubicle( Integer.parseInt(cubicleTextField.getText() ) );
         newCoordinator.setStaffNumber( staffNumberTextField.getText() );
-//        try {
-            newCoordinator.setId( new CoordinatorDAO().addCoordinator(newCoordinator) );
-//        } catch (SQLException sqlException) {
-//            String title = "¡Error al conectar con la base de datos!";
-//            String contentText = "¡No se pudo realizar una conexión a la base de datos! ¡Intentalo más tarde!";
-//            OperationAlert.showUnsuccessfullAlert(title, contentText);
-//            Logger.getLogger( AddCoordinatorController.class.getName() ).log(Level.WARNING, null, sqlException);
-//        }
+        try {
+        newCoordinator.setId( new CoordinatorDAO().addCoordinator(newCoordinator) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddCoordinatorController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
         addOperationStatus = (newCoordinator.getId() != 0);
     }
 
     private void generateRandomPassword() {
-        String randomPasswordEncrypted = Cryptography.cryptSHA2( Cryptography.generateRandomPassword() );
+        boolean isRandomPasswordGenerated = false;
+        String randomPassword = Cryptography.generateRandomPassword();
         String email = emailTextField.getText();
-        boolean isGeneratedRandomPassword = false;
-//        try {
-            isGeneratedRandomPassword = new AccessAccountDAO().changePasswordByIdUser( randomPasswordEncrypted, newCoordinator.getId() );
-//        } catch (SQLException sqlException) {
-//            String title = "¡Se generó un problema al generar una contraseña aleatoria a tu cuenta de acceso!";
-//            String contentText = "¡Hubo un problema al intentar generar la contraseña!\nUsa el modulo de recuperar contraseña para recuperarla.";
-//            OperationAlert.showUnsuccessfullAlert(title, contentText);
-//            Logger.getLogger( AddCoordinatorController.class.getName() ).log(Level.WARNING, null, sqlException);
-//        } finally {
-            if(isGeneratedRandomPassword) {
-                showSuccessfullAlertFromPasswordGenerated(email, randomPasswordEncrypted);
-            }
+        try {
+            isRandomPasswordGenerated = new AccessAccountDAO().changePasswordByIdUser(  Cryptography.cryptSHA2(randomPassword), newCoordinator.getId() );
+        } catch (SQLException sqlException) {
+           OperationAlert.showLostConnectionAlert();
+           Logger.getLogger( AddCoordinatorController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        if (isRandomPasswordGenerated) {
+            copyToClipboardSystem(email, randomPassword);
+            showSuccessfullAlertFromPasswordGenerated();
+        }
     }
 
-    private void showSuccessfullAlertFromPasswordGenerated(String email, String password) {
-        copyToClipboardSystem(password, email);
+    private void showSuccessfullAlertFromPasswordGenerated() {
         String title = "Cuenta de acceso generada";
         String contentText = "¡Se ha generado una contraseña a la cuenta de acceso y se ha copiado a tu sistema!";
         OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
-    private void copyToClipboardSystem(String password, String email) {
+    private void copyToClipboardSystem(String email, String password) {
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
         content.putString(email + ":" + password);
@@ -159,7 +150,7 @@ public class AddCoordinatorController extends ValidatorController implements Ini
         interruptorMap.put(emailTextField, false);
         interruptorMap.put(phoneNumberTextField, false);
         interruptorMap.put(staffNumberTextField, false);
-        interruptorMap.put(cubicleTextField,false);
+        interruptorMap.put(cubicleTextField, false);
         Map<TextInputControl, Object[]> validator = new HashMap<>();
         Object[] nameConstraints = {Validator.NAME_PATTERN, Validator.NAME_LENGTH, checkIconName};
         validator.put(nameTextField, nameConstraints);

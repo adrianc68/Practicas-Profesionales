@@ -14,7 +14,7 @@ public interface IAccessAccountDAO {
      * @param idUser the id user to change password
      * @return true if any row was affected otherwise it returns false
      */
-    boolean changePasswordByIdUser(String password, int idUser);
+    boolean changePasswordByIdUser(String password, int idUser) throws SQLException;
 
     /***
      * Generate a code by email
@@ -25,7 +25,7 @@ public interface IAccessAccountDAO {
      * @param emailRecovery the email to generate the code
      * @return true if any row was affected and false if any row was not affected.
      */
-    boolean generatePasswordRecoveryCodeByEmail(String emailRecovery);
+    boolean generatePasswordRecoveryCodeByEmail(String emailRecovery) throws SQLException;
 
     /***
      * Change password by email
@@ -36,7 +36,7 @@ public interface IAccessAccountDAO {
      * @param email the account's email to change it password.
      * @return true if any row was affected and false if any row was no affected.
      */
-    boolean changePasswordByEmail(String password, String email);
+    boolean changePasswordByEmail(String password, String email) throws SQLException;
 
     /***
      * Get the recovery code by Email
@@ -46,6 +46,6 @@ public interface IAccessAccountDAO {
      * @param emailRecovery the account's email to get the recovery code.
      * @return String representing the recovery code.
      */
-    String getRecoveryCodeByEmail(String emailRecovery);
+    String getRecoveryCodeByEmail(String emailRecovery) throws SQLException;
 
 }

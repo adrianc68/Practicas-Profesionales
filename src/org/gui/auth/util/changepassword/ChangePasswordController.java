@@ -19,6 +19,8 @@ import org.util.Cryptography;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ChangePasswordController extends Controller implements Initializable {
     private String email;
@@ -61,7 +63,6 @@ public class ChangePasswordController extends Controller implements Initializabl
     @FXML
     protected void changePasswordButtonPressed(ActionEvent event) throws SQLException {
         if(!isFieldEmpty() && isPasswordsEquals() ) {
-
             changePassword();
         }
     }
@@ -90,7 +91,7 @@ public class ChangePasswordController extends Controller implements Initializabl
         return isPasswordFieldEqual;
     }
 
-    private void changePassword() throws SQLException {
+    private void changePassword() {
         String newPassword = passwordTextField.getText();
         String newPasswordConfirmation = confirmationPasswordTextField.getText();
         if( newPassword.equals(newPasswordConfirmation) ) {
@@ -99,36 +100,41 @@ public class ChangePasswordController extends Controller implements Initializabl
             } else {
                 changePasswordByLoggedUser(newPassword);
             }
-            closeButton.fire();
         } else {
             systemLabel.setText("¡Las contraseñas no coinciden!");
         }
     }
 
-    private void changePasswordByLoggedUser(String newPassword) throws SQLException {
+    private void changePasswordByLoggedUser(String newPassword) {
+        boolean isPasswordChanged = false;
         String passwordEncrypted = Cryptography.cryptSHA2( newPassword );
-        if ( Auth.getInstance().resetPassword(passwordEncrypted) ) {
+        try {
+            isPasswordChanged = Auth.getInstance().resetPassword(passwordEncrypted);
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( ChangePasswordController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        if (isPasswordChanged) {
+            stage.close();
             showSuccessfullAlert();
             copyToClipboardSystem(Auth.getInstance().getCurrentUser().getEmail(), passwordTextField.getText() );
-        } else {
-            showUnsuccessfulAlert();
         }
     }
 
-    private void changePasswordByUnloggedUser(String newPassword, String email) throws SQLException {
+    private void changePasswordByUnloggedUser(String newPassword, String email) {
+        boolean isPasswordChanged = false;
         String passwordEncrypted = Cryptography.cryptSHA2(newPassword);
-        if ( Auth.getInstance().resetPasswordByUnloggedUser(email, passwordEncrypted) ) {
+        try {
+            isPasswordChanged = Auth.getInstance().resetPasswordByUnloggedUser(email, passwordEncrypted);
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( ChangePasswordController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        if (isPasswordChanged) {
+            stage.close();
             showSuccessfullAlert();
             copyToClipboardSystem( email, newPassword );
-        } else {
-            showUnsuccessfulAlert();
         }
-    }
-
-    private void showUnsuccessfulAlert() {
-        String title = "Cambio de contraseña fallido";
-        String contextText = "¡No se pudo realizar el cambio de contraseña!";
-        OperationAlert.showUnsuccessfullAlert(title, contextText);
     }
 
     private void showSuccessfullAlert() {

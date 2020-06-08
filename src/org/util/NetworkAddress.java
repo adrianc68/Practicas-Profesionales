@@ -28,5 +28,4 @@ public class NetworkAddress {
         return macAddress;
     }
 
-
 }

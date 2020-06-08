@@ -10,7 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import org.gui.ValidatorController;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.util.changepassword.ChangePasswordController;
 import org.util.Auth;
 import org.util.CSSProperties;
@@ -22,6 +24,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RecoveryPasswordController extends ValidatorController implements Initializable {
     @FXML private Button sendCodeButton;
@@ -32,7 +36,9 @@ public class RecoveryPasswordController extends ValidatorController implements I
     @FXML private Label systemLabel;
     @FXML private Label emailLabel;
     @FXML private AnchorPane rootStage;
+    @FXML private Label codeLabel;
     @FXML private MaterialDesignIconView checkIconEmail;
+    @FXML private MaterialDesignIconView checkIconCode;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -44,6 +50,7 @@ public class RecoveryPasswordController extends ValidatorController implements I
 
     public void showStage() {
         loadFXMLFile(getClass().getResource("/org/gui/auth/util/recoverpassword/RecoveryPasswordVista.fxml") , this);
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
 
@@ -63,36 +70,61 @@ public class RecoveryPasswordController extends ValidatorController implements I
     }
 
     @FXML
-    protected void sendCodeButtonPressed(ActionEvent event) throws SQLException {
+    protected void sendCodeButtonPressed(ActionEvent event) {
         String emailInput = emailTextField.getText();
         if( verifyInputData() ) {
-            if ( generateAndSendRecoveryCodeToEmail(emailInput) ) {
-                hideCodeElementsAndShowRecoveryElements();
-            } else {
-                systemLabel.setText("¡Verifica tus datos!");
-            }
+            sendCode(emailInput);
+        } else {
+            systemLabel.setText("¡Verifica tus datos!");
         }
     }
 
     @FXML
-    protected void verifyCodeButtonPressed(ActionEvent event) throws SQLException {
-        String emailInput = emailTextField.getText();
-        String recoveryCode = codeTextField.getText();
-        if ( Auth.getInstance().getRecoveryCode(emailInput).equals(recoveryCode) ) {
-            stage.close();
-            ChangePasswordController changePasswordController = new ChangePasswordController();
-            changePasswordController.setEmail(emailInput);
-            changePasswordController.showStage();
+    protected void verifyCodeButtonPressed(ActionEvent event) {
+        if ( !codeTextField.getText().equals("") && verifyInputData() ) {
+            checkRecoveryCodeAndOpenChangePasswordStage();
         } else {
             systemLabel.setText("¡Verifica tus datos!");
         }
     }
 
     private void hideCodeElementsAndShowRecoveryElements() {
-            verifyCodeButton.setVisible(true);
-            codeTextField.setVisible(true);
-            sendCodeButton.setVisible(false);
-            emailTextField.setVisible(false);
+        verifyCodeButton.setVisible(true);
+        codeTextField.setVisible(true);
+        codeLabel.setVisible(true);
+        sendCodeButton.setVisible(false);
+        emailTextField.setVisible(false);
+        emailLabel.setVisible(false);
+    }
+
+    private void checkRecoveryCodeAndOpenChangePasswordStage() {
+        boolean isCodeInputEqualToCode = false;
+        String emailInput = emailTextField.getText();
+        String codeInput = codeTextField.getText();
+        try {
+            isCodeInputEqualToCode = Auth.getInstance().getRecoveryCode(emailInput).equals(codeInput);
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( RecoveryPasswordController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        if( isCodeInputEqualToCode ) {
+            stage.close();
+            ChangePasswordController changePasswordController = new ChangePasswordController();
+            changePasswordController.setEmail(emailInput);
+            changePasswordController.showStage();
+        }
+    }
+
+    private void sendCode(String email) {
+        try {
+            if( generateAndSendRecoveryCodeToEmail(email) ) {
+                systemLabel.setText("¡Se envió un código a tu correo! ¡Ingrésalo en el campo de texto!");
+            }
+            hideCodeElementsAndShowRecoveryElements();
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( RecoveryPasswordController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
     }
 
     private boolean generateAndSendRecoveryCodeToEmail(String email) throws SQLException {
@@ -119,9 +151,12 @@ public class RecoveryPasswordController extends ValidatorController implements I
     private void initValidatorToTextFields() {
         interruptorMap = new LinkedHashMap<>();
         interruptorMap.put(emailTextField, false);
+        interruptorMap.put(codeTextField, true);
         Map<TextInputControl, Object[]> validatorMap = new HashMap<>();
-        Object[] elementConstraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH, checkIconEmail};
-        validatorMap.put(emailTextField, elementConstraints);
+        Object[] emailContraints = {Validator.EMAIL_PATTERN, Validator.EMAIL_LENGTH, checkIconEmail};
+        Object[] codeTextConstraints = {Validator.RECOVERY_CODE_PATTERN, Validator.RECOVERY_CODE_LENGTH, checkIconCode};
+        validatorMap.put(codeTextField, codeTextConstraints);
+        validatorMap.put(emailTextField, emailContraints);
         initValidatorToTextInputControl(validatorMap);
     }
 

@@ -34,7 +34,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
      * @return int representing the coordinator's id.
      */
     @Override
-    public int addCoordinator(Coordinator coordinator) {
+    public int addCoordinator(Coordinator coordinator) throws SQLException {
         int idCoordinator = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -54,7 +54,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
             idCoordinator = resultSet.getInt(1);
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return idCoordinator;
     }
@@ -69,7 +69,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
      * @return boolean true if coordinator was deleted from database.
      */
     @Override
-    public boolean removeCoordinatorByID(int idCoordinator) {
+    public boolean removeCoordinatorByID(int idCoordinator) throws SQLException {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -79,7 +79,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
             rowsAffected = preparedStatement.executeUpdate();
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -93,7 +93,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
      * @return List<Course> a list containing all coordinators.
      */
     @Override
-    public List<Coordinator> getAllCoordinatorsByCourseID(int idCourse) {
+    public List<Coordinator> getAllCoordinatorsByCourseID(int idCourse) throws SQLException {
         List<Coordinator> coordinators = new ArrayList<>();
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -120,7 +120,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
             }
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return coordinators;
     }
@@ -134,7 +134,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
      * @return List<Course> a list containing all coordinators.
      */
     @Override
-    public List<Coordinator> getAllCoordinators() {
+    public List<Coordinator> getAllCoordinators() throws SQLException {
         List<Coordinator> coordinators = new ArrayList<>();
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
@@ -160,7 +160,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
             }
             conn.commit();
         } catch (SQLException sqlException) {
-            Logger.getLogger( CoordinatorDAO.class.getName() ).log(Level.SEVERE, null, sqlException);
+            throw sqlException;
         }
         return coordinators;
     }

@@ -9,12 +9,16 @@ import org.domain.Person;
 import org.domain.Practitioner;
 import org.domain.Professor;
 import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.util.recoverpassword.RecoveryPasswordController;
 import org.util.Auth;
 import org.util.CSSProperties;
 import org.util.Cryptography;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -28,16 +32,11 @@ import org.util.exceptions.LimitReachedException;
 import org.util.exceptions.UserNotFoundException;
 
 public class LoginController extends Controller implements Initializable {
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private PasswordField passwordTextField;
-    @FXML
-    private Label systemLabel;
-    @FXML
-    private Button closeButton;
-    @FXML
-    private AnchorPane rootStage;
+    @FXML private TextField emailTextField;
+    @FXML private PasswordField passwordTextField;
+    @FXML private Label systemLabel;
+    @FXML private Button closeButton;
+    @FXML private AnchorPane rootStage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -84,11 +83,16 @@ public class LoginController extends Controller implements Initializable {
     private boolean login() {
         boolean isLogged = false;
         String emailInput = emailTextField.getText();
-        String passwordInputEncrypted = Cryptography.cryptSHA2(passwordTextField.getText());
+        String passwordInputEncrypted = Cryptography.cryptSHA2(passwordTextField.getText() );
         try {
             isLogged = Auth.getInstance().logIn(emailInput, passwordInputEncrypted);
+            System.out.println(isLogged);
         } catch (UserNotFoundException | LimitReachedException | InactiveUserException e) {
             systemLabel.setText( e.getMessage() );
+            Logger.getLogger( LoginController.class.getName() ).log(Level.FINE, null, e);
+        } catch (SQLException e) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( LoginController.class.getName() ).log(Level.WARNING, null, e);
         }
         return isLogged;
     }
@@ -100,8 +104,7 @@ public class LoginController extends Controller implements Initializable {
         systemLabel.setText("");
     }
 
-    // BAD USER MANAGER
-    // FIX HERE
+    // BAD USER MANAGER FIX HERE
     private void showStageBySpecifiedUser() {
         Person user = Auth.getInstance().getCurrentUser();
         if (user != null) {
@@ -121,7 +124,7 @@ public class LoginController extends Controller implements Initializable {
     }
 
     private void setStyleClass() {
-        setStyleClass(rootStage, getClass().getResource( "resources/" + CSSProperties.readTheme().getTheme()).toExternalForm() );
+        setStyleClass(rootStage, getClass().getResource( "resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
     }
 
 }

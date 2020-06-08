@@ -15,7 +15,10 @@ import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.CSSProperties;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AssignProjectController extends Controller implements Initializable {
     private boolean assignProjectStatus;
@@ -65,21 +68,24 @@ public class AssignProjectController extends Controller implements Initializable
     @FXML
     void assignProjectButtonPressed(ActionEvent event) {
         if( practitioner != null && project != null ) {
-            assignProjectStatus = new ProjectDAO().assignProjectToPractitioner( practitioner.getId(), project.getId() );
-        }
-        if(assignProjectStatus) {
-            closeButton.fire();
-            if(assignProjectStatus) {
-                String title = "Proyecto asignado correctamente.";
-                String contentText = "¡Se asigno el proyecto al practicante correctamente!";
-                OperationAlert.showSuccessfullAlert(title, contentText);
-            } else {
-                String title = "No se pudo asignar el proyecto.";
-                String contentText = "¡No se pudo asignar el proyecto al practicante!";
-                OperationAlert.showUnsuccessfullAlert(title, contentText);
-            }
+            assignProject();
         } else {
             systemLabel.setText("¡Verifica tus datos!");
+        }
+    }
+
+    private void assignProject() {
+        try {
+            assignProjectStatus = new ProjectDAO().assignProjectToPractitioner( practitioner.getId(), project.getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AssignProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        if(assignProjectStatus) {
+            stage.close();
+            String title = "Proyecto asignado correctamente.";
+            String contentText = "¡Se asigno el proyecto al practicante correctamente!";
+            OperationAlert.showSuccessfullAlert(title, contentText);
         }
     }
 

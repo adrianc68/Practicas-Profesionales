@@ -3,6 +3,7 @@ package org.database.dao;
 import org.domain.Activity;
 import org.domain.Professor;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IActivityDAO {
@@ -14,7 +15,7 @@ public interface IActivityDAO {
      * @param activity to be added to database.
      * @return int representing the activity's id.
      */
-    int addActivity(Activity activity);
+    int addActivity(Activity activity) throws SQLException;
     /***
      * Remove an activity from database.
      * <p>
@@ -23,7 +24,7 @@ public interface IActivityDAO {
      * @param idActivity to be removed to database
      * @return boolean true if 1 o more than 1 rows are affected
      */
-    boolean removeActivityByID(int idActivity);
+    boolean removeActivityByID(int idActivity) throws SQLException;
     /***
      * Get all activities from the actual/last course
      * <p>
@@ -31,7 +32,7 @@ public interface IActivityDAO {
      * </p>
      * @return List<activities> a list with activities of the actual/last course from database
      */
-    List<Activity> getAllActivitiesFromLastCourse();
+    List<Activity> getAllActivitiesFromLastCourse() throws SQLException;
     /***
      * Get all activities looking for Professor.
      * <p>
@@ -40,6 +41,6 @@ public interface IActivityDAO {
      * @param idProfessor the professor's id
      * @return List<activities> a list with activities looking for Professor.
      */
-    List<Activity> getAllActivitiesByProfessorID(int idProfessor);
+    List<Activity> getAllActivitiesByProfessorID(int idProfessor) throws SQLException;
 
 }

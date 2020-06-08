@@ -15,7 +15,7 @@ public interface ICoordinatorDAO {
      * @param coordinator the coordinator to be added to database.
      * @return int representing the coordinator's id.
      */
-    int addCoordinator(Coordinator coordinator);
+    int addCoordinator(Coordinator coordinator) throws SQLException;
 
     /***
      * Remove a coordiantor from course.
@@ -26,7 +26,7 @@ public interface ICoordinatorDAO {
      * @param idCoordinator coordinator's id to be removed.
      * @return boolean true if coordinator was deleted from database.
      */
-    boolean removeCoordinatorByID(int idCoordinator);
+    boolean removeCoordinatorByID(int idCoordinator) throws SQLException;
 
     /***
      * Get all coordinators from current course.
@@ -36,7 +36,7 @@ public interface ICoordinatorDAO {
      * </p>
      * @return List<Course> a list containing all coordinators.
      */
-    List<Coordinator> getAllCoordinatorsByCourseID(int idCourse);
+    List<Coordinator> getAllCoordinatorsByCourseID(int idCourse) throws SQLException;
 
     /***
      * Get all coordinators from every course
@@ -46,5 +46,5 @@ public interface ICoordinatorDAO {
      * </p>
      * @return List<Course> a list containing all coordinators.
      */
-    List<Coordinator> getAllCoordinators();
+    List<Coordinator> getAllCoordinators() throws SQLException;
 }

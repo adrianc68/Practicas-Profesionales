@@ -12,8 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class PractitionerDAO implements IPractitionerDAO {
     private final Database database;
@@ -35,7 +33,7 @@ public class PractitionerDAO implements IPractitionerDAO {
      * @return int the practitioner's id
      */
     @Override
-    public int addPractitioner(Practitioner practitioner) {
+    public int addPractitioner(Practitioner practitioner) throws SQLException {
         int idPractitioner = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -53,8 +51,8 @@ public class PractitionerDAO implements IPractitionerDAO {
             result.next();
             idPractitioner = result.getInt(1);
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return idPractitioner;
     }
@@ -68,7 +66,7 @@ public class PractitionerDAO implements IPractitionerDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     @Override
-    public boolean removePractitioner(int idPractitioner) {
+    public boolean removePractitioner(int idPractitioner) throws SQLException {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
@@ -77,8 +75,8 @@ public class PractitionerDAO implements IPractitionerDAO {
             removePractitioner.setInt(1, idPractitioner );
             rowsAffected = removePractitioner.executeUpdate();
             conn.commit();
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.SEVERE, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return rowsAffected > 0;
     }
@@ -92,7 +90,7 @@ public class PractitionerDAO implements IPractitionerDAO {
      * @return List<Practitioner> a list with practitioners of the actual/last course from database
      */
     @Override
-    public List<Practitioner> getAllPractitionersFromLastCourse() {
+    public List<Practitioner> getAllPractitionersFromLastCourse() throws SQLException {
         List<Practitioner> practitioners = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
             String statement = "SELECT PRAC.id_person, PRAC.enrollment, PERS.name, PERS.phoneNumber, PERS.email, PERS.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Practitioner AS PRAC INNER JOIN Person AS PERS ON PRAC.id_person = PERS.id_person INNER JOIN Course AS COUR ON PERS.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
@@ -120,8 +118,8 @@ public class PractitionerDAO implements IPractitionerDAO {
                 practitioner.setProject(null);
                 practitioners.add(practitioner);
             }
-        } catch (SQLException | NullPointerException e) {
-            Logger.getLogger( PractitionerDAO.class.getName() ).log(Level.WARNING, null, e);
+        } catch (SQLException sqlException) {
+            throw sqlException;
         }
         return practitioners;
     }
