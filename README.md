@@ -11,6 +11,8 @@ Repositorio para el proyecto de Principios de Construcción de Software y Princi
        
 ## Bibliotecas externas requeridas:
   - Mysql connector
+  - FontAwesomeFX
+  - JavaMail
        
 ## Integrantes:
   - Angel Adrian Camal Garcia
