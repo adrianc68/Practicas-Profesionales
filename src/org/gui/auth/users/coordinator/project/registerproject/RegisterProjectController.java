@@ -87,7 +87,6 @@ public class RegisterProjectController extends Controller implements Initializab
         super.stagePressed(event);
     }
 
-    // BAD SCREEN MANAGER ??? <--- FIX THIS
     @FXML
     protected void nextButtonPressed(ActionEvent event) {
         if(registrationPane.getChildren().get(0) == thirdScreen) {
@@ -99,22 +98,6 @@ public class RegisterProjectController extends Controller implements Initializab
             thirdLoaderRadioButton.fire();
         } else {
             secondLoaderRadioButton.fire();
-        }
-    }
-
-    private void addProjectToDatabase() {
-        newProject = screenController.getNewProject();
-        try {
-            newProject.setId( new ProjectDAO().addProject(newProject) );
-        } catch (SQLException sqlException) {
-            OperationAlert.showLostConnectionAlert();
-            Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
-        }
-        addOperationStatus = (newProject.getId() != 0);
-        if(addOperationStatus) {
-            String title = "Se agregó el proyecto.";
-            String contentText = "¡Se ha agregado al sistema el nuevo proyecto.";
-            OperationAlert.showSuccessfullAlert(title, contentText);
         }
     }
 
@@ -143,6 +126,22 @@ public class RegisterProjectController extends Controller implements Initializab
         pane.getStylesheets().clear();
         pane.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
         return pane;
+    }
+
+    private void addProjectToDatabase() {
+        newProject = screenController.getNewProject();
+        try {
+            newProject.setId( new ProjectDAO().addProject(newProject) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        addOperationStatus = (newProject.getId() != 0);
+        if(addOperationStatus) {
+            String title = "Se agregó el proyecto.";
+            String contentText = "¡Se ha agregado al sistema el nuevo proyecto.";
+            OperationAlert.showSuccessfullAlert(title, contentText);
+        }
     }
 
 }

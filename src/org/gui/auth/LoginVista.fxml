@@ -90,14 +90,6 @@
             </ImageView>
          </children>
       </HBox>
-      <Label alignment="CENTER" prefHeight="47.0" prefWidth="373.0" styleClass="windowTitle" text="Iniciar sesión" textAlignment="CENTER" translateY="15.0">
-         <padding>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-         </padding>
-         <font>
-            <Font name="Open Sans Regular" size="13.0" />
-         </font>
-      </Label>
    </children>
    <effect>
       <InnerShadow height="7.0" radius="2.0" width="3.0" />

@@ -99,7 +99,6 @@ public class UpdateProjectController extends Controller implements Initializable
         super.stagePressed(event);
     }
 
-    // BAD SCREEN MANAGER <--- FIX THIS
     @FXML
     protected void nextButtonPressed(ActionEvent event) {
         if(projectsPane.getChildren().get(0) == thirdScreen) {

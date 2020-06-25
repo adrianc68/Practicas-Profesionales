@@ -97,7 +97,7 @@
 
 #tableColumn {
   -fx-background-color:transparent;
-  -fx-font-family:"Montserrat Light";
+  -fx-font-family:"Open Sans Light";
   -fx-text-fill:#f4f4f4;
   -fx-alignment:CENTER-LEFT;
 }
@@ -143,6 +143,10 @@
   -fx-text-fill:#E9E9E9;
 }
 
+.listView:focused .list-cell:selected {
+  -fx-background-color:#303d6d;
+}
+
 .projectListView {
   -fx-background-radius:3px;
   -fx-background-color:#3D3D3D;
@@ -158,6 +162,12 @@
   -fx-background-color:#404040;
   -fx-text-fill:#E0E0E0;
 }
+
+.projectListView:focused .list-cell:selected {
+  -fx-background-color:#303d6d;
+}
+
+
 
 
 /*
@@ -202,6 +212,9 @@
 .textfield {
   -fx-background-color:#3D3D3D;
   -fx-text-fill:#B6B6B6;
+  -fx-border-color:#000000;
+  -fx-border-width:1 1 1 1;
+  -fx-border-radius:3px;
 }
 
 .wrongTextField {
@@ -358,15 +371,16 @@
 */
 
 .firstLevelButton {
-  -fx-background-color:#40B1F0;
+  -fx-background-color:#2c7ef9;
   -fx-text-fill:#EEEFEF;
   -fx-border-width: 1 1 1 1;
   -fx-border-radius:2px;
+  -fx-border-color:#176ded;
   -fx-font-family:"Montserrat Light";
 }
 
 .firstLevelButton:hover {
-  -fx-border-color:#0069aa;
+  -fx-background-color:#4b92fc;
 }
 
 .thirdLevelButton {
@@ -382,15 +396,15 @@
 }
 
 .lastLevelButton {
-  -fx-background-color:#F8F8F8;
+  -fx-background-color:#2C2D32;
   -fx-text-fill:#C5C5C5;
   -fx-border-width: 1 1 1 1;
-  -fx-border-color:#B0B0B0;
+  -fx-border-color:#6C6969;
   -fx-border-radius:2px;
 }
 
 .lastLevelButton:hover {
-  -fx-border-color:#898989;
+  -fx-background-color:#6B6F73;
 }
 
 .withBorderButton {

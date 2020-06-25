@@ -103,7 +103,6 @@ public class LoginController extends Controller implements Initializable {
         systemLabel.setText("");
     }
 
-    // BAD USER MANAGER FIX HERE
     private void showStageBySpecifiedUser() {
         Person user = Auth.getInstance().getCurrentUser();
         if (user != null) {

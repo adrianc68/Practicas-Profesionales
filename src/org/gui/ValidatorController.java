@@ -40,6 +40,4 @@ public class ValidatorController extends Controller {
         }
     }
 
-
-
 }

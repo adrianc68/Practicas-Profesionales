@@ -92,34 +92,45 @@ public class RemoveObjectController extends Controller implements Initializable 
         OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
-    //BAD USER MANAGER >>>>>> FIX THIS!!
     private void removeObjectFromDatabase() {
         if(object instanceof Coordinator) {
-            CoordinatorDAO coordinatorDAO = new CoordinatorDAO();
-            try {
-                statusRemoveOperation = coordinatorDAO.removeCoordinatorByID( ( (Coordinator) object).getId() );
-            } catch (SQLException sqlException) {
-                OperationAlert.showLostConnectionAlert();
-                Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, sqlException);
-            }
+            removeCoordinator();
         } else if(object instanceof Professor) {
-            ProfessorDAO professorDAO = new ProfessorDAO();
-            try {
-                statusRemoveOperation = professorDAO.removeProfessorByID( ( (Professor) object).getId() );
-            } catch (SQLException sqlException) {
-                OperationAlert.showLostConnectionAlert();
-                Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, sqlException);
-            }
+            removeProfessor();
         } else if(object instanceof Course){
-            CourseDAO courseDAO = new CourseDAO();
-            try {
-                statusRemoveOperation = courseDAO.removeCourseByID( ( (Course) object).getId() );
-            } catch (SQLException sqlException) {
-                OperationAlert.showLostConnectionAlert();
-                Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, sqlException);
-            }
+            removeCourse();
         } else {
             systemLabel.setText("¡No se puede eliminar!");
+        }
+    }
+
+    private void removeCoordinator() {
+        CoordinatorDAO coordinatorDAO = new CoordinatorDAO();
+        try {
+            statusRemoveOperation = coordinatorDAO.removeCoordinatorByID( ( (Coordinator) object).getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+    }
+
+    private void removeProfessor() {
+        ProfessorDAO professorDAO = new ProfessorDAO();
+        try {
+            statusRemoveOperation = professorDAO.removeProfessorByID( ( (Professor) object).getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+    }
+
+    private void removeCourse() {
+        CourseDAO courseDAO = new CourseDAO();
+        try {
+            statusRemoveOperation = courseDAO.removeCourseByID( ( (Course) object).getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( RemoveObjectController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
     }
 

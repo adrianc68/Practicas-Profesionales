@@ -122,6 +122,12 @@ public class ManagementController extends Controller implements Initializable {
         selected = null;
     }
 
+    private void updateDataFromTablesView() throws SQLException {
+        setDataToCourseTableView();
+        setDataToProfessorTableView();
+        setDataToCoordinatorTableView();
+    }
+
     private void setDataToCoordinatorTableView() throws SQLException {
         CoordinatorDAO coordinatorDAO = new CoordinatorDAO();
         coordinatorsObservableList = FXCollections.observableArrayList();
@@ -153,13 +159,6 @@ public class ManagementController extends Controller implements Initializable {
         coursesTableView.setItems(coursesObservableList);
     }
 
-    private void updateDataFromTablesView() throws SQLException {
-        setDataToCourseTableView();
-        setDataToProfessorTableView();
-        setDataToCoordinatorTableView();
-    }
-
-    //BAD USER MANAGER <---- FIX THIS
     private void removeObjectFromTableView() {
         if(selected instanceof Coordinator) {
             coordinatorsObservableList.remove(selected);
@@ -171,6 +170,24 @@ public class ManagementController extends Controller implements Initializable {
             coursesObservableList.remove(selected);
             coursesTableView.setItems(coursesObservableList);
         }
+    }
+
+    private void setListenersToTableView() {
+        coursesTableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue) {
+                selected = coursesTableView.getSelectionModel().getSelectedItem();
+            }
+        });
+        professorsTableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue) {
+                selected = professorsTableView.getSelectionModel().getSelectedItem();
+            }
+        });
+        coordinatorsTableView.focusedProperty().addListener( (observable, oldValue, newValue) -> {
+            if(!newValue) {
+                selected = coordinatorsTableView.getSelectionModel().getSelectedItem();
+            }
+        });
     }
 
     private void setTableComponents() {
@@ -190,24 +207,6 @@ public class ManagementController extends Controller implements Initializable {
         professorStaffNumberTableColumn.setCellValueFactory(new PropertyValueFactory<>("staffNumber") );
         professorActivityStateTableColumn.setCellValueFactory(new PropertyValueFactory<>("activityState") );
         setListenersToTableView();
-    }
-
-    private void setListenersToTableView() {
-        coursesTableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue) {
-                selected = coursesTableView.getSelectionModel().getSelectedItem();
-            }
-        });
-        professorsTableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue) {
-                selected = professorsTableView.getSelectionModel().getSelectedItem();
-            }
-        });
-        coordinatorsTableView.focusedProperty().addListener( (observable, oldValue, newValue) -> {
-            if(!newValue) {
-                selected = coordinatorsTableView.getSelectionModel().getSelectedItem();
-            }
-        });
     }
 
 }

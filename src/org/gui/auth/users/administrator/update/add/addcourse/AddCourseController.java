@@ -72,7 +72,7 @@ public class AddCourseController extends ValidatorController implements Initiali
     }
 
     @FXML
-    void saveButtonPressed(ActionEvent event) {
+    protected void saveButtonPressed(ActionEvent event) {
         if( verifyInputData() ) {
             registerCourse();
             if( addOperationStatus ){
@@ -82,6 +82,12 @@ public class AddCourseController extends ValidatorController implements Initiali
         } else {
             systemLabel.setText("¡Verifica tus datos!");
         }
+    }
+
+    private void showSuccessfullAlert() {
+        String title = "¡Se ha registrado un nuevo curso!";
+        String contentText = "Se ha registrado correctamente el nuevo curso. Verificar en la lista.";
+        OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
     private void registerCourse() {
@@ -97,12 +103,6 @@ public class AddCourseController extends ValidatorController implements Initiali
             Logger.getLogger( AddCourseController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
         addOperationStatus = (newCourse.getId() != 0);
-    }
-
-    private void showSuccessfullAlert() {
-        String title = "¡Se ha registrado un nuevo curso!";
-        String contentText = "Se ha registrado correctamente el nuevo curso. Verificar en la lista.";
-        OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
     private void initValidatorToTextFields() {

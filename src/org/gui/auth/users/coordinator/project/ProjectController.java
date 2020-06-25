@@ -66,6 +66,21 @@ public class ProjectController extends Controller implements Initializable {
     }
 
     @FXML
+    protected void cancelButtonPressed(ActionEvent event) {
+        stage.close();
+    }
+
+    @FXML
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
+    }
+
+    @FXML
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
+    }
+
+    @FXML
     protected void addButtonPressed(ActionEvent event) {
         rootStage.setDisable(true);
         RegisterProjectController registerProjectController = new RegisterProjectController();
@@ -90,21 +105,6 @@ public class ProjectController extends Controller implements Initializable {
             }
             rootStage.setDisable(false);
         }
-    }
-
-    @FXML
-    protected void cancelButtonPressed(ActionEvent event) {
-        stage.close();
-    }
-
-    @FXML
-    protected void stageDragged(MouseEvent event) {
-        super.stageDragged(event);
-    }
-
-    @FXML
-    protected void stagePressed(MouseEvent event) {
-        super.stagePressed(event);
     }
 
     @FXML

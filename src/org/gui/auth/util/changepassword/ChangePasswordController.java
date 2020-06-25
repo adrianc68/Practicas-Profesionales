@@ -61,10 +61,16 @@ public class ChangePasswordController extends Controller implements Initializabl
     }
 
     @FXML
-    protected void changePasswordButtonPressed(ActionEvent event) throws SQLException {
+    protected void changePasswordButtonPressed(ActionEvent event) {
         if(!isFieldEmpty() && isPasswordsEquals() ) {
             changePassword();
         }
+    }
+
+    private void showSuccessfullAlert() {
+        String title = "Cambio de contraseña exitoso";
+        String contextText = "¡Se cambio la contraseña con exito! Se ha copiado la cuenta de acceso al portapapeles de tu sistema";
+        OperationAlert.showSuccessfullAlert(title, contextText);
     }
 
     private boolean isFieldEmpty() {
@@ -135,12 +141,6 @@ public class ChangePasswordController extends Controller implements Initializabl
             showSuccessfullAlert();
             copyToClipboardSystem( email, newPassword );
         }
-    }
-
-    private void showSuccessfullAlert() {
-        String title = "Cambio de contraseña exitoso";
-        String contextText = "¡Se cambio la contraseña con exito! Se ha copiado la cuenta de acceso al portapapeles de tu sistema";
-        OperationAlert.showSuccessfullAlert(title, contextText);
     }
 
     private void copyToClipboardSystem(String email, String password) {

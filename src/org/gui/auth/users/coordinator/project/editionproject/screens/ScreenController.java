@@ -1,6 +1,5 @@
 package org.gui.auth.users.coordinator.project.editionproject.screens;
 
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,13 +18,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TextInputControl;
 import org.domain.Organization;
 import org.domain.Project;
+import org.util.Validator;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import org.gui.auth.users.coordinator.project.editionproject.screens.secondscreen.textinput.TextInputController;
 import org.gui.auth.users.coordinator.project.editionproject.company.CompanyController;
-import org.util.Validator;
 
 public class ScreenController implements Initializable {
     private Project project;

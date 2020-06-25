@@ -8,19 +8,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
-import org.database.dao.OrganizationDAO;
-import org.domain.Organization;
-import org.gui.Controller;
-import org.gui.auth.resources.alerts.OperationAlert;
-import org.gui.auth.resources.card.OrganizationCard;
-import org.gui.auth.users.coordinator.project.editionproject.company.addcompany.AddCompanyController;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.util.CSSProperties;
+import org.database.dao.OrganizationDAO;
+import org.domain.Organization;
+import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.resources.card.OrganizationCard;
+import org.gui.auth.users.coordinator.project.editionproject.company.addcompany.AddCompanyController;
 
 public class CompanyController extends Controller implements Initializable {
     private OrganizationCard selectedOrganizationCard;
@@ -45,17 +45,6 @@ public class CompanyController extends Controller implements Initializable {
     }
 
     @FXML
-    protected void addCompanyButtonPressed(ActionEvent event) {
-        rootStage.setDisable(true);
-        AddCompanyController addCompanyController = new AddCompanyController();
-        addCompanyController.showStage();
-        if( addCompanyController.getAddOperationStatus() ) {
-            addCompanyInACardToScrollPane( addCompanyController.getNewOrganization() );
-        }
-        rootStage.setDisable(false);
-    }
-
-    @FXML
     protected void closeButtonPressed(ActionEvent event) {
         stage.close();
     }
@@ -68,6 +57,26 @@ public class CompanyController extends Controller implements Initializable {
     @FXML
     protected void stagePressed(MouseEvent event) {
         super.stagePressed(event);
+    }
+
+    @FXML
+    protected void addCompanyButtonPressed(ActionEvent event) {
+        rootStage.setDisable(true);
+        AddCompanyController addCompanyController = new AddCompanyController();
+        addCompanyController.showStage();
+        if( addCompanyController.getAddOperationStatus() ) {
+            addCompanyInACardToScrollPane( addCompanyController.getNewOrganization() );
+        }
+        rootStage.setDisable(false);
+    }
+
+    private void addCompanyInACardToScrollPane(Organization organization) {
+        OrganizationCard card = new OrganizationCard(organization);
+        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
+            selectedOrganizationCard = card;
+            closeButton.fire();
+        });
+        companiesPane.getChildren().add(card);
     }
 
     private void setCompanyToScrollPaneFromDatabase() {
@@ -83,15 +92,6 @@ public class CompanyController extends Controller implements Initializable {
                 addCompanyInACardToScrollPane(organization);
             }
         }
-    }
-
-    private void addCompanyInACardToScrollPane(Organization organization) {
-        OrganizationCard card = new OrganizationCard(organization);
-        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
-            selectedOrganizationCard = card;
-            closeButton.fire();
-        });
-        companiesPane.getChildren().add(card);
     }
 
 }

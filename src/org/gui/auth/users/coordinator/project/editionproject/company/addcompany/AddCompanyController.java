@@ -17,7 +17,6 @@ import org.domain.Course;
 import org.domain.Sector;
 import org.gui.ValidatorController;
 import org.gui.auth.resources.alerts.OperationAlert;
-import org.gui.auth.users.administrator.update.add.addcoordinator.AddCoordinatorController;
 import org.util.Auth;
 import org.util.CSSProperties;
 import org.util.Validator;
@@ -104,31 +103,6 @@ public class AddCompanyController extends ValidatorController implements Initial
         }
     }
 
-    private void addOrganizationToDatabase() {
-        newOrganization = new Organization();
-        newOrganization.setName( companyNameTextField.getText() );
-        newOrganization.setAddress( companyAddressTextField.getText() );
-        newOrganization.setPhoneNumber( companyPhoneNumberTextField.getText() );
-        newOrganization.setEmail( companyEmailTextField.getText() );
-        newOrganization.setSector( getSectorFromField(companySectorChoiceBox.getSelectionModel().getSelectedItem() ) );
-        newOrganization.setCity( companyCityTextField.getText() );
-        newOrganization.setState( companyStateTextField.getText() );
-        newOrganization.setDirectUsers( Integer.valueOf( companyDirectUsersTextField.getText() ) );
-        newOrganization.setIndirectUsers( Integer.valueOf( companyIndirectUsersTextField.getText() ) );
-        newOrganization.setCoordinator(coordinator);
-        newOrganization.setCourse(course);
-        try {
-            newOrganization.setId( new OrganizationDAO().addOrganization(newOrganization) );
-        } catch (SQLException sqlException) {
-            OperationAlert.showLostConnectionAlert();
-            Logger.getLogger( AddCompanyController.class.getName() ).log(Level.WARNING, null, sqlException);
-        }
-        addOperationStatus = (newOrganization.getId() != 0);
-        if(addOperationStatus) {
-            showSuccessfullAlert();
-        }
-    }
-
     private void showSuccessfullAlert() {
         String title = "Se agregó la organizacion";
         String contentText = "¡Se ha agregado la organizacion con exito";
@@ -159,6 +133,31 @@ public class AddCompanyController extends ValidatorController implements Initial
                 checkIconSector.getStyleClass().add("wrongTextField");
             }
         });
+    }
+
+    private void addOrganizationToDatabase() {
+        newOrganization = new Organization();
+        newOrganization.setName( companyNameTextField.getText() );
+        newOrganization.setAddress( companyAddressTextField.getText() );
+        newOrganization.setPhoneNumber( companyPhoneNumberTextField.getText() );
+        newOrganization.setEmail( companyEmailTextField.getText() );
+        newOrganization.setSector( getSectorFromField(companySectorChoiceBox.getSelectionModel().getSelectedItem() ) );
+        newOrganization.setCity( companyCityTextField.getText() );
+        newOrganization.setState( companyStateTextField.getText() );
+        newOrganization.setDirectUsers( Integer.valueOf( companyDirectUsersTextField.getText() ) );
+        newOrganization.setIndirectUsers( Integer.valueOf( companyIndirectUsersTextField.getText() ) );
+        newOrganization.setCoordinator(coordinator);
+        newOrganization.setCourse(course);
+        try {
+            newOrganization.setId( new OrganizationDAO().addOrganization(newOrganization) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddCompanyController.class.getName() ).log(Level.WARNING, null, sqlException);
+        }
+        addOperationStatus = (newOrganization.getId() != 0);
+        if(addOperationStatus) {
+            showSuccessfullAlert();
+        }
     }
 
     private void initValidatorToTextFields() {
