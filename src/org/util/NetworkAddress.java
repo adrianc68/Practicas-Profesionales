@@ -8,6 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class NetworkAddress {
+    /***
+     * This method return the actual MacAddress
+     * <p>
+     * This method it is used to recognize a PC.
+     * </p>
+     * @return
+     */
     public static String getLocalAdress(){
         String macAddress = null;
         try {

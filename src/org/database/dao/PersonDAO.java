@@ -54,15 +54,15 @@ public class PersonDAO implements IPersonDAO {
      * This method changes the activity state to person. It is used to
      * avoid the access to person.
      * </p>
-     * @param idPractitioner
+     * @param idPerson
      * @return true if any row was affected, and false if it was any row not affected.
      */
-    public boolean changeActivityStateByID(int idPractitioner) throws SQLException {
+    public boolean changeActivityStateByID(int idPerson) throws SQLException {
         int rowsAffected = 0;
         try( Connection conn = database.getConnection() ) {
             String statement = "UPDATE Person SET activity_state = CASE WHEN (activity_state = 1) THEN 2 ELSE 1 END WHERE id_person = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
-            preparedStatement.setInt(1, idPractitioner);
+            preparedStatement.setInt(1, idPerson);
             rowsAffected = preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
             throw sqlException;
@@ -117,7 +117,7 @@ public class PersonDAO implements IPersonDAO {
         return course;
     }
 
-    // BAD USER MANAGER ??? <---- FIX THIS!!!!
+    // BAD USER MANAGER ?
     private Person getInstanceOfResultSet(ResultSet resultSet) throws SQLException {
         Person person = new Person();
         if( resultSet.getString("CORD.cubicle") != null) {

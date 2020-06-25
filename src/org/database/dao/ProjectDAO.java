@@ -40,7 +40,7 @@ public class ProjectDAO implements IProjectDAO {
             conn.setAutoCommit(false);
             String statement = "INSERT INTO Project (name, duration, schedule, general_purpose, general_description, id_company, charge_responsable, name_responsable, email_responsable) values (?,?,?,?,?,?,?,?,?)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
-            preparedStatement.setString(1, project.getName());
+            preparedStatement.setString(1, project.getName() );
             preparedStatement.setFloat(2,project.getDuration() );
             preparedStatement.setString(3, project.getSchedule() );
             preparedStatement.setString(4, project.getGeneralPurpose() );
@@ -87,7 +87,7 @@ public class ProjectDAO implements IProjectDAO {
      */
     @Override
     public boolean removeProjectByID(int idProject) throws SQLException {
-        int idRemove = 0;
+        boolean isProjectRemoved = false;
         try(Connection conn = database.getConnection()){
             conn.setAutoCommit(false);
             String statement = "CALL removeProject(?, ?)";
@@ -95,12 +95,13 @@ public class ProjectDAO implements IProjectDAO {
             callableStatement.setInt(1, idProject );
             callableStatement.registerOutParameter(2, Types.INTEGER);
             callableStatement.execute();
-            idRemove = callableStatement.getInt("idRemove");
+            int idRemove = callableStatement.getInt("idRemove");
+            isProjectRemoved = idRemove != 0;
             conn.commit();
         } catch (SQLException sqlException) {
             throw sqlException;
         }
-        return idRemove != 0;
+        return isProjectRemoved;
     }
 
     /***
@@ -195,19 +196,19 @@ public class ProjectDAO implements IProjectDAO {
      */
     @Override
     public boolean addSelectedProjectByPractitionerID(int idPractitioner, int idProject) throws SQLException {
-        int rowsAffected = 0;
+        boolean isProjectSelected;
         try( Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "CALL selectProject(?, ?)";
-            PreparedStatement preparedStatement = conn.prepareStatement(statement);
-            preparedStatement.setInt(1, idPractitioner);
-            preparedStatement.setInt(2, idProject);
-            rowsAffected = preparedStatement.executeUpdate();
+            CallableStatement callableStatement = conn.prepareCall(statement);
+            callableStatement.setInt(1, idPractitioner);
+            callableStatement.setInt(2, idProject);
+            isProjectSelected = !callableStatement.wasNull();
             conn.commit();
         }catch (SQLException sqlException) {
             throw sqlException;
         }
-        return rowsAffected > 0;
+        return isProjectSelected;
     }
 
     /***

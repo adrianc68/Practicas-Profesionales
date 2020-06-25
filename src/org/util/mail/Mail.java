@@ -22,6 +22,9 @@ public class Mail {
     private String account;
     private String password;
 
+    /***
+     * Mail constructor
+     */
     public Mail() {
         MailProperties mailProperties = new MailProperties("mail.properties");
         Map<String, String> propertiesMap = mailProperties.readProperties();
@@ -33,6 +36,16 @@ public class Mail {
         password = propertiesMap.get("gen.password");
     }
 
+    /***
+     * Send a email to a subject.
+     * <p>
+     * This method send a message to an another email.
+     * </p>
+     * @param email representing the destinatary.
+     * @param subject representing the subject
+     * @param contextText representing the content of message
+     * @return
+     */
     public boolean sendEmail(String email, String subject, String contextText) {
         boolean emailSend = false;
         Message message = prepareMessageWithHTMLContent(email, subject, contextText);

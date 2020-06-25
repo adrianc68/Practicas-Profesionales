@@ -9,6 +9,15 @@ public class Cryptography {
     private static final String SHA_256_FUNCTION = "SHA-256";
     private static final String MD5_FUNCTION = "MD5";
 
+    /***
+     * This method crypt any text in SHA256
+     * <p>
+     * It's used when someone needs to crypt some text.
+     * In this system, the use that is given is for Auth module.
+     * </p>
+     * @param string
+     * @return String encrypted.
+     */
     public static String cryptSHA2(String string) {
         MessageDigest messageDigest = null;
         try {
@@ -24,6 +33,15 @@ public class Cryptography {
         return stringBuffer.toString();
     }
 
+    /***
+     * This method crypt any text in SHA256
+     * <p>
+     * It's used when someone needs to crypt some text.
+     * In this system, the use that is given is for Auth module.
+     * </p>
+     * @param string
+     * @return String encrypted
+     */
     public static String cryptMD5(String string) {
         MessageDigest messageDigest = null;
         try {
@@ -39,6 +57,13 @@ public class Cryptography {
         return stringBuffer.toString();
     }
 
+    /***
+     * This method crypt a random number.
+     * <p>
+     * The purpose is generate a "random password" encrypted.
+     * </p>
+     * @return String encrypted in MD5
+     */
     public static String generateRandomPassword() {
         return cryptMD5( String.valueOf( Math.random() ) );
     }

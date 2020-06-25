@@ -30,7 +30,7 @@ public class OrganizationDAO implements IOrganizationDAO {
      */
     @Override
     public int addOrganization(Organization organization) throws SQLException {
-        int idCompany = 0;
+        int idCompany;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "INSERT INTO Company(name, address, email, state, direct_users, indirect_users, sector, city, id_coordinator, id_course) values (?,?,?,?,?,?,?,?,?,?)";

@@ -14,14 +14,21 @@ import java.util.logging.Logger;
 public class DatabaseProperties {
     private String path;
 
+    /***
+     * DatabaseProperties constructor
+     * Initiliazes the path.
+     */
     public DatabaseProperties(String path) {
         this.path = path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
+    /***
+     * This method write the database properties to a properties file
+     * <p>
+     * The purpose is set the actual configuration from the properties file
+     * </p>
+     * @return boolean true if properties were written and false if properties weren't written.
+     */
     public boolean writeProperties(String user, String password, String url) {
         boolean result = false;
         try (OutputStream output = new FileOutputStream(path)) {
@@ -37,6 +44,13 @@ public class DatabaseProperties {
         return result;
     }
 
+    /***
+     * This method reads the database properties from a properties file
+     * <p>
+     * The purpose is get the actual configuration from the properties file
+     * </p>
+     * @return Map representing the properties
+     */
     public Map<String, String> readProperties() {
         Map<String, String> propertiesMap = new HashMap<>();
         try (InputStream input = new FileInputStream(path)) {

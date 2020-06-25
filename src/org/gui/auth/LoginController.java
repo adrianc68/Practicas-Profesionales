@@ -86,7 +86,6 @@ public class LoginController extends Controller implements Initializable {
         String passwordInputEncrypted = Cryptography.cryptSHA2(passwordTextField.getText() );
         try {
             isLogged = Auth.getInstance().logIn(emailInput, passwordInputEncrypted);
-            System.out.println(isLogged);
         } catch (UserNotFoundException | LimitReachedException | InactiveUserException e) {
             systemLabel.setText( e.getMessage() );
             Logger.getLogger( LoginController.class.getName() ).log(Level.FINE, null, e);

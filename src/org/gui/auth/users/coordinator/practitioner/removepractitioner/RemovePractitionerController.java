@@ -90,7 +90,7 @@ public class RemovePractitionerController extends Controller implements Initiali
 
     private void showSucessfullAlert() {
         String title = "Practicante eliminado";
-        String contentText = "¡Se elimino el practicante correctamente!";
+        String contentText = "¡Se eliminó el practicante correctamente!";
         OperationAlert.showSuccessfullAlert(title, contentText);
     }
 

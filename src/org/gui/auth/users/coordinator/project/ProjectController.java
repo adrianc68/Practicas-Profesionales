@@ -15,7 +15,6 @@ import org.domain.Project;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.ProjectCard;
-import org.gui.auth.users.coordinator.practitioner.PractitionerController;
 import org.gui.auth.users.coordinator.project.registerproject.RegisterProjectController;
 import org.gui.auth.users.coordinator.project.removeproject.RemoveProjectController;
 import org.gui.auth.users.coordinator.project.updateproject.UpdateProjectController;

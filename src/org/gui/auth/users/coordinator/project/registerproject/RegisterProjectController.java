@@ -12,7 +12,6 @@ import org.database.dao.ProjectDAO;
 import org.domain.Project;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
-import org.gui.auth.users.administrator.update.add.addcoordinator.AddCoordinatorController;
 import org.util.CSSProperties;
 import java.io.IOException;
 import java.net.URL;

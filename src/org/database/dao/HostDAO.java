@@ -57,13 +57,14 @@ public class HostDAO implements IHostDAO {
      */
     @Override
     public boolean sendActualMacAddress(String address) throws SQLException {
-        boolean executed = false;
+        boolean executed;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "CALL sendAddress(?)";
             CallableStatement callableStatement = conn.prepareCall(statement);
             callableStatement.setString(1, address);
-            executed = callableStatement.execute();
+            callableStatement.execute();
+            executed = !callableStatement.wasNull();
             conn.commit();
         } catch (SQLException sqlException) {
             throw sqlException;
@@ -82,13 +83,14 @@ public class HostDAO implements IHostDAO {
      */
     @Override
     public boolean resetAttempts(String address) throws SQLException {
-        boolean executed = false;
+        boolean executed;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
             String statement = "UPDATE Host SET attempts = 0 WHERE mac_address = ?";
             CallableStatement callableStatement = conn.prepareCall(statement);
             callableStatement.setString(1, address);
-            executed = callableStatement.execute();
+            callableStatement.execute();
+            executed = !callableStatement.wasNull();
             conn.commit();
         } catch (SQLException sqlException) {
             throw sqlException;

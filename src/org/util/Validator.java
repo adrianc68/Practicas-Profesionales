@@ -28,20 +28,38 @@ public class Validator {
     public static final String PROJECT_NAME_PATTERN = "[a-zA-Z]{2,}+(\\ ([a-zA-Z]{1,}))*";
     public static final String PROJECT_MULTIVALUED_ATTRIBUTE_PATTERN = "[a-zA-Z]{2,}+(\\ ([a-zA-Z]{1,}))*";
     public static final String NAME_PATTERN = "([A-Za-z]{2,}(\\ [A-Za-z]{2,})+)";
-    public static final String LARGE_TEXT_PATTERN = "[a-zA-Z]{2,}+(\\ ([a-zA-Z]{1,}))*";
+    public static final String LARGE_TEXT_PATTERN = "[a-zA-Z/-]{2,}+(\\ ([a-zA-Z/-]{1,}))*";
     public static final String CHARGE_RESPONSABLE_PATTERN = "[a-zA-Z]{2,}+(\\ ([a-zA-Z]{1,}))*";
     public static final String EMAIL_PATTERN = "[A-Za-z0-9]{1,}(\\.([A-Za-z0-9]{1,}))*@(([a-zA-Z]{2,})(\\.([a-z]{1,})){1,})";
-    public static final String SCHEDULE_PATTERN = "[a-zA-Z]{1,}+(\\ ([a-zA-Z]{1,}))*";
+    public static final String SCHEDULE_PATTERN = "[a-zA-Z0-9:]{1,}+(\\ ([a-zA-Z0-9:]{1,}))*";
     public static final String DURATION_PATTERN = "(([1-9]{1,3}[0]*)(\\.[\\d]{1,})?)";
     public static final String NUMBER_PATTERN = "([0-9]{1,})";
     public static final String NRC_PATTERN = "([0-9]{5,10})";
     public static final String PERIOD_PATTERN = "(([A-Z]{3}\\ [0-9]{4})\\ \\-\\ ([A-Z]{3}\\ [0-9]{4}))";
 
+    /***
+     * This method search for a match with a pattern
+     * <p>
+     * The purpose of this method it's try to match a text to a specified pattern
+     * </p>
+     * @param string
+     * @param pattern
+     * @return
+     */
     public static boolean doesStringMatchPattern(String string, String pattern) {
         boolean stringMatchWithPattern = string.matches(pattern);
         return stringMatchWithPattern;
     }
 
+    /***
+     * This method check if a string is larger than a specified limit.
+     * <p>
+     * The purpose of tihs method it's try to match a text to a specified amount of characters
+     * </p>
+     * @param string
+     * @param limit
+     * @return
+     */
     public static boolean isStringLargerThanLimitOrEmpty(String string, int limit) {
         boolean isStringEmptyOrLarger = string.length() > limit || string.equals("");
         return isStringEmptyOrLarger;

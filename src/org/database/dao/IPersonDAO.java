@@ -2,7 +2,6 @@ package org.database.dao;
 
 import org.domain.ActivityState;
 import org.domain.Person;
-
 import java.sql.SQLException;
 
 public interface IPersonDAO {
@@ -24,10 +23,10 @@ public interface IPersonDAO {
      * This method changes the activity state to person. It is used to
      * avoid the access to person.
      * </p>
-     * @param idPractitioner
+     * @param idPerson
      * @return true if any row was affected, and false if it was any row not affected.
      */
-    boolean changeActivityStateByID(int idPractitioner) throws SQLException;
+    boolean changeActivityStateByID(int idPerson) throws SQLException;
 
     /***
      * Get the activity state by email and password.
