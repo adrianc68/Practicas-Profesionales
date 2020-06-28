@@ -58,10 +58,10 @@
                                     <Insets />
                                  </opaqueInsets>
                                  <graphic>
-                                    <OctIconView glyphName="TRASHCAN" size="55" styleClass="firstLevelIcon" />
+                                    <OctIconView glyphName="X" size="55" styleClass="firstLevelIcon" />
                                  </graphic>
                               </Button>
-                              <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#addDeliveryButtonPressed" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Evaluar">
+                              <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#addDeliveryButtonPressed" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Enviar">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>

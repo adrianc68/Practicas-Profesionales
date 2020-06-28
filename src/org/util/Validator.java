@@ -10,7 +10,7 @@ public class Validator {
     public static final int SCHEDULE_LENGTH = 75;
     public static final int CHARGE_RESPONSABLE_LENGTH = 35;
     public static final int ENROLLMENT_LENGTH = 35;
-    public static final int LARGE_TEXT_LENGTH = 180;
+    public static final int LARGE_TEXT_LENGTH = 1500;
     public static final int STATE_LENGTH = 75;
     public static final int CITY_LENGTH = 65;
     public static final int STAFF_NUMBER_LENGTH = 25;
@@ -31,7 +31,7 @@ public class Validator {
     public static final String PROJECT_NAME_PATTERN = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{2,}+(\\ ([a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{1,}))*";
     public static final String PROJECT_MULTIVALUED_ATTRIBUTE_PATTERN = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{2,}+(\\ ([a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{1,}))*";
     public static final String NAME_PATTERN = "([A-Za-záéíóúüÁÉÍÓÚÜñÑ]{2,}(\\ [A-Za-záéíóúüÁÉÍÓÚÜñÑ]{2,})*)";
-    public static final String LARGE_TEXT_PATTERN = "([A-Za-z0-9.,-áéíóúüÁÉÍÓÚÜñÑ]{1,}(\\ [A-Za-z0-9.,-áéíóúüÁÉÍÓÚÜñÑ\\r\\n]{1,})*)";
+    public static final String LARGE_TEXT_PATTERN = "([A-Za-z0-9.,-áéíóúüÁÉÍÓÚÜñÑ\\r\\n]{1,}(\\ [A-Za-z0-9.,-áéíóúüÁÉÍÓÚÜñÑ\\r\\n]{1,})*)";
     public static final String CHARGE_RESPONSABLE_PATTERN = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{2,}+(\\ ([a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{1,}))*";
     public static final String EMAIL_PATTERN = "[A-Za-z0-9\\-ñÑ]{1,}(\\.([A-Za-z0-9\\-ñÑ]{1,}))*@(([a-zA-Z]{2,})(\\.([a-z]{1,})){1,})";
     public static final String SCHEDULE_PATTERN = "[a-zA-Z0-9:-áéíóúüÁÉÍÓÚÜñÑ]{1,}+(\\ ([a-zA-Z0-9:-áéíóúüÁÉÍÓÚÜñÑ]{1,}))*";

@@ -4,7 +4,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -13,13 +12,12 @@ import org.domain.Delivery;
 import org.util.CSSProperties;
 
 public class ActivityPractitionerCard extends VBox {
-    private final int CARD_HEIGHT = 100;
-    private final int CARD_WIDTH = 1000;
+    private final int CARD_WIDTH = 980;
     private final int FONT_SIZE = 22;
     private final int FONT_SMALL_SIZE = 13;
     private final int TITLE_BOX_HEIGHT = 43;
     private final int DESCRIPTION_BOX_HEIGHT = 73;
-    private final int DESCRIPTION_CONTAINER_WIDTH = 815;
+    private final int DESCRIPTION_CONTAINER_WIDTH = 795;
     private final int SCORE_BOX_WIDTH = 185;
     private final int SPACING = 15;
     private final int SPACING_CONTAINER = 1;
@@ -74,12 +72,12 @@ public class ActivityPractitionerCard extends VBox {
         titleBox.getChildren().add(deadlineLabel);
         titleBox.getChildren().add(deadLineTitleComplementation);
         HBox descriptionBox = new HBox();
-        descriptionBox.setMaxSize(CARD_WIDTH, DESCRIPTION_BOX_HEIGHT);
+        descriptionBox.setMaxWidth(CARD_WIDTH);
         descriptionBox.setMinSize(CARD_WIDTH, DESCRIPTION_BOX_HEIGHT);
         descriptionBox.setAlignment(Pos.CENTER);
         VBox descriptionContainerBox = new VBox();
         descriptionContainerBox.setAlignment(Pos.TOP_LEFT);
-        descriptionContainerBox.setMaxSize(DESCRIPTION_CONTAINER_WIDTH, DESCRIPTION_BOX_HEIGHT);
+        descriptionContainerBox.setMaxWidth(DESCRIPTION_CONTAINER_WIDTH);
         descriptionContainerBox.setMinSize(DESCRIPTION_CONTAINER_WIDTH, DESCRIPTION_BOX_HEIGHT);
         descriptionContainerBox.setSpacing(SPACING);
         descriptionContainerBox.setPadding( new Insets(DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING));
@@ -89,7 +87,7 @@ public class ActivityPractitionerCard extends VBox {
         descriptionLabel.setWrapText(true);
         descriptionContainerBox.getChildren().add(descriptionLabel);
         VBox scoreContainerBox = new VBox();
-        scoreContainerBox.setMaxSize(SCORE_BOX_WIDTH, DESCRIPTION_BOX_HEIGHT);
+        scoreContainerBox.setMaxWidth(SCORE_BOX_WIDTH);
         scoreContainerBox.setMinSize(SCORE_BOX_WIDTH, DESCRIPTION_BOX_HEIGHT);
         scoreContainerBox.getStyleClass().add("cardDateContainer");
         scoreContainerBox.setAlignment(Pos.TOP_CENTER);
@@ -107,9 +105,8 @@ public class ActivityPractitionerCard extends VBox {
         descriptionBox.getChildren().add(descriptionContainerBox);
         descriptionBox.getChildren().add(scoreContainerBox);
         setPrefWidth(CARD_WIDTH);
-        setPrefHeight(CARD_HEIGHT);
         setMaxWidth(CARD_WIDTH);
-        setMaxHeight(CARD_HEIGHT);
+        setPrefHeight(USE_COMPUTED_SIZE);
         setSpacing(SPACING_CONTAINER);
         setStyleClass();
         setCursor(Cursor.HAND);

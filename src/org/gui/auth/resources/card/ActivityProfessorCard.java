@@ -11,7 +11,6 @@ import org.domain.Activity;
 import org.util.CSSProperties;
 
 public class ActivityProfessorCard extends VBox {
-    private final int CARD_HEIGHT = 100;
     private final int CARD_WIDTH = 1000;
     private final int FONT_SIZE = 35;
     private final int FONT_SMALL_SIZE = 15;
@@ -62,13 +61,13 @@ public class ActivityProfessorCard extends VBox {
         activityTitleLabel.getStyleClass().add("cardFirstLevelLabel");
         titleBox.getChildren().add(activityTitleLabel);
         HBox descriptionBox = new HBox();
-        descriptionBox.setMaxSize(CARD_WIDTH, DESCRIPTION_BOX_HEIGHT);
+        descriptionBox.setMaxWidth(CARD_WIDTH);
         descriptionBox.setMinSize(CARD_WIDTH, DESCRIPTION_BOX_HEIGHT);
         descriptionBox.setAlignment(Pos.TOP_CENTER);
         VBox descriptionContainerBox = new VBox();
         descriptionContainerBox.setAlignment(Pos.TOP_LEFT);
-        descriptionContainerBox.setMaxSize(DESCRIPTION_CONTAINER_WIDTH, DESCRIPTION_BOX_HEIGHT);
         descriptionContainerBox.setMinSize(DESCRIPTION_CONTAINER_WIDTH, DESCRIPTION_BOX_HEIGHT);
+        descriptionContainerBox.setMaxWidth(DESCRIPTION_CONTAINER_WIDTH);
         descriptionContainerBox.setSpacing(SPACING);
         descriptionContainerBox.setPadding( new Insets(DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING) );
         Label descriptionLabel = new Label( activity.getDescription() );
@@ -77,12 +76,12 @@ public class ActivityProfessorCard extends VBox {
         descriptionLabel.setFont( Font.font(FONT_SMALL_SIZE) );
         descriptionContainerBox.getChildren().add(descriptionLabel);
         VBox dateContainerBox = new VBox();
-        dateContainerBox.setMaxSize(SCORE_BOX_WIDTH, DESCRIPTION_BOX_HEIGHT);
+        dateContainerBox.setMaxWidth(SCORE_BOX_WIDTH);
         dateContainerBox.setMinSize(SCORE_BOX_WIDTH, DESCRIPTION_BOX_HEIGHT);
         dateContainerBox.getStyleClass().add("cardDateContainer");
         dateContainerBox.setAlignment(Pos.TOP_CENTER);
-        dateContainerBox.setSpacing(SPACING_CONTENT);
         dateContainerBox.setPadding( new Insets(PADDING, NO_PADDING, NO_PADDING, NO_PADDING) );
+        dateContainerBox.setSpacing(SPACING_CONTENT);
         // T-O Ternary Operator here!
         Label titleDeadlineLabel = new Label("Fecha límite");
         titleDeadlineLabel.getStyleClass().add("cardSecondLevelLabel");
@@ -95,13 +94,12 @@ public class ActivityProfessorCard extends VBox {
         descriptionBox.getChildren().add(descriptionContainerBox);
         descriptionBox.getChildren().add(dateContainerBox);
         setPrefWidth(CARD_WIDTH);
-        setPrefHeight(CARD_HEIGHT);
         setMaxWidth(CARD_WIDTH);
-        setMaxHeight(CARD_HEIGHT);
+        setPrefHeight(USE_COMPUTED_SIZE);
         setSpacing(SPACING_CONTAINER);
         setStyleClass();
         setCursor(Cursor.HAND);
-        setPadding(new Insets(TOP_INSET, RIGHT_INSET, BOTTOM_INSET, LEFT_INSET) );
+        setPadding( new Insets(TOP_INSET, RIGHT_INSET, BOTTOM_INSET, LEFT_INSET) );
         setAlignment(Pos.TOP_CENTER);
         getChildren().add(titleBox);
         getChildren().add(descriptionBox);

@@ -11,13 +11,12 @@ import org.domain.Delivery;
 import org.util.CSSProperties;
 
 public class DeliveryCard extends VBox {
-    private final int CARD_HEIGHT = 100;
-    private final int CARD_WIDTH = 1000;
+    private final int CARD_WIDTH = 980;
     private final int FONT_SIZE = 22;
     private final int FONT_SMALL_SIZE = 13;
     private final int TITLE_BOX_HEIGHT = 43;
     private final int DESCRIPTION_BOX_HEIGHT = 73;
-    private final int DESCRIPTION_CONTAINER_WIDTH = 856;
+    private final int DESCRIPTION_CONTAINER_WIDTH = 836;
     private final int SCORE_BOX_WIDTH = 144;
     private final int SPACING = 15;
     private final int SPACING_CONTAINER = 1;
@@ -62,12 +61,12 @@ public class DeliveryCard extends VBox {
         namePractitionerLabel.getStyleClass().add("cardFirstLevelLabel");
         titleBox.getChildren().add(namePractitionerLabel);
         HBox descriptionBox = new HBox();
-        descriptionBox.setMaxSize(CARD_WIDTH, DESCRIPTION_BOX_HEIGHT);
+        descriptionBox.setMaxWidth(CARD_WIDTH);
         descriptionBox.setMinSize(CARD_WIDTH, DESCRIPTION_BOX_HEIGHT);
         descriptionBox.setAlignment(Pos.CENTER);
         VBox observationBox = new VBox();
         observationBox.setAlignment(Pos.TOP_LEFT);
-        observationBox.setMaxSize(DESCRIPTION_CONTAINER_WIDTH, DESCRIPTION_BOX_HEIGHT);
+        observationBox.setMaxWidth(DESCRIPTION_CONTAINER_WIDTH);
         observationBox.setMinSize(DESCRIPTION_CONTAINER_WIDTH, DESCRIPTION_BOX_HEIGHT);
         observationBox.setSpacing(SPACING);
         observationBox.setPadding( new Insets(DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING));
@@ -76,7 +75,7 @@ public class DeliveryCard extends VBox {
         observationLabel.getStyleClass().add("cardThirdLevelLabel");
         observationBox.getChildren().add(observationLabel);
         VBox scoreContainerBox = new VBox();
-        scoreContainerBox.setMaxSize(SCORE_BOX_WIDTH, DESCRIPTION_BOX_HEIGHT);
+        scoreContainerBox.setMaxWidth(SCORE_BOX_WIDTH);
         scoreContainerBox.setMinSize(SCORE_BOX_WIDTH, DESCRIPTION_BOX_HEIGHT);
         scoreContainerBox.getStyleClass().add("cardDateContainer");
         scoreContainerBox.setAlignment(Pos.TOP_CENTER);
@@ -93,13 +92,12 @@ public class DeliveryCard extends VBox {
         descriptionBox.getChildren().add(observationBox);
         descriptionBox.getChildren().add(scoreContainerBox);
         setPrefWidth(CARD_WIDTH);
-        setPrefHeight(CARD_HEIGHT);
         setMaxWidth(CARD_WIDTH);
-        setMaxHeight(CARD_HEIGHT);
+        setPrefHeight(USE_COMPUTED_SIZE);
         setSpacing(SPACING_CONTAINER);
         setStyleClass();
         setCursor(Cursor.HAND);
-        setPadding(new Insets(TOP_INSET, RIGHT_INSET, BOTTOM_INSET, LEFT_INSET));
+        setPadding( new Insets(TOP_INSET, RIGHT_INSET, BOTTOM_INSET, LEFT_INSET) );
         setAlignment(Pos.TOP_CENTER);
         getChildren().add(titleBox);
         getChildren().add(descriptionBox);

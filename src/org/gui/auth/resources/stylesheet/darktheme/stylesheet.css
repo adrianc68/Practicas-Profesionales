@@ -369,7 +369,7 @@
 .formLabel {
   -fx-text-fill:#E6F0FA;
   -fx-font-family:"Montserrat Light";
-  -fx-font-size:11px;
+  -fx-font-size:10px;
 }
 
 .projectDescriptionLabel {
@@ -757,37 +757,6 @@
 .date-picker-popup > * > .next-month.today:hover {
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
   The background
