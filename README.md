@@ -7,3 +7,9 @@ El proyecto fue desarrollado para la experiencia educativa de Principios de Cons
 
 - Angel Adrian Camal Garcia
 - Jose Luis Carbajal Pacheco
+
+
+## Bibliotecas externas requeridas:
+- JavaMail
+- FontAwesomeFX8.9
+- MysqlConnector8.0.18
