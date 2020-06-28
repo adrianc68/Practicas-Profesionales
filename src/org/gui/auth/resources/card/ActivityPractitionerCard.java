@@ -10,24 +10,30 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.domain.Activity;
 import org.domain.Delivery;
+import org.util.CSSProperties;
 
-public class ActivityCard extends VBox {
-    private final int CARD_HEIGHT = 138;
+public class ActivityPractitionerCard extends VBox {
+    private final int CARD_HEIGHT = 100;
     private final int CARD_WIDTH = 1000;
     private final int FONT_SIZE = 22;
     private final int FONT_SMALL_SIZE = 13;
     private final int TITLE_BOX_HEIGHT = 43;
-    private final int DESCRIPTION_BOX_HEIGHT = 93;
-    private final int DESCRIPTION_CONTAINER_WIDTH = 856;
-    private final int SCORE_BOX_WIDTH = 144;
+    private final int DESCRIPTION_BOX_HEIGHT = 73;
+    private final int DESCRIPTION_CONTAINER_WIDTH = 815;
+    private final int SCORE_BOX_WIDTH = 185;
     private final int SPACING = 15;
+    private final int SPACING_CONTAINER = 1;
+    private final int SPACING_CONTENT = 5;
     private final int TOP_INSET = 5;
     private final int BOTTOM_INSET = 5;
     private final int LEFT_INSET = 5;
     private final int RIGHT_INSET = 5;
+    private final int PADDING = 15;
+    private final int NO_PADDING = 0;
+    private final int DESCRIPTION_PADDING = 10;
     private Activity activity;
 
-    public ActivityCard(Activity activity) {
+    public ActivityPractitionerCard(Activity activity) {
         this.activity = activity;
         initCard();
     }
@@ -47,38 +53,56 @@ public class ActivityCard extends VBox {
 
     private void initCard() {
         HBox titleBox = new HBox();
-        titleBox.setStyle("-fx-background-color:#d5d599");
-        titleBox.setAlignment(Pos.CENTER);
+        titleBox.getStyleClass().add("cardTopDescription");
+        titleBox.setAlignment(Pos.CENTER_LEFT);
         titleBox.setFillHeight(true);
         titleBox.setMaxSize(CARD_WIDTH, TITLE_BOX_HEIGHT);
         titleBox.setMinSize(CARD_WIDTH, TITLE_BOX_HEIGHT);
+        titleBox.setPadding( new Insets(DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING) );
         Label activityTitleLabel = new Label(activity.getName() );
         activityTitleLabel.setFont( Font.font(FONT_SIZE) );
+        activityTitleLabel.getStyleClass().add("cardFirstLevelLabel");
         titleBox.getChildren().add(activityTitleLabel);
+        Label deadLineTitle = new Label(" (Fecha límite: ");
+        deadLineTitle.getStyleClass().add("cardSecondLevelLabel");
+        Label deadlineLabel = new Label(String.valueOf( activity.getDeadline() ) );
+        deadlineLabel.setFont( Font.font(FONT_SMALL_SIZE) );
+        deadlineLabel.getStyleClass().add("cardThirdLevelLabel");
+        Label deadLineTitleComplementation = new Label(")" );
+        deadLineTitleComplementation.getStyleClass().add("cardSecondLevelLabel");
+        titleBox.getChildren().add(deadLineTitle);
+        titleBox.getChildren().add(deadlineLabel);
+        titleBox.getChildren().add(deadLineTitleComplementation);
         HBox descriptionBox = new HBox();
         descriptionBox.setMaxSize(CARD_WIDTH, DESCRIPTION_BOX_HEIGHT);
         descriptionBox.setMinSize(CARD_WIDTH, DESCRIPTION_BOX_HEIGHT);
         descriptionBox.setAlignment(Pos.CENTER);
         VBox descriptionContainerBox = new VBox();
-        descriptionContainerBox.setAlignment(Pos.CENTER);
+        descriptionContainerBox.setAlignment(Pos.TOP_LEFT);
         descriptionContainerBox.setMaxSize(DESCRIPTION_CONTAINER_WIDTH, DESCRIPTION_BOX_HEIGHT);
         descriptionContainerBox.setMinSize(DESCRIPTION_CONTAINER_WIDTH, DESCRIPTION_BOX_HEIGHT);
         descriptionContainerBox.setSpacing(SPACING);
+        descriptionContainerBox.setPadding( new Insets(DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING, DESCRIPTION_PADDING));
         Label descriptionLabel = new Label( activity.getDescription() );
         descriptionLabel.setFont( Font.font(FONT_SMALL_SIZE) );
+        descriptionLabel.getStyleClass().add("cardThirdLevelLabel");
+        descriptionLabel.setWrapText(true);
         descriptionContainerBox.getChildren().add(descriptionLabel);
-        Label deadlineLabel = new Label( String.valueOf( activity.getDeadline() ) );
-        deadlineLabel.setFont( Font.font(FONT_SMALL_SIZE) );
-        descriptionContainerBox.getChildren().add(deadlineLabel);
         VBox scoreContainerBox = new VBox();
         scoreContainerBox.setMaxSize(SCORE_BOX_WIDTH, DESCRIPTION_BOX_HEIGHT);
         scoreContainerBox.setMinSize(SCORE_BOX_WIDTH, DESCRIPTION_BOX_HEIGHT);
-        scoreContainerBox.setStyle("-fx-background-color:#6a6a6a;");
-        scoreContainerBox.setAlignment(Pos.CENTER);
+        scoreContainerBox.getStyleClass().add("cardDateContainer");
+        scoreContainerBox.setAlignment(Pos.TOP_CENTER);
+        scoreContainerBox.setPadding( new Insets(PADDING, NO_PADDING, NO_PADDING, NO_PADDING) );
+        scoreContainerBox.setSpacing(SPACING_CONTENT);
         Delivery delivery = getDeliveryOfActualActivity();
         // T-O Ternary Operator here!
+        Label scoreTitleLabel = new Label("Puntaje");
+        scoreTitleLabel.getStyleClass().add("cardFirstLevelLabel");
         Label scoreActivityLabel = new Label( (delivery != null) ? String.valueOf( delivery.getScore() ): "" );
-        scoreActivityLabel.setFont(Font.font(FONT_SIZE));
+        scoreActivityLabel.setFont( Font.font(FONT_SIZE) );
+        scoreActivityLabel.getStyleClass().add("cardSecondLevelLabel");
+        scoreContainerBox.getChildren().add(scoreTitleLabel);
         scoreContainerBox.getChildren().add(scoreActivityLabel);
         descriptionBox.getChildren().add(descriptionContainerBox);
         descriptionBox.getChildren().add(scoreContainerBox);
@@ -86,14 +110,13 @@ public class ActivityCard extends VBox {
         setPrefHeight(CARD_HEIGHT);
         setMaxWidth(CARD_WIDTH);
         setMaxHeight(CARD_HEIGHT);
-        setStyle("-fx-border-color:#323232;");
+        setSpacing(SPACING_CONTAINER);
+        setStyleClass();
         setCursor(Cursor.HAND);
-        setPadding(new Insets(TOP_INSET, RIGHT_INSET, BOTTOM_INSET, LEFT_INSET));
+        setPadding( new Insets(TOP_INSET, RIGHT_INSET, BOTTOM_INSET, LEFT_INSET) );
         setAlignment(Pos.TOP_CENTER);
         getChildren().add(titleBox);
         getChildren().add(descriptionBox);
-        setOnMouseEntered((MouseEvent event) -> { setStyle("-fx-border-color:#0043ff;-fx-border-width:2 2 2 2;"); });
-        setOnMouseExited((MouseEvent event) -> { setStyle("-fx-border-color:#323232;-fx-border-width:1 1 1 1;"); });
     }
 
     private Delivery getDeliveryOfActualActivity() {
@@ -105,6 +128,13 @@ public class ActivityCard extends VBox {
             }
         }
         return actualDelivery;
+    }
+
+    private void setStyleClass() {
+        getStylesheets().clear();
+        getStyleClass().clear();
+        getStylesheets().add(getClass().getResource("../" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        getStyleClass().add("card");
     }
 
 }

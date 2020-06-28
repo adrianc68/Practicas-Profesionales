@@ -58,6 +58,7 @@ public class ProfessorCard extends VBox{
         nameProfessorLabel.getStyleClass().add("cardLabel");
         nameProfessorLabel.setFont( Font.font(FONT_SIZE) );
         nameProfessorLabel.setWrapText(true);
+        nameProfessorLabel.setAlignment(Pos.CENTER);
         Label staffNumberLabel = new Label( professor.getStaffNumber() );
         staffNumberLabel.setFont( Font.font(FONT_SIZE) );
         staffNumberLabel.setWrapText(true);

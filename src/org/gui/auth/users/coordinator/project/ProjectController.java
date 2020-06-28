@@ -123,6 +123,15 @@ public class ProjectController extends Controller implements Initializable {
         }
     }
 
+    private void addProjectInACardToScrollPane(Project project) {
+        ProjectCard card = new ProjectCard(project);
+        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
+            selectedProjectCard = card;
+            setProjectInformationToLabelsBySelectedProject( selectedProjectCard.getProject() );
+        });
+        projectsPane.getChildren().add(card);
+    }
+
     private void setProjectsFromDatabaseToScrollPane() {
         List<Project> projects = null;
         try {
@@ -136,15 +145,6 @@ public class ProjectController extends Controller implements Initializable {
                 addProjectInACardToScrollPane(project);
             }
         }
-    }
-
-    private void addProjectInACardToScrollPane(Project project) {
-        ProjectCard card = new ProjectCard(project);
-        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
-            selectedProjectCard = card;
-            setProjectInformationToLabelsBySelectedProject( selectedProjectCard.getProject() );
-        });
-        projectsPane.getChildren().add(card);
     }
 
     private void clearLabels() {

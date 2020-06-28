@@ -142,7 +142,8 @@ public class Auth {
     }
 
     private String getMacAddress() {
-        String macAddressEncrypted = Cryptography.cryptSHA2( NetworkAddress.getLocalAdress() );
+        String macAddress = NetworkAddress.getLocalAdress();
+        String macAddressEncrypted = Cryptography.cryptSHA2( (macAddress != null) ? macAddress : "" );
         return macAddressEncrypted;
     }
 

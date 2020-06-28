@@ -98,8 +98,10 @@ public class AddCompanyController extends ValidatorController implements Initial
     @FXML
     protected void saveButtonPressed(ActionEvent event) {
         if( verifyInputData() ) {
-            stage.close();
             addOrganizationToDatabase();
+            if(addOperationStatus) {
+                stage.close();
+            }
         }
     }
 

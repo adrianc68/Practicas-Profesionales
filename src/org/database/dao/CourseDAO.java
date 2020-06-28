@@ -33,7 +33,7 @@ public class CourseDAO implements ICourseDAO {
         int idCourse = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
-            String statement = "INSERT INTO COURSE(NRC, period, name) VALUES(?,?,?)";
+            String statement = "INSERT INTO Course(NRC, period, name) VALUES(?,?,?)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString( 1, course.getNRC() );
             preparedStatement.setString(2, course.getPeriod() );
@@ -64,7 +64,7 @@ public class CourseDAO implements ICourseDAO {
         int rowsAffected = 0;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
-            String statement = "DELETE FROM COURSE WHERE id_course = ?";
+            String statement = "DELETE FROM Course WHERE id_course = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setInt( 1, idCourse );
             rowsAffected = preparedStatement.executeUpdate();
@@ -87,15 +87,15 @@ public class CourseDAO implements ICourseDAO {
         Course course = null;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
-            String statement = "SELECT COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Course AS COUR WHERE COUR.id_course = (SELECT max(id_course) FROM COURSE)";
+            String statement = "SELECT COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Course AS COUR WHERE COUR.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             course = new Course();
-            course.setName(resultSet.getString("COUR.name"));
-            course.setPeriod(resultSet.getString("COUR.period"));
-            course.setNRC(resultSet.getString("COUR.NRC"));
-            course.setId(resultSet.getInt("COUR.id_course"));
+            course.setName( resultSet.getString("COUR.name") );
+            course.setPeriod( resultSet.getString("COUR.period") );
+            course.setNRC( resultSet.getString("COUR.NRC") );
+            course.setId( resultSet.getInt("COUR.id_course") );
             conn.commit();
         } catch (SQLException sqlException) {
             throw sqlException;

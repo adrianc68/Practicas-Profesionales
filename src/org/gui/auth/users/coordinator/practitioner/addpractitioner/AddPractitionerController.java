@@ -33,7 +33,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 
-
 public class AddPractitionerController extends ValidatorController implements Initializable {
     private boolean addOperationStatus;
     private Practitioner newPractitioner;
@@ -90,7 +89,7 @@ public class AddPractitionerController extends ValidatorController implements In
         if( verifyInputData() ) {
             stage.close();
             registerPractitioner();
-            if( addOperationStatus ) {
+            if(addOperationStatus) {
                 generateRandomPasswordToUser();
             }
         } else {

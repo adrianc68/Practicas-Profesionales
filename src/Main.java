@@ -7,7 +7,7 @@ import org.util.CSSProperties;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
        if( CSSProperties.readConfiguredAppProperties() ) {
             SelectThemeController selectThemeController = new SelectThemeController();
             selectThemeController.showStage();

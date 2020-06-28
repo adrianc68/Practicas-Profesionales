@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import de.jensd.fx.glyphs.octicons.OctIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootStage" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="809.0" prefWidth="1163.0" styleClass="background" stylesheets="@../../../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="628.0" prefWidth="983.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <right>
+            <VBox prefHeight="777.0" prefWidth="368.0" spacing="10.0" styleClass="boxBorder" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="33.0" prefWidth="400.0" styleClass="firstLevelLabel" text="Entregar actividad">
+                           <font>
+                              <Font name="Gill Sans" size="28.0" />
+                           </font>
+                        </Label>
+                        <Separator prefWidth="200.0" />
+                        <VBox alignment="CENTER_LEFT" prefHeight="76.0" prefWidth="336.0" spacing="5.0">
+                           <children>
+                              <Label styleClass="formLabel" text="RUTA DE ARCHIVO">
+                                 <graphic>
+                                    <MaterialDesignIconView fx:id="checkIconPath" glyphName="CHECK" size="15" />
+                                 </graphic>
+                              </Label>
+                              <HBox prefWidth="200.0" spacing="15.0">
+                                 <children>
+                                    <TextField fx:id="pathTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" prefWidth="241.0" promptText="Selecciona el archivo" styleClass="textfield">
+                                       <tooltip>
+                                          <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                                       </tooltip>
+                                    </TextField>
+                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectButtonPressed" prefHeight="46.0" prefWidth="82.0" styleClass="withBorderButton" text="Seleccionar archivo" textAlignment="CENTER" wrapText="true">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font></Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                           <children>
+                              <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#closeButtonPressed" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Cancelar">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <graphic>
+                                    <OctIconView glyphName="TRASHCAN" size="55" styleClass="firstLevelIcon" />
+                                 </graphic>
+                              </Button>
+                              <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#addDeliveryButtonPressed" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Evaluar">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <graphic>
+                                    <OctIconView glyphName="REPO_PUSH" size="55" styleClass="firstLevelIcon" />
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+               <BorderPane.margin>
+                  <Insets bottom="15.0" right="15.0" top="15.0" />
+               </BorderPane.margin>
+            </VBox>
+         </right>
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <StackPane alignment="TOP_CENTER" prefHeight="814.0" prefWidth="778.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="799.0" prefWidth="778.0" styleClass="boxBorder">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                        </VBox>
+                        <HBox fillHeight="false" maxHeight="-Infinity" prefHeight="58.0" prefWidth="748.0" styleClass="background" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </VBox.margin>
+                  </StackPane>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

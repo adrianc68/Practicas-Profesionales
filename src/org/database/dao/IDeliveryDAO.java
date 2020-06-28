@@ -14,7 +14,7 @@ public interface IDeliveryDAO {
      * @param delivery, idActivity
      * @return int representing the delivery's id
      */
-    int addDeliveryToActivity(Delivery delivery, int idActivity) throws SQLException;
+    int addDeliveryToActivity(Delivery delivery) throws SQLException;
 
     /***
      * Evaluate an activity in database.
@@ -27,6 +27,16 @@ public interface IDeliveryDAO {
      * @return boolean true if 1 o more than 1 rows are affected
      */
     boolean evaluateDeliveryOfActivity(int idDelivery, float score, String observation) throws SQLException;
+
+    /***
+     * Remove an delivery in database.
+     * <p>
+     * This method remove an activity saved in database. It's used by professor.
+     * </p>
+     * @param idDelivery delivery's id to remove
+     * @return boolean true if delivery was removed and false if was not deleted.
+     */
+    boolean removeDeliveryById(int idDelivery) throws SQLException;
 
     /***
      * Get all deliveries from activities from database.

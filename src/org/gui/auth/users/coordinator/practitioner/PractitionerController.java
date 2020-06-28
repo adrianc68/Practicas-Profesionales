@@ -39,7 +39,6 @@ public class PractitionerController extends Controller implements Initializable 
     public void initialize(URL location, ResourceBundle resources) {
         setStyleClass(rootStage, getClass().getResource("../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
         setPractitionerToScrollPaneFromDatabase();
-
     }
 
     public void showStage() {
@@ -139,9 +138,9 @@ public class PractitionerController extends Controller implements Initializable 
 
     private void setPractitionerToScrollPaneFromDatabase() {
         try {
-            List<Practitioner> practitioners = new PractitionerDAO().getAllPractitionersFromLastCourse();
-            if (practitioners != null) {
-                for (Practitioner practitioner : practitioners) {
+            List<Practitioner> practitionersList = new PractitionerDAO().getAllPractitionersFromLastCourse();
+            if (practitionersList != null) {
+                for (Practitioner practitioner : practitionersList) {
                     int idPractitioner = practitioner.getId();
                     practitioner.setProject( new ProjectDAO().getAssignedProjectByPractitionerID(idPractitioner) );
                     practitioner.setProfessor( new ProfessorDAO().getAssignedProfessorByPractitionerID(idPractitioner) );
@@ -152,18 +151,6 @@ public class PractitionerController extends Controller implements Initializable 
         } catch (SQLException sqlException) {
             OperationAlert.showLostConnectionAlert();
             Logger.getLogger( PractitionerController.class.getName() ).log(Level.WARNING, null, sqlException);
-        }
-    }
-
-    private void confirmationProject(Project projectToAssign, PractitionerCard card) {
-        AssignProjectController assignProjectController = new AssignProjectController();
-        assignProjectController.setProject(projectToAssign);
-        assignProjectController.setPractitioner( card.getPractitioner() );
-        assignProjectController.showStage();
-        if ( assignProjectController.getAssignationOperationStatus() ) {
-            card.getPractitioner().setProject(projectToAssign);
-            card.repaint();
-            card.addAssignButton();
         }
     }
 
@@ -179,5 +166,19 @@ public class PractitionerController extends Controller implements Initializable 
         });
         practitionersPane.getChildren().add(card);
     }
+
+    private void confirmationProject(Project projectToAssign, PractitionerCard card) {
+        AssignProjectController assignProjectController = new AssignProjectController();
+        assignProjectController.setProject(projectToAssign);
+        assignProjectController.setPractitioner( card.getPractitioner() );
+        assignProjectController.showStage();
+        if ( assignProjectController.getAssignationOperationStatus() ) {
+            card.getPractitioner().setProject(projectToAssign);
+            card.repaint();
+            card.addAssignButton();
+        }
+    }
+
+
 
 }

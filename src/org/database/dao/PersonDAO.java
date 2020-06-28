@@ -117,7 +117,6 @@ public class PersonDAO implements IPersonDAO {
         return course;
     }
 
-    // BAD USER MANAGER ?
     private Person getInstanceOfResultSet(ResultSet resultSet) throws SQLException {
         Person person = new Person();
         if( resultSet.getString("CORD.cubicle") != null) {

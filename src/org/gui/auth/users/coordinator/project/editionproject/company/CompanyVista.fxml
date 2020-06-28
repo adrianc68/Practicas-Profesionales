@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootStage" minWidth="550.0" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="626.0" prefWidth="825.0" styleClass="background" stylesheets="@../../../../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootStage" minWidth="550.0" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="626.0" prefWidth="836.0" styleClass="background" stylesheets="@../../../../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="1.0" layoutY="20.0" prefHeight="30.0" prefWidth="175.0" styleClass="windowTitle" text="Organizaciones">
          <padding>

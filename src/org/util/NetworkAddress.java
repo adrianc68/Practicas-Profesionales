@@ -1,5 +1,7 @@
 package org.util;
 
+import org.gui.auth.resources.alerts.OperationAlert;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -15,22 +17,22 @@ public class NetworkAddress {
      * </p>
      * @return
      */
-    public static String getLocalAdress(){
+    public static String getLocalAdress() {
         String macAddress = null;
         try {
             InetAddress ip = InetAddress.getLocalHost();
             NetworkInterface network = NetworkInterface.getByInetAddress(ip);
             byte[] mac = network.getHardwareAddress();
             StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < mac.length; i++) {
-                // T-O Ternary Operator here!
-                stringBuilder.append( String.format("%02X%s", mac[i], (i < mac.length - 1) ? ":" : "") );
+            if( mac != null ) {
+                for (int i = 0; i < mac.length; i++) {
+                    // T-O Ternary Operator here!
+                    stringBuilder.append( String.format("%02X%s", mac[i], (i < mac.length - 1) ? ":" : "") );
+                }
             }
             macAddress = stringBuilder.toString();
-        } catch (UnknownHostException e) {
+        } catch (UnknownHostException | SocketException e) {
             Logger.getLogger( NetworkAddress.class.getName() ).log(Level.SEVERE, null, e);
-        } catch (SocketException e){
-            Logger.getLogger( NetworkAddress.class.getName() ) .log(Level.SEVERE, null, e);
         }
         return macAddress;
     }

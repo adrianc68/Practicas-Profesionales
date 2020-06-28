@@ -90,9 +90,11 @@ public class RegisterProjectController extends Controller implements Initializab
     @FXML
     protected void nextButtonPressed(ActionEvent event) {
         if(registrationPane.getChildren().get(0) == thirdScreen) {
-            if(screenController.verifyInputData() ) {
+            if( screenController.verifyInputData() ) {
                 addProjectToDatabase();
-                closeButton.fire();
+                if( addOperationStatus) {
+                    stage.close();
+                }
             }
         } else if(registrationPane.getChildren().get(0) == secondScreen) {
             thirdLoaderRadioButton.fire();
@@ -130,17 +132,19 @@ public class RegisterProjectController extends Controller implements Initializab
 
     private void addProjectToDatabase() {
         newProject = screenController.getNewProject();
-        try {
-            newProject.setId( new ProjectDAO().addProject(newProject) );
-        } catch (SQLException sqlException) {
-            OperationAlert.showLostConnectionAlert();
-            Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
-        }
-        addOperationStatus = (newProject.getId() != 0);
-        if(addOperationStatus) {
-            String title = "Se agregó el proyecto.";
-            String contentText = "¡Se ha agregado al sistema el nuevo proyecto.";
-            OperationAlert.showSuccessfullAlert(title, contentText);
+        if( newProject.getOrganization() != null ) {
+            try {
+                newProject.setId( new ProjectDAO().addProject(newProject) );
+            } catch (SQLException sqlException) {
+                OperationAlert.showLostConnectionAlert();
+                Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+            }
+            addOperationStatus = (newProject.getId() != 0);
+            if(addOperationStatus) {
+                String title = "Se agregó el proyecto.";
+                String contentText = "¡Se ha agregado al sistema el nuevo proyecto.";
+                OperationAlert.showSuccessfullAlert(title, contentText);
+            }
         }
     }
 

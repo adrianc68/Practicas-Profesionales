@@ -16,4 +16,13 @@ public class GetPractitionerTest {
         assertEquals(expected,actual);
     }
 
+    @Test
+    public void getAllPractitionersByProfessor() throws SQLException {
+        int idProfessor = 5;
+        List<Practitioner> practitionerList = new PractitionerDAO().getAllPractitionersByProfessor(idProfessor);
+        int expected = 1;
+        int actual = practitionerList.size();
+        assertEquals(expected, actual);
+    }
+
 }

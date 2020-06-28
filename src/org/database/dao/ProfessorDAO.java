@@ -145,7 +145,7 @@ public class ProfessorDAO implements IProfessorDAO {
     public Professor getAssignedProfessorByPractitionerID(int idPractitioner) throws SQLException {
         Professor professor = null;
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN Practitioner AS PRAC ON PROF.id_person = PRAC.id_professor AND PRAC.id_person = ? INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course";
+            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN Practitioner AS PRAC ON PROF.id_person = PRAC.id_professor AND PRAC.id_person = ? INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
             PreparedStatement queryProfessor = conn.prepareStatement(statement);
             queryProfessor.setInt(1, idPractitioner);
             ResultSet resultSet = queryProfessor.executeQuery();
@@ -183,7 +183,7 @@ public class ProfessorDAO implements IProfessorDAO {
     public List<Professor> getAllProfessorsFromLastCourse() throws SQLException {
         List<Professor> professors = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
+            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement queryProfessors = conn.prepareStatement(statement);
             ResultSet resultSet = queryProfessors.executeQuery();
             while( resultSet.next() ) {
@@ -221,7 +221,7 @@ public class ProfessorDAO implements IProfessorDAO {
     public List<Professor> getAllProfessorsByCourseID(int idCourse) throws SQLException {
         List<Professor> professors = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = ?";
+            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course AND COUR.id_course = ?";
             PreparedStatement queryProfessors = conn.prepareStatement(statement);
             queryProfessors.setInt(1, idCourse);
             ResultSet resultSet = queryProfessors.executeQuery();
@@ -260,7 +260,7 @@ public class ProfessorDAO implements IProfessorDAO {
     public List<Professor> getAllProfessors() throws SQLException {
         List<Professor> professors = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN PERSON AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN COURSE AS COUR ON PERSPROF.id_course = COUR.id_course";
+            String statement = "SELECT PROF.id_person, PROF.cubicle, PROF.staff_number, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PERSPROF.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Professor AS PROF INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
             PreparedStatement queryProfessors = conn.prepareStatement(statement);
             ResultSet resultSet = queryProfessors.executeQuery();
             while( resultSet.next() ) {

@@ -82,6 +82,46 @@ public class PractitionerDAO implements IPractitionerDAO {
     }
 
     /***
+     * Get a Practitioner by a specific delivery.
+     * <p>
+     * This method it's used by Professor when he needs to look a delivery.
+     * </p>
+     * @param idDelivery to get the practitioner
+     * @return Practitioner
+     * @throws SQLException
+     */
+    @Override
+    public Practitioner getPractitionerByDelivery(int idDelivery) throws SQLException {
+        Practitioner practitioner = null;
+        try(Connection conn = database.getConnection() ) {
+            String statement = "SELECT PERS.name, PERS.phoneNumber, PERS.email, PERS.activity_state, PRAC.id_person,PRAC.enrollment, COUR.id_course, COUR.NRC, COUR.name, COUR.period FROM Delivery AS DEL INNER JOIN Person AS PERS ON PERS.id_person = DEL.id_practitioner and DEL.id_delivery = ? INNER JOIN Course AS COUR ON COUR.id_course = PERS.id_course INNER JOIN Practitioner AS PRAC ON PRAC.id_person = DEL.id_practitioner";
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idDelivery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if( resultSet.next() ) {
+                Course course = new Course();
+                course.setId( resultSet.getInt("COUR.id_course") ) ;
+                course.setName( resultSet.getString("COUR.name") );
+                course.setNRC( resultSet.getString("COUR.NRC") );
+                course.setPeriod( resultSet.getString("COUR.period") );
+                practitioner = new Practitioner();
+                practitioner.setName( resultSet.getString("PERS.name") );
+                practitioner.setPhoneNumber( resultSet.getString("PERS.phoneNumber") );
+                practitioner.setEmail( resultSet.getString("PERS.email") );
+                practitioner.setActivityState( ActivityState.valueOf( resultSet.getString("PERS.activity_state").toUpperCase() ) );
+                practitioner.setId( resultSet.getInt("PRAC.id_person") );
+                practitioner.setEnrollment( resultSet.getString("PRAC.enrollment") );
+                practitioner.setCourse(course);
+                practitioner.setProfessor(null);
+                practitioner.setProject(null);
+            }
+        } catch (SQLException sqlException) {
+            throw sqlException;
+        }
+        return practitioner;
+    }
+
+    /***
      * Get all practitioners and their assigned projects from the actual/last course
      * <p>
      * This method is used by the coordinator and professor.
@@ -98,7 +138,7 @@ public class PractitionerDAO implements IPractitionerDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
             while( resultSet.next() ) {
                 Course course = new Course();
-                course.setId( resultSet.getInt("COUR.id_course")) ;
+                course.setId( resultSet.getInt("COUR.id_course") ) ;
                 course.setName( resultSet.getString("COUR.name") );
                 course.setNRC( resultSet.getString("COUR.NRC") );
                 course.setPeriod( resultSet.getString("COUR.period") );
@@ -107,6 +147,49 @@ public class PractitionerDAO implements IPractitionerDAO {
                 practitioner.setPhoneNumber( resultSet.getString("PERS.phoneNumber") );
                 practitioner.setEmail( resultSet.getString("PERS.email") );
                 practitioner.setActivityState( ActivityState.valueOf( resultSet.getString("PERS.activity_state").toUpperCase() ) );
+                practitioner.setId( resultSet.getInt("PRAC.id_person") );
+                practitioner.setEnrollment( resultSet.getString("PRAC.enrollment") );
+                practitioner.setCourse(course);
+                List<Project> selectedProjects = new ArrayList<>();
+                List<Delivery> deliveries = new ArrayList<>();
+                practitioner.setSelectedProjects(selectedProjects);
+                practitioner.setDeliveries(deliveries);
+                practitioner.setProfessor(null);
+                practitioner.setProject(null);
+                practitioners.add(practitioner);
+            }
+        } catch (SQLException sqlException) {
+            throw sqlException;
+        }
+        return practitioners;
+    }
+
+    /***
+     * Get all practitioners by a Professor
+     * <p>
+     * This method is used by the the professor when he needs to look
+     * who is assigned to him.
+     * </p>
+     * @return List<Practitioner> a list with practitioners assigned to professor.
+     */
+    public List<Practitioner> getAllPractitionersByProfessor(int idProfessor) throws SQLException {
+        List<Practitioner> practitioners = new ArrayList<>();
+        try(Connection conn = database.getConnection() ) {
+            String statement = "SELECT PRAC.id_person, PRAC.enrollment, PERSPRAC.name, PERSPRAC.phoneNumber, PERSPRAC.email, PERSPRAC.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name from Practitioner AS PRAC INNER JOIN Professor AS PROF ON PRAC.id_professor = PROF.id_person AND PROF.id_person = ? INNER JOIN Person AS PERSPRAC ON PERSPRAC.id_person = PRAC.id_person INNER JOIN Course AS COUR ON PERSPRAC.id_course = COUR.id_course";
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idProfessor);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while( resultSet.next() ) {
+                Course course = new Course();
+                course.setId( resultSet.getInt("COUR.id_course") ) ;
+                course.setName( resultSet.getString("COUR.name") );
+                course.setNRC( resultSet.getString("COUR.NRC") );
+                course.setPeriod( resultSet.getString("COUR.period") );
+                Practitioner practitioner = new Practitioner();
+                practitioner.setName( resultSet.getString("PERSPRAC.name") );
+                practitioner.setPhoneNumber( resultSet.getString("PERSPRAC.phoneNumber") );
+                practitioner.setEmail( resultSet.getString("PERSPRAC.email") );
+                practitioner.setActivityState( ActivityState.valueOf( resultSet.getString("PERSPRAC.activity_state").toUpperCase() ) );
                 practitioner.setId( resultSet.getInt("PRAC.id_person") );
                 practitioner.setEnrollment( resultSet.getString("PRAC.enrollment") );
                 practitioner.setCourse(course);

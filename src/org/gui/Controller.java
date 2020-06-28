@@ -13,6 +13,11 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/***
+ * You should use this class for every class which it will works like a
+ * GUI for an user. If you will to validate some inputs then you will prefer use
+ * ValidatorController which extends of this class.
+ */
 public abstract class Controller {
     protected double mousePositionOnX;
     protected double mousePositionOnY;

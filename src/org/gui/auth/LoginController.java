@@ -10,6 +10,7 @@ import org.domain.Practitioner;
 import org.domain.Professor;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.users.professor.ProfessorController;
 import org.gui.auth.util.recoverpassword.RecoveryPasswordController;
 import org.util.Auth;
 import org.util.CSSProperties;
@@ -107,7 +108,8 @@ public class LoginController extends Controller implements Initializable {
         Person user = Auth.getInstance().getCurrentUser();
         if (user != null) {
             if (user instanceof Professor) {
-                System.out.println("Agregar ventana profesor");
+                ProfessorController professorController = new ProfessorController();
+                professorController.showStage();
             } else if (user instanceof Coordinator) {
                 CoordinatorController coordinatorController = new CoordinatorController();
                 coordinatorController.showStage();
