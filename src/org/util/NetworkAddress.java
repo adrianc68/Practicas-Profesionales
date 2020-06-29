@@ -1,7 +1,5 @@
 package org.util;
 
-import org.gui.auth.resources.alerts.OperationAlert;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -10,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class NetworkAddress {
+
     /***
      * This method return the actual MacAddress
      * <p>
