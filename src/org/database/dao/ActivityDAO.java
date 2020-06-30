@@ -94,7 +94,7 @@ public class ActivityDAO implements IActivityDAO {
                 Activity activity = new Activity();
                 activity.setName(resultSet.getString( "ACT.name") );
                 activity.setDescription(resultSet.getString( "ACT.description") );
-                activity.setDeadline( resultSet.getTimestamp( "ACT.deadline") );
+                activity.setDeadline( resultSet.getString( "ACT.deadline") );
                 activity.setId( ( resultSet.getInt("ACT.id_activity") ) );
                 activity.setDeliveries(null);
                 activity.setProfessor(null);
@@ -126,7 +126,7 @@ public class ActivityDAO implements IActivityDAO {
                 Activity activity = new Activity();
                 activity.setName( resultSet.getString("ACT.name") );
                 activity.setDescription( resultSet.getString("ACT.description") );
-                activity.setDeadline( resultSet.getTimestamp("ACT.deadline") );
+                activity.setDeadline( resultSet.getString("ACT.deadline") );
                 activity.setId( ( resultSet.getInt("ACT.id_activity") ) );
                 activity.setDeliveries(null);
                 activity.setProfessor(null);

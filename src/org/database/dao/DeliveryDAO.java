@@ -189,7 +189,7 @@ public class DeliveryDAO implements IDeliveryDAO {
                 professor.setStaffNumber(resultSet.getString( "PROF.staff_number") );
                 professor.setCubicle(resultSet.getInt( "PROF.cubicle") );
                 Activity activity = new Activity();
-                activity.setDeadline( resultSet.getTimestamp("ACT.deadline") );
+                activity.setDeadline( resultSet.getString("ACT.deadline") );
                 activity.setDescription(resultSet.getString( "ACT.description") );
                 activity.setId(resultSet.getInt( "ACT.id_activity") );
                 activity.setName(resultSet.getString( "ACT.name") );

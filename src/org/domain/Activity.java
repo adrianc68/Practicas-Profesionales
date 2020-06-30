@@ -1,13 +1,12 @@
 package org.domain;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public class Activity {
     private int id;
     private String name;
     private String description;
-    private Timestamp deadline;
+    private String deadline;
     private Professor professor;
     private List<Delivery> deliveries;
 
@@ -35,11 +34,11 @@ public class Activity {
         this.description = description;
     }
 
-    public Timestamp getDeadline() {
+    public String getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Timestamp deadline) {
+    public void setDeadline(String deadline) {
         this.deadline = deadline;
     }
 

@@ -109,12 +109,11 @@ public class AddActivityController extends ValidatorController implements Initia
         secondSpinner.setValueFactory( new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59,0,1) );
     }
 
-    private Timestamp getTimestampFromFields() {
+    private String getTimestampFromFields() {
         String dateInput = deadlineDatePicker.getValue().toString();
         String timeInput = hourSpinner.getValue().toString() + ":"+ minuteSpinner.getValue().toString() +":" + secondSpinner.getValue().toString();
         String dateTime = dateInput + " " + timeInput;
-        Timestamp timestamp = DateFormatter.getTimeStampByString(dateTime);
-        return timestamp;
+        return dateTime;
     }
 
     private void registerActivity() {

@@ -41,7 +41,7 @@ public class Validator {
     public static final String PERIOD_PATTERN = "(([A-Z]{3}\\ [0-9]{4})\\ \\-\\ ([A-Z]{3}\\ [0-9]{4}))";
     public static final String DATE_PATTERN = "(([0-9]){1,2}/([0-9]){1,2}/([0-9]){4})";
     public static final String TIME_PATTERN = "([0-9]{1,2})";
-    public static final String PATH_PATTERN = "([a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑí\\s\\_:`´,.;/\\\\]{2,})";
+    public static final String PATH_PATTERN = "([a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑíñ\\-\\s\\_:`´,.;/\\\\]{2,})";
 
     /***
      * This method search for a match with a pattern
