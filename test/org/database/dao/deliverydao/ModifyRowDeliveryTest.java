@@ -44,7 +44,7 @@ public class ModifyRowDeliveryTest {
         activity.setDescription("Realizar los diagramas de secuencia");
         activity.setName("RL04 Lectura de comprensión del capitulo IX de Wiegers RL05 ");
         activity.setDeliveries(null);
-        activity.setDeadline( DateFormatter.getTimeStampByString("2021-06-26 00:30:01") );
+        activity.setDeadline("2049-06-26 23:59:32");
         delivery.setActivity(activity);
         Practitioner practitioner = new Practitioner();
         practitioner.setEnrollment("S19023349");

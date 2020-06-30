@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    GetAllDeliveryTest.class,
+    GetDeliveryTest.class,
     ModifyRowDeliveryTest.class
 })
 public class DeliveryDAOSuiteTest {

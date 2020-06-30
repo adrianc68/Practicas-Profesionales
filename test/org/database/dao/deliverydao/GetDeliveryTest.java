@@ -5,9 +5,11 @@ import org.domain.Delivery;
 import org.junit.Test;
 import java.sql.SQLException;
 import java.util.List;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GetAllDeliveryTest {
+public class GetDeliveryTest {
 
     @Test
     public void getAllDeliveriesByActivity() throws SQLException {
@@ -39,6 +41,22 @@ public class GetAllDeliveryTest {
         int expected = 0;
         int actual = deliveryList.size();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getDeliveryByActivityAndPractitioner() throws SQLException {
+        int idPractitioner = 9;
+        int idActivity = 9;
+        Delivery delivery = new DeliveryDAO().getDeliveryByActivityAndPractitioner(idActivity, idPractitioner);
+        assertNotNull(delivery);
+    }
+
+    @Test
+    public void getDeliveryByNoexistingActivityAndPractitioner() throws SQLException {
+        int idPractitioner = 999;
+        int idActivity = 9999;
+        Delivery delivery = new DeliveryDAO().getDeliveryByActivityAndPractitioner(idActivity, idPractitioner);
+        assertNull(delivery);
     }
 
 }

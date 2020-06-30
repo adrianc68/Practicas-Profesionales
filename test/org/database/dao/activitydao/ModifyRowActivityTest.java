@@ -41,7 +41,7 @@ public class ModifyRowActivityTest {
         activity.setDescription("Realizar las actividades de la página 350 y 348");
         activity.setName("RL06 Lectura de comprensión del capitulo VIII de Wiegers");
         activity.setDeliveries(null);
-        activity.setDeadline( DateFormatter.getTimeStampByString("2020-06-26 12:30:00") );
+        activity.setDeadline("2020-06-26 12:30:00");
         idActivity = new ActivityDAO().addActivity(activity);
         activity.setId(idActivity);
         int unexpected = 0;
@@ -70,7 +70,7 @@ public class ModifyRowActivityTest {
         activity.setDescription("Realizar las actividades de la página 350 y 348");
         activity.setName("RL06 Lectura de comprensión del capitulo VIII de Wiegers RL06 Lectura de comprensión del capitulo VIII de Wiegers RL06 Lectura de comprensión del capitulo VIII de Wiegers RL06 Lectura de comprensión del capitulo VIII de Wiegers RL06 Lectura de comprensión del capitulo VIII de Wiegers ");
         activity.setDeliveries(null);
-        activity.setDeadline( DateFormatter.getTimeStampByString("2020-06-26 12:30:00") );
+        activity.setDeadline("2020-06-26 12:30:00");
         Class<MysqlDataTruncation> expectedException = MysqlDataTruncation.class;
         Class<SQLException> actualException = (Class<SQLException>) assertThrows( SQLException.class, () -> new ActivityDAO().addActivity(activity) ).getClass();
         assertEquals(expectedException, actualException);
