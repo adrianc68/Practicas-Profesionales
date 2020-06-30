@@ -81,6 +81,14 @@ public class DeliveryDAO implements IDeliveryDAO {
         return  rowsAffected > 0;
     }
 
+    /***
+     * Remove an delivery in database.
+     * <p>
+     * This method remove an activity saved in database. It's used by professor.
+     * </p>
+     * @param idDelivery delivery's id to remove
+     * @return boolean true if delivery was removed and false if was not deleted.
+     */
     @Override
     public boolean removeDeliveryById(int idDelivery) throws SQLException {
         int rowsAffected = 0;
@@ -95,6 +103,40 @@ public class DeliveryDAO implements IDeliveryDAO {
             throw sqlException;
         }
         return  rowsAffected > 0;
+    }
+
+    /***
+     * Get a practitioner's delivery from database.
+     * <p>
+     * This method get the actual delivery from a activity.
+     * It can be used when you need to replace a delivery.
+     * </p>
+     * @param idActivity activity's id to get the delivery
+     * @param idPractitioner practitioner's id to get the delivery
+     * @return Delivery representing the actual delivery of practitioner
+     */
+    @Override
+    public Delivery getDeliveryByActivityAndPractitioner(int idActivity, int idPractitioner) throws SQLException {
+        Delivery delivery = null;
+        try(Connection conn = database.getConnection() ) {
+            conn.setAutoCommit(false);
+            String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path FROM Delivery AS DEL WHERE id_activity = ? AND id_practitioner = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idActivity);
+            preparedStatement.setInt(2, idPractitioner);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if ( resultSet.next() ) {
+                delivery = new Delivery();
+                delivery.setObservation( resultSet.getString("DEL.observation") );
+                delivery.setScore( resultSet.getFloat("DEl.score") );
+                delivery.setId( resultSet.getInt("DEL.id_delivery") );
+                delivery.setDocumentPath( resultSet.getString("DEL.file_path") );
+                conn.commit();
+            }
+        } catch (SQLException sqlException) {
+            throw sqlException;
+        }
+        return delivery;
     }
 
     /***

@@ -19,7 +19,7 @@ public class Validator {
     public static final int NUMBER_LENGTH = 11;
     public static final int RECOVERY_CODE_LENGTH = 8;
     public static final int TIME_LENGTH = 10;
-    public static final int PATH_LENGTH = 200;
+    public static final int PATH_LENGTH = 550;
     public static final String NAME_AND_NUMBERS_PATTERN = "([A-Za-z0-9.-áéíóúüÁÉÍÓÚÜñÑ]{1,}(\\ [A-Za-z0-9.-áéíóúüÁÉÍÓÚÜñÑ]{1,})*)";
     public static final String RECOVERY_CODE_PATTERN = "[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ]{8}";
     public static final String STAFF_NUMBER_PATTERN = "([a-zA-Z0-9\\-]{3,})";
@@ -41,7 +41,7 @@ public class Validator {
     public static final String PERIOD_PATTERN = "(([A-Z]{3}\\ [0-9]{4})\\ \\-\\ ([A-Z]{3}\\ [0-9]{4}))";
     public static final String DATE_PATTERN = "(([0-9]){1,2}/([0-9]){1,2}/([0-9]){4})";
     public static final String TIME_PATTERN = "([0-9]{1,2})";
-    public static final String PATH_PATTERN = "([a-zA-Z0-9_.-/\\()@%&:;\'\"]{2,})";
+    public static final String PATH_PATTERN = "([a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑí\\s\\_:`´,.;/\\\\]{2,})";
 
     /***
      * This method search for a match with a pattern

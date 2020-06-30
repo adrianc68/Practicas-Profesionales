@@ -5,6 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
@@ -12,17 +13,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootStage" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="809.0" prefWidth="1163.0" styleClass="background" stylesheets="@../../../../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootStage" maxHeight="-Infinity" minHeight="-Infinity" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="809.0" prefWidth="1238.0" styleClass="background" stylesheets="@../../../../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="628.0" prefWidth="983.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <right>
             <VBox prefHeight="777.0" prefWidth="368.0" spacing="10.0" styleClass="boxBorder" BorderPane.alignment="CENTER">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0" VBox.vgrow="ALWAYS">
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="33.0" prefWidth="400.0" styleClass="firstLevelLabel" text="Evaluar actividad">
                            <font>
@@ -65,7 +65,7 @@
                                     <Insets />
                                  </opaqueInsets>
                                  <graphic>
-                                    <OctIconView glyphName="REPO" size="55" styleClass="firstLevelIcon" />
+                                    <OctIconView glyphName="NO_NEWLINE" size="55" styleClass="firstLevelIcon" />
                                  </graphic>
                               </Button>
                               <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#evaluateButtonPressed" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Evaluar">
@@ -73,11 +73,12 @@
                                     <Insets />
                                  </opaqueInsets>
                                  <graphic>
-                                    <OctIconView glyphName="REPO" size="55" styleClass="firstLevelIcon" />
+                                    <OctIconView glyphName="CHECKLIST" size="55" styleClass="firstLevelIcon" />
                                  </graphic>
                               </Button>
                            </children>
                         </HBox>
+                        <Label alignment="CENTER" onMousePressed="#downloadDeliveryFileToSystem" prefHeight="17.0" prefWidth="177.0" styleClass="recoveryLabel" text="Descargar archivo" textAlignment="CENTER" textFill="#2c50ab" underline="true" wrapText="true" />
                      </children>
                   </VBox>
                </children>
@@ -92,19 +93,14 @@
          <center>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <StackPane alignment="TOP_CENTER" prefHeight="814.0" prefWidth="778.0">
-                     <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="799.0" prefWidth="778.0" styleClass="background">
-                           <padding>
-                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                           </padding>
-                        </VBox>
-                        <HBox fillHeight="false" maxHeight="-Infinity" prefHeight="58.0" prefWidth="748.0" styleClass="background" />
-                     </children>
+                  <ScrollPane prefHeight="795.0" prefWidth="911.0" styleClass="scrollPane">
+                     <content>
+                        <AnchorPane fx:id="pdfDisplayerAnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="772.0" prefWidth="818.0" />
+                     </content>
                      <VBox.margin>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </VBox.margin>
-                  </StackPane>
+                  </ScrollPane>
                </children>
             </VBox>
          </center>

@@ -1,7 +1,6 @@
 package org.database.dao;
 
 import org.domain.Delivery;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -37,6 +36,18 @@ public interface IDeliveryDAO {
      * @return boolean true if delivery was removed and false if was not deleted.
      */
     boolean removeDeliveryById(int idDelivery) throws SQLException;
+
+    /***
+     * Get a practitioner's delivery from database.
+     * <p>
+     * This method get the actual delivery from a activity.
+     * It can be used when you need to replace a delivery.
+     * </p>
+     * @param idActivity activity's id to get the delivery
+     * @param idPractitioner practitioner's id to get the delivery
+     * @return Delivery representing the actual delivery of practitioner
+     */
+    Delivery getDeliveryByActivityAndPractitioner(int idActivity, int idPractitioner) throws SQLException;
 
     /***
      * Get all deliveries from activities from database.

@@ -20,6 +20,7 @@ import org.util.CSSProperties;
 import org.util.PDFViewer;
 import org.util.SwingToFX;
 import org.util.Validator;
+import org.util.ftp.FTPConnection;
 import javax.swing.JPanel;
 import java.io.File;
 import java.net.URL;
@@ -33,8 +34,11 @@ import java.util.logging.Logger;
 
 public class AddDeliveryController extends ValidatorController implements Initializable {
     private boolean addOperationStatus;
+    private String fileDirectory;
+    private File selectedFile;
     private Activity activity;
     private Practitioner practitioner;
+    private Delivery actualDelivery;
     @FXML private AnchorPane rootStage;
     @FXML private MaterialDesignIconView checkIconPath;
     @FXML private TextField pathTextField;
@@ -44,6 +48,7 @@ public class AddDeliveryController extends ValidatorController implements Initia
     public void initialize(URL location, ResourceBundle resources) {
         super.setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
         initValidatorToTextFields();
+        setExistingDeliveryToActivity();
     }
 
     public void showStage() {
@@ -74,26 +79,22 @@ public class AddDeliveryController extends ValidatorController implements Initia
     @FXML
     protected void addDeliveryButtonPressed(ActionEvent event) {
         if( verifyInputData() ) {
-            addDelivery();
-            stage.close();
-            if(addOperationStatus) {
-                showSuccessfullAlert();
-            }
+                addDelivery( selectedFile );
+                if(addOperationStatus) {
+                    stage.close();
+                    showSuccessfullAlert();
+                }
         }
     }
 
     @FXML
     protected void selectButtonPressed(ActionEvent event) {
         showFileChooser();
-        if( isFileChoosenAPDF( pathTextField.getText() ) ) {
+        if( isFileChoosenPDF( pathTextField.getText() ) ) {
             showPDFInComponent();
         } else {
             clearFileSelection();
         }
-    }
-
-    private void clearFileSelection() {
-        pdfDisplayerAnchorPane.getChildren().clear();
     }
 
     private void showSuccessfullAlert() {
@@ -102,19 +103,18 @@ public class AddDeliveryController extends ValidatorController implements Initia
         OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
+    private void clearFileSelection() {
+        pdfDisplayerAnchorPane.getChildren().clear();
+    }
+
     private void showFileChooser() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona el archivo a subir");
-        File selectedDirectory = fileChooser.showOpenDialog(stage);
-        if(selectedDirectory != null ) {
-            pathTextField.setText( selectedDirectory.getAbsolutePath() );
+        selectedFile = fileChooser.showOpenDialog(stage);
+        fileDirectory = practitioner.getName() + ":" + activity.getName() + ":" + activity.getId() + ":" + selectedFile.getName();
+        if(selectedFile != null ) {
+            pathTextField.setText( selectedFile.getAbsolutePath() );
         }
-    }
-
-    private boolean isFileChoosenAPDF(String path) {
-        String fileExtension = path.substring( path.length() - 4 );
-        boolean isPDF = fileExtension.equals(".pdf");
-        return isPDF;
     }
 
     private void showPDFInComponent() {
@@ -125,20 +125,56 @@ public class AddDeliveryController extends ValidatorController implements Initia
         pdfDisplayerAnchorPane.getChildren().add( node );
     }
 
-    private void addDelivery() {
+    private boolean isFileChoosenPDF(String path) {
+        boolean isPDF = false;
+        int extensionLength = 4;
+        if( path.length() > extensionLength ) {
+            String fileExtension = path.substring( path.length() - extensionLength );
+            isPDF = fileExtension.equals(".pdf");
+        }
+        return isPDF;
+    }
+
+    private void addDelivery(File file) {
         Delivery delivery = new Delivery();
-        delivery.setPractitioner(practitioner);
-        delivery.setActivity(activity);
-        delivery.setDocumentPath( pathTextField.getText() );
-        delivery.setObservation( null);
-        delivery.setScore(0);
-        try {
-            delivery.setId( new DeliveryDAO().addDeliveryToActivity( delivery ) );
-        } catch (SQLException e) {
-            OperationAlert.showSuccessfullAlert( "¡Error!", e.getMessage() );
-            Logger.getLogger( AddDeliveryController.class.getName() ).log(Level.WARNING, null, e);
+        if ( saveFileInServer(file) ) {
+            delivery.setPractitioner(practitioner);
+            delivery.setActivity(activity);
+            delivery.setDocumentPath( fileDirectory );
+            delivery.setObservation(null);
+            delivery.setScore(0);
+            try {
+                delivery.setId( new DeliveryDAO().addDeliveryToActivity(delivery) );
+            } catch (SQLException e) {
+                OperationAlert.showSuccessfullAlert( "¡Error!", e.getMessage() );
+                Logger.getLogger( AddDeliveryController.class.getName() ).log(Level.WARNING, null, e);
+            }
+            removeOldDeliveryFromFTP();
         }
         addOperationStatus = ( delivery.getId() != 0);
+    }
+
+    private boolean saveFileInServer(File file) {
+        FTPConnection ftpConnection = new FTPConnection();
+        boolean isFileSaved = ftpConnection.uploadFile( file, fileDirectory );
+        return isFileSaved;
+    }
+
+    private void setExistingDeliveryToActivity() {
+        if( activity != null && practitioner != null ) {
+            try {
+                actualDelivery = new DeliveryDAO().getDeliveryByActivityAndPractitioner( activity.getId(), practitioner.getId() );
+            } catch (SQLException e) {
+                Logger.getLogger( AddDeliveryController.class.getName() ).log(Level.WARNING, null, e);
+            }
+        }
+    }
+
+    private void removeOldDeliveryFromFTP() {
+        if( actualDelivery != null ) {
+            FTPConnection ftpConnection = new FTPConnection();
+            ftpConnection.deleteFile( actualDelivery.getDocumentPath() );
+        }
     }
 
     private void initValidatorToTextFields() {

@@ -36,6 +36,7 @@ public class FTPProperties {
             propertiesMap.put( "ftp.password", properties.getProperty("ftp.password") );
             propertiesMap.put( "ftp.port", properties.getProperty("ftp.port") );
             propertiesMap.put( "ftp.serverName", properties.getProperty("ftp.serverName") );
+            propertiesMap.put( "ftp.working.directory", properties.getProperty("ftp.working.directory") );
         } catch (IOException io) {
             Logger.getLogger( FTPProperties.class.getName() ).log(Level.SEVERE, null, io);
         }
