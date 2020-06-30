@@ -105,10 +105,21 @@ public class EvaluateDeliveryController extends ValidatorController implements I
     }
 
     @FXML
-    void downloadDeliveryFileToSystem(MouseEvent event) {
+    protected void downloadDeliveryFileToSystem(MouseEvent event) {
         showDirectoryChooserAndSaveFileToNewDirectory();
     }
 
+
+    private void setStyleClassToCheckIcon() {
+        checkIconScore.setStyleClass("correctlyTextField");
+    }
+
+    private void setActualInformationToTextInputs() {
+        if( delivery.getObservation() != null ) {
+            descriptionTextArea.setText( delivery.getObservation() );
+            scoreSpinner.getEditor().setText( String.valueOf( delivery.getScore() ) );
+        }
+    }
 
     private void evaluateDelivery() {
         float score = Float.valueOf( scoreSpinner.getEditor().getText() );
@@ -190,17 +201,6 @@ public class EvaluateDeliveryController extends ValidatorController implements I
             isPDF = fileExtension.equals(".pdf");
         }
         return isPDF;
-    }
-
-    private void setStyleClassToCheckIcon() {
-        checkIconScore.setStyleClass("correctlyTextField");
-    }
-
-    private void setActualInformationToTextInputs() {
-        if( delivery.getObservation() != null ) {
-            descriptionTextArea.setText( delivery.getObservation() );
-            scoreSpinner.getEditor().setText( String.valueOf( delivery.getScore() ) );
-        }
     }
 
     private void initValidatorToTextInput() {

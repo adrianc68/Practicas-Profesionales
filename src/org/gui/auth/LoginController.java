@@ -4,6 +4,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import org.domain.Administrator;
 import org.domain.Coordinator;
 import org.domain.Person;
 import org.domain.Practitioner;
@@ -116,9 +117,11 @@ public class LoginController extends Controller implements Initializable {
             } else if (user instanceof Practitioner) {
                 PractitionerController practitionerController = new PractitionerController();
                 practitionerController.showStage();
-            } else {
+            } else if (user instanceof Administrator) {
                 AdministratorController administratorController = new AdministratorController();
                 administratorController.showStage();
+            } else {
+               systemLabel.setText("El usuario no tiene una cuenta de acceso asignada");
             }
         }
     }

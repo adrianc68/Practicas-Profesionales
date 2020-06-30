@@ -764,9 +764,12 @@
 */
 
 .windowTitle {
-  -fx-background-color:#FDFDFD;
+  -fx-background-color:#1F1F1F;
   -fx-background-radius:0 3 3 0;
-  -fx-text-fill:#121212;
+  -fx-border-color:#6C6969;
+  -fx-border-radius:0 3 3 0;
+  -fx-border-width:0.3px;
+  -fx-text-fill:#ededed;
   -fx-font-family:"Montserrat Light";
 }
 

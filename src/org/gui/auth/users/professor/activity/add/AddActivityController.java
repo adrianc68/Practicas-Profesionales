@@ -21,11 +21,9 @@ import org.gui.ValidatorController;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
 import org.util.CSSProperties;
-import org.util.DateFormatter;
 import org.util.Validator;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,23 +31,22 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class AddActivityController extends ValidatorController implements Initializable {
     private boolean addOperationStatus;
     private Activity newActivity;
     @FXML private AnchorPane rootStage;
     @FXML private Label systemLabel;
-    @FXML private MaterialDesignIconView checkIconTitle;
     @FXML private TextField titleTextField;
-    @FXML private MaterialDesignIconView checkIconDescription;
     @FXML private TextArea descriptionTextArea;
-    @FXML private MaterialDesignIconView checkIconDateTime;
     @FXML private DatePicker deadlineDatePicker;
-    @FXML private MaterialDesignIconView checkIconSchedule;
     @FXML private Button closeButton;
     @FXML private Spinner<Integer> hourSpinner;
     @FXML private Spinner<Integer> minuteSpinner;
     @FXML private Spinner<Integer> secondSpinner;
+    @FXML private MaterialDesignIconView checkIconTitle;
+    @FXML private MaterialDesignIconView checkIconDescription;
+    @FXML private MaterialDesignIconView checkIconDateTime;
+    @FXML private MaterialDesignIconView checkIconSchedule;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -73,18 +70,6 @@ public class AddActivityController extends ValidatorController implements Initia
     }
 
     @FXML
-    protected void addButtonPressed(ActionEvent event) {
-        if( verifyInputData() ) {
-            registerActivity();
-            if(addOperationStatus) {
-                stage.close();
-            }
-        } else {
-            systemLabel.setText("¡Verifica tus datos!");
-        }
-    }
-
-    @FXML
     protected void cancelButtonPressed(ActionEvent event) {
         stage.close();
     }
@@ -99,6 +84,25 @@ public class AddActivityController extends ValidatorController implements Initia
         super.stagePressed(event);
     }
 
+    @FXML
+    protected void addButtonPressed(ActionEvent event) {
+        if( verifyInputData() ) {
+            addActivity();
+            if(addOperationStatus) {
+                stage.close();
+                showSuccessfullAlert();
+            }
+        } else {
+            systemLabel.setText("¡Verifica tus datos!");
+        }
+    }
+
+    private void showSuccessfullAlert() {
+        String title = "¡Se ha agregado la actividad correctamente!";
+        String contentText = "¡Se ha agregado la actividad correctamente! Se mostrará en la lista de actividades";
+        OperationAlert.showSuccessfullAlert(title, contentText);
+    }
+
     private void initIconSchedule() {
         checkIconSchedule.getStyleClass().add("correctlyTextField");
     }
@@ -109,18 +113,18 @@ public class AddActivityController extends ValidatorController implements Initia
         secondSpinner.setValueFactory( new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59,0,1) );
     }
 
-    private String getTimestampFromFields() {
+    private String getDatetimeFromFields() {
         String dateInput = deadlineDatePicker.getValue().toString();
         String timeInput = hourSpinner.getValue().toString() + ":"+ minuteSpinner.getValue().toString() +":" + secondSpinner.getValue().toString();
         String dateTime = dateInput + " " + timeInput;
         return dateTime;
     }
 
-    private void registerActivity() {
+    private void addActivity() {
         newActivity = new Activity();
         newActivity.setName( titleTextField.getText() );
         newActivity.setDescription( descriptionTextArea.getText() );
-        newActivity.setDeadline( getTimestampFromFields() );
+        newActivity.setDeadline( getDatetimeFromFields() );
         newActivity.setProfessor( (Professor) Auth.getInstance().getCurrentUser() );
         try {
             newActivity.setId( new ActivityDAO().addActivity(newActivity) );
