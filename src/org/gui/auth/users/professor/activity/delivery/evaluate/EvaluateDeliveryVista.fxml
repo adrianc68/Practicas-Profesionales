@@ -79,6 +79,7 @@
                            </children>
                         </HBox>
                         <Label alignment="CENTER" onMousePressed="#downloadDeliveryFileToSystem" prefHeight="17.0" prefWidth="177.0" styleClass="recoveryLabel" text="Descargar archivo" textAlignment="CENTER" textFill="#2c50ab" underline="true" wrapText="true" />
+                        <Label fx:id="systemLabel" styleClass="systemLabel" />
                      </children>
                   </VBox>
                </children>

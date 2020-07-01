@@ -13,7 +13,6 @@ import org.gui.auth.users.coordinator.project.ProjectController;
 import org.gui.auth.util.changepassword.ChangePasswordController;
 import org.gui.auth.util.theme.SelectThemeController;
 import org.util.Auth;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -89,7 +88,7 @@ public class CoordinatorController extends Controller implements Initializable {
     }
 
     private void setStyleClass() {
-        super.setStyleClass(rootStage, getClass().getResource("../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.setStyleClass(rootStage);
     }
 
 }

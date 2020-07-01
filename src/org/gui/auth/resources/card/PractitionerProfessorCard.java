@@ -10,14 +10,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.domain.Practitioner;
 import org.domain.Project;
-import org.util.CSSProperties;
 
-public class PractitionerProfessorCard extends VBox{
+public class PractitionerProfessorCard extends Card {
     private final int CARD_HEIGHT = 440;
     private final int CARD_WIDTH = 235;
     private final int IMAGE_HEIGHT = 100;
@@ -123,13 +121,6 @@ public class PractitionerProfessorCard extends VBox{
         getChildren().add(projectsSelectedLabelBox);
         getChildren().add(selectedProjectsListView);
         setStyleClass();
-    }
-
-    private void setStyleClass() {
-        getStylesheets().clear();
-        getStyleClass().clear();
-        getStylesheets().add(getClass().getResource("../" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-        getStyleClass().add("card");
     }
 
 }

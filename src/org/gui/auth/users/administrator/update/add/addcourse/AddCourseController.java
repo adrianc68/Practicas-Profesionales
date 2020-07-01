@@ -15,7 +15,6 @@ import org.database.dao.CourseDAO;
 import org.domain.Course;
 import org.gui.ValidatorController;
 import org.gui.auth.resources.alerts.OperationAlert;
-import org.util.CSSProperties;
 import org.util.Validator;
 import java.net.URL;
 import java.sql.SQLException;
@@ -41,7 +40,7 @@ public class AddCourseController extends ValidatorController implements Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         addOperationStatus = false;
         initValidatorToTextFields();
     }

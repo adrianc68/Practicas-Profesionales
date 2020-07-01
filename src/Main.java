@@ -3,7 +3,6 @@ import javafx.stage.Stage;
 import org.gui.auth.LoginController;
 import org.gui.auth.util.theme.SelectThemeController;
 import org.util.CSSProperties;
-import org.util.ftp.FTPConnection;
 
 public class Main extends Application {
 
@@ -15,6 +14,7 @@ public class Main extends Application {
         }
         LoginController loginController = new LoginController();
         loginController.showStage();
+
     }
 
     public static void main(String[] args) {

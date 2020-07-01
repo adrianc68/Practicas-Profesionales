@@ -16,7 +16,6 @@ import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.ActivityPractitionerCard;
 import org.gui.auth.users.practitioner.activity.adddelivery.AddDeliveryController;
 import org.util.Auth;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -31,7 +30,7 @@ public class ActivityController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        super.setStyleClass(rootStage, getClass().getResource("../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.setStyleClass(rootStage);
         if(practitioner != null) {
             getAssignedProfessorByActualPractitioner();
             if( practitioner.getProfessor() != null) {

@@ -16,7 +16,6 @@ import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.ProfessorCard;
 import org.gui.auth.users.coordinator.practitioner.assignproject.AssignProjectController;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -35,7 +34,7 @@ public class AssignProfessorController extends Controller implements Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
+        setStyleClass(rootStage);
         assignOperationStatus = false;
         setProfessorsToScrollPaneFromDatabase();
     }

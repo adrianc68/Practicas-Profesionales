@@ -13,7 +13,6 @@ import org.database.dao.PractitionerDAO;
 import org.domain.Practitioner;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -31,7 +30,7 @@ public class RemovePractitionerController extends Controller implements Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
+        setStyleClass(rootStage);
         if( practitionerToBeRemoved != null) {
             userLabel.setText( practitionerToBeRemoved.getName() );
         }

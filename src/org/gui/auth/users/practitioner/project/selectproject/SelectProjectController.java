@@ -17,7 +17,6 @@ import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.ProjectCard;
 import org.gui.auth.util.theme.SelectThemeController;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -57,7 +56,7 @@ public class SelectProjectController extends Controller implements Initializable
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         setProjectsFromDatabaseToScrollPane();
     }
 

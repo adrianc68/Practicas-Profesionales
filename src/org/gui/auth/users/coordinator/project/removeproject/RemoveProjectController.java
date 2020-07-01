@@ -12,7 +12,6 @@ import javafx.stage.Modality;
 import org.database.dao.ProjectDAO;
 import org.domain.Project;
 import org.gui.Controller;
-import org.util.CSSProperties;
 import org.gui.auth.resources.alerts.OperationAlert;
 import java.net.URL;
 import java.sql.SQLException;
@@ -31,7 +30,7 @@ public class RemoveProjectController extends Controller implements Initializable
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         if(project != null) {
             projectLabel.setText( project.getName() );
         }

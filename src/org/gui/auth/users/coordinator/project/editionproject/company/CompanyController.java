@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.util.CSSProperties;
 import org.database.dao.OrganizationDAO;
 import org.domain.Organization;
 import org.gui.Controller;
@@ -30,7 +29,7 @@ public class CompanyController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         setCompanyToScrollPaneFromDatabase();
     }
 

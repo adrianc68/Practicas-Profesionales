@@ -16,7 +16,6 @@ import org.domain.Delivery;
 import org.domain.Practitioner;
 import org.gui.ValidatorController;
 import org.gui.auth.resources.alerts.OperationAlert;
-import org.util.CSSProperties;
 import org.util.PDFViewer;
 import org.util.SwingToFX;
 import org.util.Validator;
@@ -46,7 +45,7 @@ public class AddDeliveryController extends ValidatorController implements Initia
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        super.setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.setStyleClass(rootStage);
         initValidatorToTextFields();
         setExistingDeliveryToActivity();
     }
@@ -111,8 +110,8 @@ public class AddDeliveryController extends ValidatorController implements Initia
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona el archivo a subir");
         selectedFile = fileChooser.showOpenDialog(stage);
-        fileDirectory = practitioner.getName() + ":" + activity.getName() + ":" + activity.getId() + ":" + selectedFile.getName();
         if(selectedFile != null ) {
+            fileDirectory = practitioner.getName() + ":" + activity.getName() + ":" + activity.getId() + ":" + selectedFile.getName();
             pathTextField.setText( selectedFile.getAbsolutePath() );
         }
     }
@@ -143,13 +142,15 @@ public class AddDeliveryController extends ValidatorController implements Initia
             delivery.setDocumentPath( fileDirectory );
             delivery.setObservation(null);
             delivery.setScore(0);
+            removeOldDeliveryFromFTP();
             try {
                 delivery.setId( new DeliveryDAO().addDeliveryToActivity(delivery) );
             } catch (SQLException e) {
                 OperationAlert.showSuccessfullAlert( "¡Error!", e.getMessage() );
                 Logger.getLogger( AddDeliveryController.class.getName() ).log(Level.WARNING, null, e);
             }
-            removeOldDeliveryFromFTP();
+        } else {
+            removeInvalidDeliveryFromFTP();
         }
         addOperationStatus = ( delivery.getId() != 0);
     }
@@ -167,6 +168,13 @@ public class AddDeliveryController extends ValidatorController implements Initia
             } catch (SQLException e) {
                 Logger.getLogger( AddDeliveryController.class.getName() ).log(Level.WARNING, null, e);
             }
+        }
+    }
+
+    private void removeInvalidDeliveryFromFTP() {
+        if( fileDirectory != null ) {
+            FTPConnection ftpConnection = new FTPConnection();
+            ftpConnection.deleteFile( fileDirectory );
         }
     }
 

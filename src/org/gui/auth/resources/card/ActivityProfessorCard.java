@@ -8,9 +8,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.domain.Activity;
-import org.util.CSSProperties;
 
-public class ActivityProfessorCard extends VBox {
+public class ActivityProfessorCard extends Card {
     private final int CARD_WIDTH = 1000;
     private final int FONT_SIZE = 35;
     private final int FONT_SMALL_SIZE = 15;
@@ -103,13 +102,6 @@ public class ActivityProfessorCard extends VBox {
         setAlignment(Pos.TOP_CENTER);
         getChildren().add(titleBox);
         getChildren().add(descriptionBox);
-    }
-
-    private void setStyleClass() {
-        getStylesheets().clear();
-        getStyleClass().clear();
-        getStylesheets().add(getClass().getResource("../" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-        getStyleClass().add("card");
     }
 
 }

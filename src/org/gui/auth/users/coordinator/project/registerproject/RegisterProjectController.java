@@ -38,7 +38,7 @@ public class RegisterProjectController extends Controller implements Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
+        setStyleClass(rootStage);
         initScreens();
         firstLoaderRadioButton.fire();
         addOperationStatus = false;
@@ -125,8 +125,9 @@ public class RegisterProjectController extends Controller implements Initializab
         } catch (IOException e) {
             Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, e);
         }
+        String styleSheetPath = "/org/gui/auth/resources/" + CSSProperties.readTheme().getTheme() ;
         pane.getStylesheets().clear();
-        pane.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        pane.getStylesheets().add(styleSheetPath);
         return pane;
     }
 

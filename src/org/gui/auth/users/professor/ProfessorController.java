@@ -16,7 +16,6 @@ import org.gui.auth.users.professor.practitioner.PractitionerController;
 import org.gui.auth.util.changepassword.ChangePasswordController;
 import org.gui.auth.util.theme.SelectThemeController;
 import org.util.Auth;
-import org.util.CSSProperties;
 
 public class ProfessorController extends Controller implements Initializable {
     @FXML private Label nameLabel;
@@ -90,7 +89,7 @@ public class ProfessorController extends Controller implements Initializable {
     }
 
     private void setStyleClass() {
-        super.setStyleClass(rootStage, getClass().getResource("../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.setStyleClass(rootStage);
     }
 
 }

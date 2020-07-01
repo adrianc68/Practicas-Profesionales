@@ -15,7 +15,6 @@ import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.DeliveryCard;
 import org.gui.auth.users.professor.activity.delivery.evaluate.EvaluateDeliveryController;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -30,7 +29,7 @@ public class DeliveryController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        super.setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.setStyleClass(rootStage);
         if ( activity != null ) {
             getDeliveriesFromDatabase();
         }
@@ -44,6 +43,21 @@ public class DeliveryController extends Controller implements Initializable {
 
     public DeliveryController(Activity activity) {
         this.activity = activity;
+    }
+
+    @FXML
+    protected void closeButtonPressed(ActionEvent event) {
+        stage.close();
+    }
+
+    @FXML
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
+    }
+
+    @FXML
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
     }
 
     private void getDeliveriesFromDatabase() {
@@ -73,22 +87,6 @@ public class DeliveryController extends Controller implements Initializable {
             }
         });
         deliveriesPane.getChildren().add(card);
-    }
-
-
-    @FXML
-    protected void closeButtonPressed(ActionEvent event) {
-        stage.close();
-    }
-
-    @FXML
-    protected void stageDragged(MouseEvent event) {
-        super.stageDragged(event);
-    }
-
-    @FXML
-    protected void stagePressed(MouseEvent event) {
-        super.stagePressed(event);
     }
 
 }

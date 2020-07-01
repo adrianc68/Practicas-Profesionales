@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
@@ -16,7 +17,7 @@ import javafx.stage.Modality;
 import org.database.dao.DeliveryDAO;
 import org.domain.Delivery;
 import org.gui.ValidatorController;
-import org.util.CSSProperties;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.PDFViewer;
 import org.util.SwingToFX;
 import org.util.Validator;
@@ -48,14 +49,14 @@ public class EvaluateDeliveryController extends ValidatorController implements I
     @FXML private TextArea descriptionTextArea;
     @FXML private MaterialDesignIconView checkIconScore;
     @FXML private Spinner<Double> scoreSpinner;
+    @FXML private Label systemLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        super.setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.setStyleClass(rootStage);
         initSpinner();
         initValidatorToTextInput();
         setActualInformationToTextInputs();
-        setStyleClassToCheckIcon();
         downloadDeliveryFileAndDisplayToPDFViewer();
     }
 
@@ -99,6 +100,7 @@ public class EvaluateDeliveryController extends ValidatorController implements I
             evaluateDelivery();
             if(updateOperationStatus) {
                 deliveryFile.delete();
+                showSuccessfullAlert();
                 stage.close();
             }
         }
@@ -109,11 +111,6 @@ public class EvaluateDeliveryController extends ValidatorController implements I
         showDirectoryChooserAndSaveFileToNewDirectory();
     }
 
-
-    private void setStyleClassToCheckIcon() {
-        checkIconScore.setStyleClass("correctlyTextField");
-    }
-
     private void setActualInformationToTextInputs() {
         if( delivery.getObservation() != null ) {
             descriptionTextArea.setText( delivery.getObservation() );
@@ -121,8 +118,14 @@ public class EvaluateDeliveryController extends ValidatorController implements I
         }
     }
 
+    private void showSuccessfullAlert() {
+        String title = "¡Se ha evaluado la actividad!";
+        String contentText = "¡Se ha evaluado la actividad correctamente! Se mostrará en la lista de actividades";
+        OperationAlert.showSuccessfullAlert(title, contentText);
+    }
+
     private void evaluateDelivery() {
-        float score = Float.valueOf( scoreSpinner.getEditor().getText() );
+        float score = Float.parseFloat( scoreSpinner.getEditor().getText() );
         String observation = descriptionTextArea.getText();
         try {
             updateOperationStatus = new DeliveryDAO().evaluateDeliveryOfActivity(delivery.getId(), score, observation);
@@ -178,8 +181,10 @@ public class EvaluateDeliveryController extends ValidatorController implements I
         FTPConnection ftpConnection = new FTPConnection();
         deliveryFile = ftpConnection.downloadFile( delivery.getDocumentPath() );
         deliveryFile.deleteOnExit();
-        if( isFileAPDF( deliveryFile.getAbsolutePath() ) ) {
+        if( deliveryFile.length() != 0  && isFileAPDF( deliveryFile.getAbsolutePath() ) ) {
             showPDFInComponent();
+        } else {
+            systemLabel.setText("El archivo no se puede visualizar");
         }
     }
 

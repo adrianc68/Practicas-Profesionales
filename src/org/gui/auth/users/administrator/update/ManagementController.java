@@ -28,7 +28,6 @@ import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.users.administrator.update.add.AddController;
 import org.gui.auth.users.administrator.update.change.ChangeActivityStateController;
 import org.gui.auth.users.administrator.update.remove.RemoveObjectController;
-import org.util.CSSProperties;
 
 public class ManagementController extends Controller implements Initializable {
     private Object selected;
@@ -57,7 +56,7 @@ public class ManagementController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         setTableComponents();
         try {
             updateDataFromTablesView();

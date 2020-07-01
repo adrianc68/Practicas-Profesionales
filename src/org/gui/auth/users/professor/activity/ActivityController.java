@@ -14,7 +14,6 @@ import org.gui.auth.resources.card.ActivityProfessorCard;
 import org.gui.auth.users.professor.activity.add.AddActivityController;
 import org.gui.auth.users.professor.activity.delivery.DeliveryController;
 import org.util.Auth;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,7 +27,7 @@ public class ActivityController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        super.setStyleClass(rootStage, getClass().getResource("../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.setStyleClass(rootStage);
         if(Auth.getInstance().getCurrentUser() != null) {
             setActivitiesFromDatabase();
         }

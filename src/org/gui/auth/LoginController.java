@@ -14,7 +14,6 @@ import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.users.professor.ProfessorController;
 import org.gui.auth.util.recoverpassword.RecoveryPasswordController;
 import org.util.Auth;
-import org.util.CSSProperties;
 import org.util.Cryptography;
 import java.net.URL;
 import java.sql.SQLException;
@@ -127,7 +126,7 @@ public class LoginController extends Controller implements Initializable {
     }
 
     private void setStyleClass() {
-        setStyleClass(rootStage, getClass().getResource( "resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
     }
 
 }

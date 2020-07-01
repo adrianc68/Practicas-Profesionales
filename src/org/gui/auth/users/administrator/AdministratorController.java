@@ -15,7 +15,6 @@ import org.gui.auth.util.changepassword.ChangePasswordController;
 import org.gui.auth.users.administrator.update.ManagementController;
 import org.gui.auth.util.theme.SelectThemeController;
 import org.util.Auth;
-import org.util.CSSProperties;
 
 public class AdministratorController extends Controller implements Initializable {
     @FXML private Label nameLabel;
@@ -78,8 +77,7 @@ public class AdministratorController extends Controller implements Initializable
     }
 
     private void setStyleClass() {
-        rootStage.getStylesheets().clear();
-        rootStage.getStylesheets().add( getClass().getResource("../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.setStyleClass(rootStage);
     }
 
 }

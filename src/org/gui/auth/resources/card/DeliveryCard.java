@@ -8,9 +8,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.domain.Delivery;
-import org.util.CSSProperties;
 
-public class DeliveryCard extends VBox {
+public class DeliveryCard extends Card {
     private final int CARD_WIDTH = 980;
     private final int FONT_SIZE = 22;
     private final int FONT_SMALL_SIZE = 13;
@@ -101,13 +100,6 @@ public class DeliveryCard extends VBox {
         setAlignment(Pos.TOP_CENTER);
         getChildren().add(titleBox);
         getChildren().add(descriptionBox);
-    }
-
-    private void setStyleClass() {
-        getStylesheets().clear();
-        getStyleClass().clear();
-        getStylesheets().add(getClass().getResource("../" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-        getStyleClass().add("card");
     }
 
 }

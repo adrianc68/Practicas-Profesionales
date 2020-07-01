@@ -9,9 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.domain.Professor;
-import org.util.CSSProperties;
 
-public class ProfessorCard extends VBox{
+public class ProfessorCard extends Card{
     private final int CARD_HEIGHT = 300;
     private final int CARD_WIDTH = 235;
     private final int IMAGE_HEIGHT = 100;
@@ -85,13 +84,6 @@ public class ProfessorCard extends VBox{
         getChildren().add(cubicleLabel);
         getChildren().add(phoneNumber);
         setStyleClass();
-    }
-
-    private void setStyleClass() {
-        getStylesheets().clear();
-        getStyleClass().clear();
-        getStylesheets().add(getClass().getResource("../" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-        getStyleClass().add("card");
     }
 
 }

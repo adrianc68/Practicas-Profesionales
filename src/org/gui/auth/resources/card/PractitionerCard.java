@@ -15,9 +15,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.domain.Practitioner;
 import org.domain.Project;
-import org.util.CSSProperties;
 
-public class PractitionerCard extends VBox{
+public class PractitionerCard extends Card {
     private final int CARD_HEIGHT = 470;
     private final int CARD_WIDTH = 235;
     private final int IMAGE_HEIGHT = 100;
@@ -150,13 +149,6 @@ public class PractitionerCard extends VBox{
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
         buttonBox.getChildren().add(button);
         getChildren().add(buttonBox);
-    }
-
-    private void setStyleClass() {
-        getStylesheets().clear();
-        getStyleClass().clear();
-        getStylesheets().add(getClass().getResource("../" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-        getStyleClass().add("card");
     }
 
 }

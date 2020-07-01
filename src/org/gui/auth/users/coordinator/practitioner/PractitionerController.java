@@ -27,7 +27,6 @@ import org.gui.auth.users.coordinator.practitioner.assignproject.AssignProjectCo
 import org.gui.auth.resources.card.PractitionerCard;
 import org.gui.auth.users.coordinator.practitioner.assignproject.assignother.AssignOtherProject;
 import org.gui.auth.users.coordinator.practitioner.removepractitioner.RemovePractitionerController;
-import org.util.CSSProperties;
 
 public class PractitionerController extends Controller implements Initializable {
     private PractitionerCard practitionerCardSelected;
@@ -37,7 +36,7 @@ public class PractitionerController extends Controller implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         setPractitionerToScrollPaneFromDatabase();
     }
 

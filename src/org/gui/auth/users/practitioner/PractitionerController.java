@@ -16,7 +16,6 @@ import org.gui.auth.users.practitioner.project.selectproject.SelectProjectContro
 import org.gui.auth.util.changepassword.ChangePasswordController;
 import org.gui.auth.util.theme.SelectThemeController;
 import org.util.Auth;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -34,7 +33,6 @@ public class PractitionerController extends Controller implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setStyleClass();
-
         setInformationToLabel();
     }
 
@@ -112,7 +110,7 @@ public class PractitionerController extends Controller implements Initializable{
     }
 
     private void setStyleClass() {
-        super.setStyleClass(rootStage, getClass().getResource("../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        super.setStyleClass(rootStage);
     }
 
 }

@@ -15,7 +15,7 @@
 
 <AnchorPane fx:id="rootStage" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="593.0" prefWidth="983.0" styleClass="background" stylesheets="@../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="1.0" layoutY="25.0" prefHeight="30.0" prefWidth="175.0" styleClass="windowTitle" text="Profesor">
+      <Label layoutY="25.0" prefHeight="30.0" prefWidth="175.0" styleClass="windowTitle" text="Profesor">
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>

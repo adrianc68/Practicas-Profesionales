@@ -20,7 +20,6 @@ import org.domain.Professor;
 import org.gui.ValidatorController;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
-import org.util.CSSProperties;
 import org.util.Validator;
 import java.net.URL;
 import java.sql.SQLException;
@@ -50,7 +49,7 @@ public class AddActivityController extends ValidatorController implements Initia
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         initSpinners();
         initValidatorToTextInput();
         initIconSchedule();

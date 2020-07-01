@@ -19,7 +19,6 @@ import org.domain.Person;
 import org.domain.Practitioner;
 import org.gui.ValidatorController;
 import org.util.Auth;
-import org.util.CSSProperties;
 import org.util.Cryptography;
 import org.util.Validator;
 import org.gui.auth.resources.alerts.OperationAlert;
@@ -50,7 +49,7 @@ public class AddPractitionerController extends ValidatorController implements In
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         addOperationStatus = false;
         initValidatorToTextFields();
     }

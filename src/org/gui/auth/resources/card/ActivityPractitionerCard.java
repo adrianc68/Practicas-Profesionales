@@ -9,9 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.domain.Activity;
 import org.domain.Delivery;
-import org.util.CSSProperties;
 
-public class ActivityPractitionerCard extends VBox {
+public class ActivityPractitionerCard extends Card {
     private final int CARD_WIDTH = 980;
     private final int FONT_SIZE = 22;
     private final int FONT_SMALL_SIZE = 13;
@@ -125,13 +124,6 @@ public class ActivityPractitionerCard extends VBox {
             }
         }
         return actualDelivery;
-    }
-
-    private void setStyleClass() {
-        getStylesheets().clear();
-        getStyleClass().clear();
-        getStylesheets().add(getClass().getResource("../" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-        getStyleClass().add("card");
     }
 
 }

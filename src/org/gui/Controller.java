@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.util.CSSProperties;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -49,9 +50,10 @@ public abstract class Controller {
         mousePositionOnY = event.getSceneY();
     }
 
-    protected void setStyleClass(AnchorPane rootStage, String cssPath) {
+    protected void setStyleClass(AnchorPane rootStage) {
         rootStage.getStylesheets().clear();
-        rootStage.getStylesheets().add(cssPath);
+        String styleSheetPath = "/org/gui/auth/resources/" + CSSProperties.readTheme().getTheme() ;
+        rootStage.getStylesheets().add(styleSheetPath);
     }
 
 }

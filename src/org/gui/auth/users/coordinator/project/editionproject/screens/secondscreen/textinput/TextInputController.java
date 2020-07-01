@@ -28,7 +28,7 @@ public class TextInputController extends ValidatorController implements Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         initValidatorToTextFields();
     }
 

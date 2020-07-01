@@ -893,7 +893,7 @@
             </HBox>
          </children>
       </VBox>
-      <Label layoutX="1.0" layoutY="19.0" prefHeight="47.0" styleClass="windowTitle" text="Asignar otro proyecto">
+      <Label layoutY="19.0" prefHeight="47.0" styleClass="windowTitle" text="Asignar otro proyecto">
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>

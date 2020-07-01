@@ -41,7 +41,7 @@
                               <Font name="Gill Sans" size="31.0" />
                            </font>
                         </Label>
-                        <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="62.0" prefWidth="414.0" styleClass="thirdLevelLabel" text="Debes ingresar la información del practicante para que pueda ser registrado correctamente y tenga acceso al sistema" textAlignment="CENTER" wrapText="true" />
+                        <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="62.0" prefWidth="414.0" styleClass="thirdLevelLabel" text="Debes ingresar información de la actividad para que pueda ser visualizada por los practicantes del sistema y puedan realizarla" textAlignment="CENTER" wrapText="true" />
                         <Label styleClass="firstLevelLabel" text="Información de actividad">
                            <font>
                               <Font name="Open Sans Light" size="20.0" />

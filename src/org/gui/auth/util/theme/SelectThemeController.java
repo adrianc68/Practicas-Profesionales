@@ -67,7 +67,7 @@ public class SelectThemeController extends Controller implements Initializable {
 
     private void setStyleClass() {
         Theme theme = CSSProperties.readTheme();
-        setStyleClass(rootStage, getClass().getResource("../../resources/" + theme.getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         if (theme == Theme.LIGHT_THEME) {
             lightRadioButton.setSelected(true);
         } else {

@@ -41,7 +41,7 @@ public class UpdateProjectController extends Controller implements Initializable
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage,  getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         if(selectedProject != null) {
             screenController = new ScreenController(selectedProject);
         } else {
@@ -154,8 +154,9 @@ public class UpdateProjectController extends Controller implements Initializable
         } catch (IOException e) {
             Logger.getLogger( UpdateProjectController.class.getName() ).log(Level.WARNING, null, e);
         }
+        String styleSheetPath = "/org/gui/auth/resources/" + CSSProperties.readTheme().getTheme() ;
         pane.getStylesheets().clear();
-        pane.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        pane.getStylesheets().add(styleSheetPath);
         return pane;
     }
 
