@@ -184,7 +184,7 @@ public class EvaluateDeliveryController extends ValidatorController implements I
         if( deliveryFile.length() != 0  && isFileAPDF( deliveryFile.getAbsolutePath() ) ) {
             showPDFInComponent();
         } else {
-            systemLabel.setText("El archivo no se puede visualizar");
+            systemLabel.setText("El archivo no se puede visualizar (Puede que no sea un PDF o esté dañado)");
         }
     }
 

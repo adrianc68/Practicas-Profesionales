@@ -9,19 +9,19 @@ import javafx.scene.layout.FlowPane;
 import org.database.dao.ActivityDAO;
 import org.database.dao.DeliveryDAO;
 import org.database.dao.ProfessorDAO;
-import org.domain.Activity;
-import org.domain.Practitioner;
-import org.gui.Controller;
-import org.gui.auth.resources.alerts.OperationAlert;
-import org.gui.auth.resources.card.ActivityPractitionerCard;
-import org.gui.auth.users.practitioner.activity.adddelivery.AddDeliveryController;
-import org.util.Auth;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.util.Auth;
+import org.domain.Activity;
+import org.domain.Practitioner;
+import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.resources.card.ActivityPractitionerCard;
+import org.gui.auth.users.practitioner.activity.adddelivery.AddDeliveryController;
 
 public class ActivityController extends Controller implements Initializable {
     private Practitioner practitioner;

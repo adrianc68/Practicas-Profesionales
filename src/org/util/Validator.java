@@ -31,9 +31,9 @@ public class Validator {
     public static final String PROJECT_NAME_PATTERN = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{2,}+(\\ ([a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{1,}))*";
     public static final String PROJECT_MULTIVALUED_ATTRIBUTE_PATTERN = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{2,}+(\\ ([a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{1,}))*";
     public static final String NAME_PATTERN = "([A-Za-záéíóúüÁÉÍÓÚÜñÑ]{2,}(\\ [A-Za-záéíóúüÁÉÍÓÚÜñÑ]{2,})*)";
-    public static final String LARGE_TEXT_PATTERN = "([A-Za-z0-9.,-áéíóúüÁÉÍÓÚÜñÑ\\r\\n]{1,}(\\ [A-Za-z0-9.,-áéíóúüÁÉÍÓÚÜñÑ\\r\\n]{1,})*)";
+    public static final String LARGE_TEXT_PATTERN = "([^º]{1,}(\\ [^º]{1,})*)";
     public static final String CHARGE_RESPONSABLE_PATTERN = "[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{2,}+(\\ ([a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]{1,}))*";
-    public static final String EMAIL_PATTERN = "[A-Za-z0-9\\-ñÑ]{1,}(\\.([A-Za-z0-9\\-ñÑ]{1,}))*@(([a-zA-Z]{2,})(\\.([a-z]{1,})){1,})";
+    public static final String EMAIL_PATTERN = "[A-Za-z0-9\\-ñÑ_]{1,}(\\.([A-Za-z0-9\\-ñÑ_]{1,}))*@(([a-zA-Z]{2,})(\\.([a-z]{1,})){1,})";
     public static final String SCHEDULE_PATTERN = "[a-zA-Z0-9:-áéíóúüÁÉÍÓÚÜñÑ]{1,}+(\\ ([a-zA-Z0-9:-áéíóúüÁÉÍÓÚÜñÑ]{1,}))*";
     public static final String DURATION_PATTERN = "(([1-9]{1,3}[0]*)(\\.[\\d]{1,})?)";
     public static final String NUMBER_PATTERN = "([0-9]{1,})";
@@ -41,7 +41,7 @@ public class Validator {
     public static final String PERIOD_PATTERN = "(([A-Z]{3}\\ [0-9]{4})\\ \\-\\ ([A-Z]{3}\\ [0-9]{4}))";
     public static final String DATE_PATTERN = "(([0-9]){1,2}/([0-9]){1,2}/([0-9]){4})";
     public static final String TIME_PATTERN = "([0-9]{1,2})";
-    public static final String PATH_PATTERN = "([a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑíñ\\-\\s\\_:`´,.;/\\\\]{2,})";
+    public static final String PATH_PATTERN = "([^º]{2,})";
 
     /***
      * This method search for a match with a pattern

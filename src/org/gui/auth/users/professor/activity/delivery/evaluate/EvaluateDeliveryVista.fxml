@@ -53,7 +53,7 @@
                               </Label>
                               <HBox alignment="CENTER" spacing="5.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Spinner fx:id="scoreSpinner" editable="true" prefHeight="51.0" prefWidth="118.0" />
+                                    <Spinner fx:id="scoreSpinner" editable="true" prefHeight="46.0" prefWidth="118.0" />
                                  </children>
                               </HBox>
                            </children>
@@ -79,7 +79,7 @@
                            </children>
                         </HBox>
                         <Label alignment="CENTER" onMousePressed="#downloadDeliveryFileToSystem" prefHeight="17.0" prefWidth="177.0" styleClass="recoveryLabel" text="Descargar archivo" textAlignment="CENTER" textFill="#2c50ab" underline="true" wrapText="true" />
-                        <Label fx:id="systemLabel" styleClass="systemLabel" />
+                        <Label fx:id="systemLabel" alignment="TOP_CENTER" prefHeight="190.0" prefWidth="336.0" styleClass="systemLabel" textAlignment="CENTER" wrapText="true" />
                      </children>
                   </VBox>
                </children>

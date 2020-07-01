@@ -21,7 +21,7 @@
          <right>
             <VBox prefHeight="777.0" prefWidth="316.0" spacing="10.0" styleClass="boxBorder" BorderPane.alignment="CENTER">
                <children>
-                  <VBox maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="200.0" prefWidth="100.0" spacing="15.0" VBox.vgrow="ALWAYS">
+                  <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="200.0" prefWidth="100.0" spacing="15.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="33.0" prefWidth="400.0" styleClass="firstLevelLabel" text="Entregar actividad">
                            <font>
@@ -38,7 +38,7 @@
                               </Label>
                               <HBox prefWidth="200.0" spacing="15.0">
                                  <children>
-                                    <TextField fx:id="pathTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" prefWidth="182.0" promptText="Selecciona el archivo" styleClass="textfield">
+                                    <TextField fx:id="pathTextField" editable="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" prefWidth="182.0" promptText="Selecciona el archivo" styleClass="textfield">
                                        <tooltip>
                                           <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
                                        </tooltip>
@@ -71,6 +71,7 @@
                               </Button>
                            </children>
                         </HBox>
+                        <Label fx:id="systemLabel" alignment="TOP_CENTER" prefHeight="113.0" prefWidth="284.0" styleClass="systemLabel" textAlignment="CENTER" wrapText="true" />
                      </children>
                   </VBox>
                </children>

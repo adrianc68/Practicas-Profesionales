@@ -29,9 +29,12 @@ public class ActivityPractitionerCard extends Card {
     private final int NO_PADDING = 0;
     private final int DESCRIPTION_PADDING = 10;
     private Activity activity;
+    private Delivery delivery;
+
 
     public ActivityPractitionerCard(Activity activity) {
         this.activity = activity;
+        this.delivery = getDeliveryOfActualActivity();
         initCard();
     }
 
@@ -84,7 +87,15 @@ public class ActivityPractitionerCard extends Card {
         descriptionLabel.setFont( Font.font(FONT_SMALL_SIZE) );
         descriptionLabel.getStyleClass().add("cardThirdLevelLabel");
         descriptionLabel.setWrapText(true);
+        Label observationLabel = new Label( (delivery != null ) ? "Observaciones de actividad entregada: " : "");
+        observationLabel.setFont( Font.font(FONT_SMALL_SIZE) );
+        observationLabel.getStyleClass().add("cardSecondLevelLabel");
+        Label observationByProfessorLabel = new Label( (delivery != null) ? delivery.getObservation() :  "" );
+        observationByProfessorLabel.setFont( Font.font(FONT_SMALL_SIZE) );
+        observationByProfessorLabel.getStyleClass().add("cardThirdLevelLabel");
         descriptionContainerBox.getChildren().add(descriptionLabel);
+        descriptionContainerBox.getChildren().add(observationLabel);
+        descriptionContainerBox.getChildren().add(observationByProfessorLabel);
         VBox scoreContainerBox = new VBox();
         scoreContainerBox.setMaxWidth(SCORE_BOX_WIDTH);
         scoreContainerBox.setMinSize(SCORE_BOX_WIDTH, DESCRIPTION_BOX_HEIGHT);
@@ -92,7 +103,6 @@ public class ActivityPractitionerCard extends Card {
         scoreContainerBox.setAlignment(Pos.TOP_CENTER);
         scoreContainerBox.setPadding( new Insets(PADDING, NO_PADDING, NO_PADDING, NO_PADDING) );
         scoreContainerBox.setSpacing(SPACING_CONTENT);
-        Delivery delivery = getDeliveryOfActualActivity();
         // T-O Ternary Operator here!
         Label scoreTitleLabel = new Label("Puntaje");
         scoreTitleLabel.getStyleClass().add("cardFirstLevelLabel");
@@ -118,7 +128,7 @@ public class ActivityPractitionerCard extends Card {
     private Delivery getDeliveryOfActualActivity() {
         Delivery actualDelivery = null;
         for (Delivery delivery : activity.getDeliveries() ) {
-            if(delivery.getActivity().getId() == activity.getId() ) {
+            if( delivery.getActivity().getId() == activity.getId() ) {
                 actualDelivery = delivery;
                 break;
             }

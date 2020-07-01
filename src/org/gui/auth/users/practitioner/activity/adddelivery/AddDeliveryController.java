@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
@@ -38,10 +39,11 @@ public class AddDeliveryController extends ValidatorController implements Initia
     private Activity activity;
     private Practitioner practitioner;
     private Delivery actualDelivery;
-    @FXML private AnchorPane rootStage;
-    @FXML private MaterialDesignIconView checkIconPath;
-    @FXML private TextField pathTextField;
     @FXML private AnchorPane pdfDisplayerAnchorPane;
+    @FXML private AnchorPane rootStage;
+    @FXML private Label systemLabel;
+    @FXML private TextField pathTextField;
+    @FXML private MaterialDesignIconView checkIconPath;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -92,6 +94,7 @@ public class AddDeliveryController extends ValidatorController implements Initia
         if( isFileChoosenPDF( pathTextField.getText() ) ) {
             showPDFInComponent();
         } else {
+            systemLabel.setText("El archivo no se puede visualizar (Puede que no sea un PDF o este dañado)");
             clearFileSelection();
         }
     }

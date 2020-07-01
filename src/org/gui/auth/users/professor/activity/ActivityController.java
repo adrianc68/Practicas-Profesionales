@@ -6,20 +6,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import org.database.dao.ActivityDAO;
-import org.domain.Activity;
-import org.gui.Controller;
-import org.gui.auth.resources.alerts.OperationAlert;
-import org.gui.auth.resources.card.ActivityProfessorCard;
-import org.gui.auth.users.professor.activity.add.AddActivityController;
-import org.gui.auth.users.professor.activity.delivery.DeliveryController;
-import org.util.Auth;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.database.dao.ActivityDAO;
+import org.domain.Activity;
+import org.gui.Controller;
+import org.util.Auth;
+import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.resources.card.ActivityProfessorCard;
+import org.gui.auth.users.professor.activity.add.AddActivityController;
+import org.gui.auth.users.professor.activity.delivery.DeliveryController;
 
 public class ActivityController extends Controller implements Initializable {
     @FXML private AnchorPane rootStage;
@@ -63,9 +63,7 @@ public class ActivityController extends Controller implements Initializable {
     }
 
     @FXML
-    protected void removeActivityButtonPressed(ActionEvent event) {
-        throw new UnsupportedOperationException("Not in use case yet");
-    }
+    protected void removeActivityButtonPressed(ActionEvent event) { }
 
     private void addActivityInACardToScrollPane(Activity activity) {
         ActivityProfessorCard card = new ActivityProfessorCard(activity);
