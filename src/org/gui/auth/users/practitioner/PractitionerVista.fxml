@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.octicons.OctIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -7,28 +8,68 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="471.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootStage" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="593.0" prefWidth="983.0" styleClass="background" stylesheets="@../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox layoutX="11.0" layoutY="13.0" prefHeight="471.0" prefWidth="764.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <HBox alignment="CENTER" prefHeight="65.0" prefWidth="764.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #8a8a8a;">
+      <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="628.0" prefWidth="983.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <bottom>
+            <HBox alignment="TOP_CENTER" prefHeight="184.0" prefWidth="981.0" spacing="35.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="Practicante - Ventana principal">
+                  <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#activityButtonPressed" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Entregar actividad">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <graphic>
+                        <OctIconView glyphName="REPO" size="55" styleClass="firstLevelIcon" />
+                     </graphic>
                      <font>
-                        <Font size="22.0" />
+                        <Font size="13.0" />
                      </font>
-                  </Label>
+                  </Button>
+                  <Button alignment="CENTER" contentDisplay="TOP" graphicTextGap="2.0" mnemonicParsing="false" onAction="#myProjectButtonPressed" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Mi Proyecto" textAlignment="CENTER">
+                     <graphic>
+                        <OctIconView glyphName="ORGANIZATION" onDragDetected="#myProjectButtonPressed" size="55" styleClass="firstLevelIcon" />
+                     </graphic>
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Button>
+                  <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Configuración" textAlignment="CENTER">
+                     <graphic>
+                        <OctIconView glyphName="SETTINGS" size="55" styleClass="firstLevelIcon" />
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#aspectButtonPressed" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Aspecto" textAlignment="CENTER">
+                     <graphic>
+                        <OctIconView glyphName="FILE_MEDIA" size="55" styleClass="firstLevelIcon" />
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="125.0" prefWidth="125.0" styleClass="withBorderButton" text="Cola" textAlignment="CENTER">
+                     <graphic>
+                        <OctIconView glyphName="LIST_UNORDERED" size="55" styleClass="firstLevelIcon" />
+                     </graphic>
+                  </Button>
                </children>
+               <padding>
+                  <Insets top="25.0" />
+               </padding>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="363.0" prefWidth="764.0" VBox.vgrow="ALWAYS">
+         </bottom>
+         <center>
+            <HBox alignment="TOP_CENTER" fillHeight="false" prefHeight="293.0" prefWidth="981.0" spacing="15.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="523.0" prefWidth="300.0">
+                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="300.0" prefWidth="300.0" spacing="10.0" styleClass="boxBorder">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: #8a8a8a;">
+                        <Label prefHeight="29.0" prefWidth="337.0" styleClass="firstLevelLabel" text="Perfil">
+                           <font>
+                              <Font name="Gill Sans" size="28.0" />
+                           </font>
+                        </Label>
+                        <VBox prefHeight="100.0" prefWidth="100.0" styleClass="imageBox">
                            <children>
                               <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -37,45 +78,113 @@
                               </ImageView>
                            </children>
                         </VBox>
-                        <Label fx:id="nameLabel" text="Nombre " />
-                        <Separator prefHeight="9.0" prefWidth="300.0" />
-                        <Label fx:id="enrollmentLabel" text="Matricula" />
-                        <Separator prefHeight="11.0" prefWidth="300.0" />
-                        <Label fx:id="periodLabel" text="Periodo" />
-                        <Separator prefHeight="15.0" prefWidth="300.0" />
-                        <Label fx:id="courseLabel" text="Curso" />
+                        <Label fx:id="practitionerNameLabel" alignment="CENTER" prefHeight="70.0" prefWidth="268.0" styleClass="firstLevelLabel" text="Nombre" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="dateLabel" alignment="TOP_CENTER" prefHeight="42.0" prefWidth="268.0" styleClass="secondLevelLabel" text="Fecha" textAlignment="CENTER">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                        <Button mnemonicParsing="false" prefHeight="29.0" prefWidth="150.0" styleClass="withBorderButton" text="Editar perfil" />
                      </children>
-                     <HBox.margin>
-                        <Insets bottom="15.0" top="15.0" />
-                     </HBox.margin>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" prefHeight="523.0" prefWidth="437.0" spacing="15.0">
+                  <VBox prefHeight="300.0" prefWidth="300.0" spacing="10.0" styleClass="boxBorder">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="55.0" prefWidth="438.0">
+                        <Label prefHeight="29.0" prefWidth="268.0" styleClass="firstLevelLabel" text="Curso">
+                           <font>
+                              <Font name="Gill Sans" size="28.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="courseLabel" minHeight="-Infinity" prefHeight="58.0" prefWidth="268.0" styleClass="firstLevelLabel" text="Nombre" wrapText="true">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                        <Separator prefWidth="200.0" />
+                        <Label fx:id="periodLabel" alignment="TOP_LEFT" minHeight="-Infinity" prefHeight="59.0" prefWidth="268.0" styleClass="firstLevelLabel" text="Periodo" wrapText="true">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </Label>
+                        <VBox alignment="CENTER" fillWidth="false" prefHeight="357.0" prefWidth="342.0" spacing="15.0">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
                            <children>
-                              <Label text="Seleciona una opcion">
-                                 <font>
-                                    <Font size="22.0" />
-                                 </font>
-                              </Label>
+                              <Label fx:id="systemLabel" />
                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="437.0" spacing="25.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#myProjectButtonPressed" prefHeight="54.0" prefWidth="133.0" text="Mi proyecto" />
-                              <Button mnemonicParsing="false" onAction="#activitiesButtonPressed" prefHeight="54.0" prefWidth="133.0" text="Actividades" />
-                           </children>
-                        </HBox>
-                        <Button mnemonicParsing="false" onAction="#logOutButtonPressed" prefHeight="54.0" prefWidth="133.0" text="Cerrar sesión" />
-                        <Button mnemonicParsing="false" onAction="#changePasswordButtonPressed" prefHeight="54.0" prefWidth="133.0" text="Cambiar contraseña" textAlignment="CENTER" wrapText="true" />
+                        </VBox>
                      </children>
-                     <HBox.margin>
-                        <Insets bottom="15.0" top="15.0" />
-                     </HBox.margin>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+                  <VBox prefHeight="300.0" prefWidth="300.0" spacing="10.0" styleClass="boxBorder">
+                     <children>
+                        <Label prefHeight="15.0" prefWidth="268.0" styleClass="firstLevelLabel" text="Cuenta">
+                           <font>
+                              <Font name="Gill Sans" size="28.0" />
+                           </font>
+                        </Label>
+                        <VBox alignment="CENTER" fillWidth="false" prefHeight="357.0" prefWidth="342.0" spacing="45.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#changePasswordButtonPressed" prefHeight="42.0" prefWidth="130.0" styleClass="withBorderButton" text="Cambiar contraseña" textAlignment="CENTER" wrapText="true">
+                                 <graphic>
+                                    <OctIconView glyphName="KEY" size="35" styleClass="firstLevelIcon" />
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#logOutButtonPressed" prefHeight="42.0" prefWidth="130.0" styleClass="withBorderButton" text="Cerrar sesion" textAlignment="CENTER" wrapText="true">
+                                 <graphic>
+                                    <OctIconView glyphName="SIGN_OUT" size="35" styleClass="firstLevelIcon" />
+                                 </graphic>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
                   </VBox>
                </children>
+               <padding>
+                  <Insets top="25.0" />
+               </padding>
             </HBox>
-         </children>
-      </VBox>
+         </center>
+         <top>
+            <VBox alignment="CENTER" prefHeight="66.0" prefWidth="427.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="52.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../resources/images/logouv.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets top="15.0" />
+               </padding>
+            </VBox>
+         </top>
+      </BorderPane>
+      <Label layoutX="1.0" layoutY="25.0" prefHeight="30.0" prefWidth="175.0" styleClass="windowTitle" text="Practicante">
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <font>
+            <Font name="Open Sans Regular" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -1,107 +1,101 @@
 package org.gui.auth.users.practitioner;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
-import org.database.dao.ProjectDAO;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import org.domain.Practitioner;
-import org.gui.auth.resources.alerts.OperationAlert;
-import org.gui.auth.users.administrator.update.remove.RemoveObjectController;
-import org.gui.auth.users.practitioner.activity.ActivityController;
-import org.gui.auth.users.practitioner.project.myproject.MyProjectController;
+import org.gui.Controller;
+import org.gui.auth.users.practitioner.activity.AddActivityController;
 import org.gui.auth.users.practitioner.project.selectproject.SelectProjectController;
 import org.gui.auth.util.changepassword.ChangePasswordController;
+import org.gui.auth.util.theme.SelectThemeController;
 import org.util.Auth;
-import java.io.IOException;
+import org.util.CSSProperties;
 import java.net.URL;
-import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class PractitionerController implements Initializable{
-    private Practitioner practitioner;
+public class PractitionerController extends Controller implements Initializable{
+    @FXML private Label practitionerNameLabel;
+    @FXML private Label periodLabel;
+    @FXML private Label dateLabel;
+    @FXML private Label courseLabel;
+    @FXML private Label systemLabel;
+    @FXML private AnchorPane rootStage;
 
-    @FXML
-    private Label nameLabel;
-
-    @FXML
-    private Label enrollmentLabel;
-
-    @FXML
-    private Label periodLabel;
-
-    @FXML
-    private Label courseLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        practitioner = ( (Practitioner) Auth.getInstance().getCurrentUser() );
-        try {
-            practitioner.setProject( new ProjectDAO().getAssignedProjectByPractitionerID( practitioner.getId() ));
-        } catch (SQLException sqlException) {
-            OperationAlert.showLostConnectionAlert();
-            Logger.getLogger( PractitionerController.class.getName() ).log(Level.WARNING, null, sqlException);
-        }
-        nameLabel.setText( practitioner.getName() );
-        enrollmentLabel.setText( practitioner.getEnrollment() );
-        periodLabel.setText( practitioner.getCourse().getPeriod() );
-        courseLabel.setText( practitioner.getCourse().getName() );
+        setStyleClass();
+        setInformationToFields();
     }
 
     public void showStage() {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/org/gui/auth/users/practitioner/PractitionerVista.fxml") );
-        loader.setController(this);
-        Parent root = null;
-        try{
-            root = loader.load();
-        } catch(IOException ioe) {
-            Logger.getLogger( PractitionerController.class.getName() ).log(Level.WARNING, null, ioe);
-        }
-        Stage coordinator = new Stage();
-        coordinator.setScene( new Scene(root) );
-        coordinator.showAndWait();
+        loadFXMLFile(getClass().getResource("/org/gui/auth/users/practitioner/PractitionerVista.fxml"), this);
+        stage.showAndWait();
     }
 
     @FXML
-    void activitiesButtonPressed(ActionEvent event) {
-        ActivityController activityController = new ActivityController();
-        activityController.showStage();
-    }
-
-    @FXML
-    void logOutButtonPressed(ActionEvent event) {
-        closeStage(event);
-    }
-
-    @FXML
-    void myProjectButtonPressed(ActionEvent event) {
-        if( practitioner.getProject() == null ) {
+    protected void myProjectButtonPressed(ActionEvent event) {
+        if(((Practitioner) Auth.getInstance().getCurrentUser()).getSelectedProjects() == null) {
             SelectProjectController selectProjectController = new SelectProjectController();
             selectProjectController.showStage();
-        } else {
-            MyProjectController myProjectController = new MyProjectController();
-            myProjectController.showStage();
+        }else{
+            systemLabel.setText("Ya has seleccionado tus proyectos espere a que se le asigne uno");
         }
     }
 
     @FXML
-    void changePasswordButtonPressed(ActionEvent event) {
+    protected void activityButtonPressed(ActionEvent event) {
+        AddActivityController addActivityController = new AddActivityController();
+        addActivityController.showStage();
+    }
+
+    @FXML
+    protected void changePasswordButtonPressed(ActionEvent event) {
         ChangePasswordController changePasswordController = new ChangePasswordController();
         changePasswordController.showStage();
     }
 
-    private void closeStage(ActionEvent event) {
-        Stage stage = ( (Stage) ( (Node) event.getSource() ).getScene().getWindow() );
+    @FXML
+    protected void aspectButtonPressed(ActionEvent event) {
+        SelectThemeController selectThemeController = new SelectThemeController();
+        selectThemeController.showStage();
+        if( selectThemeController.getConfiguredStatusOperation() ) {
+            setStyleClass();
+        }
+    }
+
+    @FXML
+    protected void logOutButtonPressed(ActionEvent event) {
         stage.close();
     }
 
-}
+    @FXML
+    protected void stageDragged(MouseEvent event) {
+        super.stageDragged(event);
+    }
 
+    @FXML
+    protected void stagePressed(MouseEvent event) {
+        super.stagePressed(event);
+    }
+
+    private void setInformationToFields() {
+        Practitioner user = (Practitioner) Auth.getInstance().getCurrentUser();
+        if(user != null) {
+            practitionerNameLabel.setText( user.getName() );
+            periodLabel.setText( user.getCourse().getPeriod() );
+            dateLabel.setText( String.valueOf( LocalDate.now() ) );
+            courseLabel.setText( user.getCourse().getName() );
+        }
+    }
+
+    private void setStyleClass() {
+        super.setStyleClass(rootStage, getClass().getResource("../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+    }
+
+}
