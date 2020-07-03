@@ -93,7 +93,7 @@ public class DeliveryDAO implements IDeliveryDAO {
      */
     @Override
     public List<Delivery> getAllDeliveriesByActivity(int idActivity) throws SQLException {
-        String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path, ACT.id_activity, ACT.name, ACT.description, ACT.deadline, COUR.id_course, COUR.NRC, COUR.name, COUR.PERIOD, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PROF.cubicle, PROF.staff_number FROM delivery AS DEL INNER JOIN Activity AS ACT ON DEL.id_activity = ? INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
+        String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path, ACT.id_activity, ACT.name, ACT.description, ACT.deadline, COUR.id_course, COUR.NRC, COUR.name, COUR.PERIOD, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PROF.cubicle, PROF.staff_number FROM Delivery AS DEL INNER JOIN Activity AS ACT ON DEL.id_activity = ? INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
         return getAllDeliveryByStatementAndID(statement, idActivity);
     }
 
@@ -109,6 +109,54 @@ public class DeliveryDAO implements IDeliveryDAO {
     public List<Delivery> getAllDeliveriesByPractitionerID(int idPractitioner) throws SQLException {
         String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path, ACT.id_activity, ACT.name, ACT.description, ACT.deadline, COUR.id_course, COUR.NRC, COUR.name, COUR.PERIOD, PERSPROF.name, PERSPROF.phoneNumber, PERSPROF.email, PROF.cubicle, PROF.staff_number FROM delivery AS DEL INNER JOIN Activity AS ACT ON DEL.id_activity = ACT.id_activity AND DEL.id_practitioner = ? INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PERSPROF ON PROF.id_person = PERSPROF.id_person INNER JOIN Course AS COUR ON PERSPROF.id_course = COUR.id_course";
         return getAllDeliveryByStatementAndID(statement, idPractitioner);
+    }
+
+    public  Delivery getDeliveryByActivityIdAndPractitionerId(int idActivity, int idPractitioner) throws SQLException {
+        Delivery delivery = new Delivery();
+        System.out.println(idActivity+" "+idPractitioner);
+        try (Connection conn = database.getConnection()) {
+            conn.setAutoCommit(false);
+            String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path FROM Delivery AS DEL WHERE DEL.id_Activity = ? AND DEL.id_Practitioner = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setInt(1, idActivity);
+            preparedStatement.setInt(2, idPractitioner);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while( resultSet.next() ) {
+                delivery.setId(resultSet.getInt("DEL.id_delivery"));
+                delivery.setScore(resultSet.getFloat("DEL.score"));
+                delivery.setObservation(resultSet.getString("DEL.observation"));
+                delivery.setDocumentPath(resultSet.getString("DEL.file_path"));
+            }
+            conn.commit();
+        }catch (SQLException sqlException) {
+            throw  sqlException;
+        }
+        return delivery;
+    }
+
+    /***
+     * Get activitie's delivery of practitioner from database.
+     * <p>
+     * This method return a delivery list of practitioner.
+     * </p>
+     * @param idDelivery delivery id help to find rows to change file path;
+     * @parem path new path from delivery;
+     * @return boolean true if 1 o more than 1 rows are affected;
+     */
+    public boolean updateDeliveryFilePath(int idDelivery, String path) throws  SQLException{
+        int rowsAffected = 0;
+        try(Connection conn = database.getConnection()){
+            conn.setAutoCommit(false);
+            String statement = "UPDATE Delivery SET file_path = ? WHERE id_delivery = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setString(1, path);
+            preparedStatement.setInt(2, idDelivery);
+            rowsAffected = preparedStatement.executeUpdate();
+            conn.commit();
+        } catch (SQLException sqlException) {
+            throw sqlException;
+        }
+        return  rowsAffected > 0;
     }
 
     private List<Delivery> getAllDeliveryByStatementAndID(String statement, int id) throws SQLException {
@@ -132,7 +180,7 @@ public class DeliveryDAO implements IDeliveryDAO {
                 professor.setStaffNumber(resultSet.getString( "PROF.staff_number") );
                 professor.setCubicle(resultSet.getInt( "PROF.cubicle") );
                 Activity activity = new Activity();
-                activity.setDeadline(resultSet.getDate( "ACT.deadline") );
+                activity.setDeadline(resultSet.getString( "ACT.deadline") );
                 activity.setDescription(resultSet.getString( "ACT.description") );
                 activity.setId(resultSet.getInt( "ACT.id_activity") );
                 activity.setName(resultSet.getString( "ACT.name") );
@@ -151,6 +199,7 @@ public class DeliveryDAO implements IDeliveryDAO {
         } catch (SQLException sqlException) {
             throw sqlException;
         }
+        System.out.println( deliveries.size() );
         return deliveries;
     }
 
