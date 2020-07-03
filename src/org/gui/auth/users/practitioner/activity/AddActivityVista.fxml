@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="613.0" prefWidth="746.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="14.0" layoutY="14.0" prefHeight="580.0" prefWidth="716.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="716.0">
+               <children>
+                  <Label text="Agregar actividad">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="484.0" prefWidth="716.0">
+               <children>
+                  <VBox prefHeight="482.0" prefWidth="316.0">
+                     <children>
+                        <TableView fx:id="activityTableView" prefHeight="430.0" prefWidth="300.0">
+                          <columns>
+                            <TableColumn fx:id="activityNameColumn" prefWidth="302.0" text="Nombre de la actividad" />
+                          </columns>
+                        </TableView>
+                        <HBox alignment="CENTER" prefHeight="51.0" prefWidth="230.0">
+                           <children>
+                              <Label text="Actividades">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="463.0" prefWidth="414.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="69.0" prefWidth="414.0">
+                           <children>
+                              <Label text="Fecha limite de entrega:      " />
+                              <Label fx:id="deadlineLabel" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="222.0" prefWidth="414.0">
+                           <children>
+                              <VBox prefHeight="181.0" prefWidth="407.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="4.0" prefWidth="407.0">
+                                       <children>
+                                          <Label text="Descripción de la actividad: " />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="159.0" prefWidth="407.0">
+                                       <children>
+                                          <TextArea fx:id="descriptionTextArea" prefHeight="108.0" prefWidth="360.0" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="180.0" prefWidth="407.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="142.0" prefWidth="101.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="46.0" prefWidth="135.0">
+                                       <children>
+                                          <Label text="Calificación" />
+                                       </children>
+                                    </HBox>
+                                    <TextField fx:id="scoreTextField" prefHeight="31.0" prefWidth="75.0" />
+                                 </children>
+                              </VBox>
+                              <Separator orientation="VERTICAL" prefHeight="142.0" prefWidth="30.0" />
+                              <VBox prefHeight="142.0" prefWidth="229.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="44.0" prefWidth="194.0">
+                                       <children>
+                                          <Label text="Observaciones" />
+                                       </children>
+                                    </HBox>
+                                    <TextArea fx:id="observationTextArea" prefHeight="94.0" prefWidth="209.0" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label fx:id="documentLabel" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="selectButton" mnemonicParsing="false" onAction="#selectDocumentButtonPressed" prefHeight="31.0" prefWidth="116.0" text="Seleccionar documento" />
+                              <Separator orientation="VERTICAL" prefHeight="200.0" />
+                              <Button fx:id="deliverButton" mnemonicParsing="false" onAction="#deliverButtonPressed" prefHeight="31.0" prefWidth="116.0" text="Entregar" />
+                              <Separator orientation="VERTICAL" prefHeight="200.0" />
+                              <Button mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="31.0" prefWidth="116.0" text="Cancelar" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
