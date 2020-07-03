@@ -113,7 +113,6 @@ public class DeliveryDAO implements IDeliveryDAO {
 
     public  Delivery getDeliveryByActivityIdAndPractitionerId(int idActivity, int idPractitioner) throws SQLException {
         Delivery delivery = new Delivery();
-        System.out.println(idActivity+" "+idPractitioner);
         try (Connection conn = database.getConnection()) {
             conn.setAutoCommit(false);
             String statement = "SELECT DEL.id_delivery, DEL.observation, DEL.score, DEL.file_path FROM Delivery AS DEL WHERE DEL.id_Activity = ? AND DEL.id_Practitioner = ?";
