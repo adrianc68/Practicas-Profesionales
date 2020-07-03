@@ -208,30 +208,42 @@ public class AddActivityController extends Controller implements  Initializable{
         String splitDate[] = date.split(" ");
         String activityDate[] = splitDate[0].split("-");
         String activityHour[] = splitDate[1].split(":");
-        if (Integer.parseInt(actualDate[0]) > Integer.parseInt(activityDate[0])) {
+        if ( Integer.parseInt(actualDate[0]) > Integer.parseInt(activityDate[0]) ) {
             return false;
         } else {
-            if (Integer.parseInt(actualDate[1]) > Integer.parseInt(activityDate[1])) {
+            if ( Integer.parseInt(actualDate[1]) > Integer.parseInt(activityDate[1]) ) {
                 return false;
             } else {
-                if (Integer.parseInt(actualDate[2]) > Integer.parseInt(activityDate[2])) {
+                if ( Integer.parseInt(actualDate[2]) > Integer.parseInt(activityDate[2]) ) {
                     return false;
                 } else {
-                    if (Integer.parseInt(actualDate[2]) == Integer.parseInt(activityDate[2])) {
-                        if (Integer.parseInt(actualHour[0]) > Integer.parseInt(activityHour[0])) {
+                    if ( Integer.parseInt(actualDate[2]) == Integer.parseInt(activityDate[2]) ) {
+                        if ( Integer.parseInt(actualHour[0]) > Integer.parseInt(activityHour[3]) ) {
                             return false;
                         } else {
-                            if (Integer.parseInt(actualHour[1]) > Integer.parseInt(activityHour[1])) {
-                                return false;
-                            } else {
-                                if (Integer.parseInt(actualHour[2].substring(0, 2)) > Integer.parseInt(activityHour[2])) {
+                            if ( Integer.parseInt(actualHour[0]) == Integer.parseInt(activityHour[3]) ) {
+                                if ( Integer.parseInt(actualHour[1]) > Integer.parseInt(activityHour[4]) ) {
                                     return false;
                                 } else {
-                                    return true;
+                                    if ( Integer.parseInt(actualHour[1]) == Integer.parseInt(activityHour[4]) ) {
+                                        if ( Integer.parseInt(actualHour[2].substring(0, 2)) > Integer.parseInt(activityHour[5]) ) {
+                                            return false;
+                                        } else {
+                                            if ( Integer.parseInt(actualHour[2].substring(0, 2)) == Integer.parseInt(activityHour[5]) ) {
+                                                return false;
+                                            } else {
+                                                return true;
+                                            }
+                                        }
+                                    } else {
+                                        return true;
+                                    }
                                 }
+                            } else {
+                                return true;
                             }
                         }
-                    }else{
+                    } else {
                         return true;
                     }
                 }
