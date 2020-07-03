@@ -37,7 +37,7 @@ public class ActivityDAO implements IActivityDAO {
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, activity.getName());
             preparedStatement.setString(2, activity.getDescription());
-            preparedStatement.setDate(3, activity.getDeadline());
+            preparedStatement.setString(3, activity.getDeadline());
             preparedStatement.setInt(4, activity.getProfessor().getId());
             preparedStatement.executeUpdate();
             statement = "SELECT LAST_INSERT_ID()";
@@ -94,7 +94,7 @@ public class ActivityDAO implements IActivityDAO {
                 Activity activity = new Activity();
                 activity.setName(resultSet.getString("ACT.name"));
                 activity.setDescription(resultSet.getString("ACT.description"));
-                activity.setDeadline(resultSet.getDate("ACT.deadline"));
+                activity.setDeadline(resultSet.getString("ACT.deadline"));
                 activity.setId((resultSet.getInt("ACT.id_activity")));
                 activity.setDeliveries(null);
                 activity.setProfessor(null);
@@ -126,7 +126,7 @@ public class ActivityDAO implements IActivityDAO {
                 Activity activity = new Activity();
                 activity.setName(result.getString("ACT.name"));
                 activity.setDescription(result.getString("ACT.description"));
-                activity.setDeadline(result.getDate("ACT.deadline"));
+                activity.setDeadline(result.getString("ACT.deadline"));
                 activity.setId((result.getInt("ACT.id_activity")));
                 activity.setDeliveries(null);
                 activity.setProfessor(null);
