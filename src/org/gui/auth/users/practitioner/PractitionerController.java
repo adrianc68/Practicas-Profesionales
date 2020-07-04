@@ -6,19 +6,25 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import org.database.dao.ProjectDAO;
 import org.domain.Practitioner;
+import org.domain.Project;
 import org.gui.Controller;
 import org.gui.auth.users.practitioner.activity.AddActivityController;
+import org.gui.auth.users.practitioner.project.myproject.MyProjectController;
 import org.gui.auth.users.practitioner.project.selectproject.SelectProjectController;
 import org.gui.auth.util.changepassword.ChangePasswordController;
 import org.gui.auth.util.theme.SelectThemeController;
 import org.util.Auth;
 import org.util.CSSProperties;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class PractitionerController extends Controller implements Initializable{
+    List<Project> selectedProjects;
     @FXML private Label practitionerNameLabel;
     @FXML private Label periodLabel;
     @FXML private Label dateLabel;
@@ -40,11 +46,18 @@ public class PractitionerController extends Controller implements Initializable{
 
     @FXML
     protected void myProjectButtonPressed(ActionEvent event) {
-        if(((Practitioner) Auth.getInstance().getCurrentUser()).getSelectedProjects() == null) {
+        ProjectDAO projectDAO = new ProjectDAO();
+        try {
+            selectedProjects = projectDAO.getSelectedProjectsByPractitionerID( ( (Practitioner) Auth.getInstance().getCurrentUser() ).getId() );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if( selectedProjects.size() == 0 ) {
             SelectProjectController selectProjectController = new SelectProjectController();
             selectProjectController.showStage();
         }else{
-            systemLabel.setText("Ya has seleccionado tus proyectos espere a que se le asigne uno");
+            MyProjectController myProjectController = new MyProjectController();
+            myProjectController.showStage();
         }
     }
 
