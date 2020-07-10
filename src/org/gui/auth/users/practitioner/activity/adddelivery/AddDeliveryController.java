@@ -94,14 +94,14 @@ public class AddDeliveryController extends ValidatorController implements Initia
         if( isFileChoosenPDF( pathTextField.getText() ) ) {
             showPDFInComponent();
         } else {
-            systemLabel.setText("El archivo no se puede visualizar (Puede que no sea un PDF o este dañado)");
+            systemLabel.setText("El archivo no se puede visualizar (Puede que no sea un PDF o esté dañado)");
             clearFileSelection();
         }
     }
 
     private void showSuccessfullAlert() {
         String title = "¡Se ha entregado la actividad correctamente!";
-        String contentText = "¡Se ha entregado la actividad correctamente! puedes volver a subirla si no se ha excedido la fecha límite.";
+        String contentText = "¡Se ha entregado la actividad correctamente! Puedes volver a subirla si no se ha excedido la fecha límite.";
         OperationAlert.showSuccessfullAlert(title, contentText);
     }
 
