@@ -18,14 +18,13 @@ import org.domain.Delivery;
 import org.domain.Practitioner;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.users.administrator.update.add.addcoordinator.AddCoordinatorController;
 import org.gui.auth.users.professor.activity.ActivityController;
 import org.util.Auth;
 import org.util.ftp.FTPConnection;
 import java.io.File;
 import java.net.URL;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
@@ -56,7 +55,7 @@ public class AddActivityController extends Controller implements  Initializable{
             practitioner.setProfessor( new ProfessorDAO().getAssignedProfessorByPractitionerID( practitioner.getId() ) );
         } catch (SQLException sqlException) {
             OperationAlert.showLostConnectionAlert();
-            Logger.getLogger( ActivityController.class.getName() ).log(Level.WARNING, null, sqlException);
+            Logger.getLogger( AddActivityController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
         if(practitioner.getProfessor() != null ) {
             setInformationFromDatabaseToTableActivity();
@@ -90,9 +89,10 @@ public class AddActivityController extends Controller implements  Initializable{
         ActivityDAO activityDAO = new ActivityDAO();
         activityObservableList = FXCollections.observableArrayList();
         try {
-            activityObservableList.addAll(activityDAO.getAllActivitiesByProfessorID( practitioner.getProfessor().getId() ));
-        } catch (SQLException e) {
-            e.printStackTrace();
+            activityObservableList.addAll( activityDAO.getAllActivitiesByProfessorID( practitioner.getProfessor().getId() ) );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddActivityController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
         activityTableView.setItems(activityObservableList);
     }
@@ -115,9 +115,10 @@ public class AddActivityController extends Controller implements  Initializable{
         selectButton.setDisable(true);
         deliverButton.setDisable(true);
         try {
-            delivery = new DeliveryDAO().getDeliveryByActivityIdAndPractitionerId(activity.getId(), practitioner.getId());
-        } catch (SQLException e) {
-            e.printStackTrace();
+            delivery = new DeliveryDAO().getDeliveryByActivityIdAndPractitionerId( activity.getId(), practitioner.getId() );
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( AddActivityController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
 
         if( compareDates( activity.getDeadline() ) ) {
@@ -125,11 +126,12 @@ public class AddActivityController extends Controller implements  Initializable{
                 if (delivery.getObservation() != null) {
                     scoreTextField.setText( String.valueOf( delivery.getScore() ) );
                     observationTextArea.setText( delivery.getObservation() );
+                    OperationAlert.showUnsuccessfullAlert("Actividad calificada", "Esta actividad ya ha sido calificada, por lo que no puedes moficar la entrega");
                 }else{
                     selectButton.setDisable(false);
                     deliverButton.setDisable(false);
                 }
-                documentLabel.setText( "ya has subido el siguiente documento "+getFileName( delivery.getDocumentPath() ) );
+                documentLabel.setText( "Documento entregado "+getFileName( delivery.getDocumentPath() ) );
             }else{
                 selectButton.setDisable(false);
                 deliverButton.setDisable(false);
@@ -141,13 +143,15 @@ public class AddActivityController extends Controller implements  Initializable{
                     observationTextArea.setText( delivery.getObservation() );
                 }
             }
-            documentLabel.setText("La actividad ya ha cerrado");
+            OperationAlert.showUnsuccessfullAlert("Actividad ha cerrado", "La actividad seleccionada ha cerrado");
         }
+
     }
 
     private void setTableComponents() {
-        activityNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        activityNameColumn.setCellValueFactory( new PropertyValueFactory<>("name") );
         setListenerToActivityTable();
+
     }
 
     @FXML
@@ -156,41 +160,44 @@ public class AddActivityController extends Controller implements  Initializable{
             if (selectedFile != null) {
                 FTPConnection ftpConnection = new FTPConnection();
                 if( delivery.getId() != 0 ){
-                    ftpConnection.deleteFile(delivery.getDocumentPath());
-                    if (ftpConnection.uploadFile(selectedFile, ((Activity) selectedActivity).getName() + ":" + practitioner.getName() + ":" + ((Activity) selectedActivity).getId() + ":" + selectedFile.getName())) {
+                    ftpConnection.deleteFile( delivery.getDocumentPath() );
+                    if ( ftpConnection.uploadFile(selectedFile, ( (Activity) selectedActivity ).getName() + ":" + practitioner.getName() + ":" + ( (Activity) selectedActivity ).getId() + ":" + selectedFile.getName() ) ) {
                         try {
-                            new DeliveryDAO().updateDeliveryFilePath(delivery.getId(), ((Activity) selectedActivity).getName() + ":" + practitioner.getName() + ":" + ((Activity) selectedActivity).getId() + ":" + selectedFile.getName());
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                            new DeliveryDAO().updateDeliveryFilePath( delivery.getId(), ( (Activity) selectedActivity ).getName() + ":" + practitioner.getName() + ":" + ((Activity) selectedActivity).getId() + ":" + selectedFile.getName() );
+                        } catch (SQLException sqlException) {
+                            OperationAlert.showLostConnectionAlert();
+                            Logger.getLogger( AddActivityController.class.getName() ).log(Level.WARNING, null, sqlException);
                         }
-                        documentLabel.setText("Se actualizado el documento en el sistema");
+                        OperationAlert.showSuccessfullAlert("Registro exitoso", "Se ha sustituido el documento cargado previamente en el sistema");
                         selectButton.setDisable(true);
                         deliverButton.setDisable(true);
+                        selectedFile = null;
                     } else {
-                        documentLabel.setText("No se ha podido cargar el documento");
+                        OperationAlert.showUnsuccessfullAlert("Registro fallido", "No se ha podido cargar el documento en el sistema");
                     }
                 }else{
-                    if (ftpConnection.uploadFile(selectedFile, ((Activity) selectedActivity).getName() + ":" + practitioner.getName() + ":" + ((Activity) selectedActivity).getId() + ":" + selectedFile.getName())) {
+                    if ( ftpConnection.uploadFile(selectedFile, ( (Activity) selectedActivity ).getName() + ":" + practitioner.getName() + ":" + ((Activity) selectedActivity).getId() + ":" + selectedFile.getName() ) ) {
                         Delivery newDelivery = new Delivery();
                         newDelivery.setPractitioner(practitioner);
                         newDelivery.setDocumentPath(((Activity) selectedActivity).getName() + ":" + practitioner.getName() + ":" + ((Activity) selectedActivity).getId() + ":" + selectedFile.getName());
                         try {
-                            new DeliveryDAO().addDeliveryToActivity(newDelivery, ((Activity) selectedActivity).getId());
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                            new DeliveryDAO().addDeliveryToActivity( newDelivery, ( (Activity) selectedActivity ).getId() );
+                        } catch (SQLException sqlException) {
+                            OperationAlert.showLostConnectionAlert();
+                            Logger.getLogger( AddActivityController.class.getName() ).log(Level.WARNING, null, sqlException);
                         }
-                        documentLabel.setText("El docuemnto se ha cargado en el sistema");
+                        OperationAlert.showSuccessfullAlert("Registro exitoso", "El documento: "+selectedFile.getName()+" se ha cargado en el sistema");
                         selectButton.setDisable(true);
                         deliverButton.setDisable(true);
                     } else {
-                        documentLabel.setText("No se ha podido cargar el documento");
+                        OperationAlert.showUnsuccessfullAlert("Registro fallido", "No se ha podido cargar el documento en el sistema");
                     }
                 }
             } else {
-                documentLabel.setText("No se ha seleccionado documento, favor de seleccionar uno");
+                OperationAlert.showUnsuccessfullAlert("Documento no seleccionado", "No se ha seleccionado ningun documento, favor de elegir uno");
             }
         }else{
-            documentLabel.setText("La actividad ya ha cerrado");
+            OperationAlert.showUnsuccessfullAlert("Actividad ha cerrado", "La actividad seleccionada ha cerrado");
         }
     }
 
@@ -199,12 +206,12 @@ public class AddActivityController extends Controller implements  Initializable{
         FileChooser fileChooser = new FileChooser();
         selectedFile = fileChooser.showOpenDialog(null);
         if(selectedFile != null)
-            documentLabel.setText("El documento seleccionado es: "+selectedFile.getName());
+            documentLabel.setText( "El documento seleccionado es: "+selectedFile.getName() );
     }
 
     private boolean compareDates(String date) {
-        String actualDate[] = String.valueOf(LocalDate.now()).split("-");
-        String actualHour[] = String.valueOf(LocalTime.now()).split(":");
+        String actualDate[] = String.valueOf( LocalDate.now() ).split("-");
+        String actualHour[] = String.valueOf( LocalTime.now() ).split(":");
         String splitDate[] = date.split(" ");
         String activityDate[] = splitDate[0].split("-");
         String activityHour[] = splitDate[1].split(":");

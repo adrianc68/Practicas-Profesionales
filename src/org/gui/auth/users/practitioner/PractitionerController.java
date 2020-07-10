@@ -10,6 +10,7 @@ import org.database.dao.ProjectDAO;
 import org.domain.Practitioner;
 import org.domain.Project;
 import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.users.practitioner.activity.AddActivityController;
 import org.gui.auth.users.practitioner.project.myproject.MyProjectController;
 import org.gui.auth.users.practitioner.project.selectproject.SelectProjectController;
@@ -22,6 +23,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PractitionerController extends Controller implements Initializable{
     List<Project> selectedProjects;
@@ -49,8 +52,9 @@ public class PractitionerController extends Controller implements Initializable{
         ProjectDAO projectDAO = new ProjectDAO();
         try {
             selectedProjects = projectDAO.getSelectedProjectsByPractitionerID( ( (Practitioner) Auth.getInstance().getCurrentUser() ).getId() );
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( PractitionerController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
         if( selectedProjects.size() == 0 ) {
             SelectProjectController selectProjectController = new SelectProjectController();

@@ -5,14 +5,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import org.database.dao.ActivityDAO;
 import org.domain.Activity;
 import org.domain.Professor;
 import org.gui.Controller;
+import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
 import org.util.Validator;
 import java.net.URL;
@@ -22,12 +21,13 @@ import java.time.LocalTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AddActivityController extends Controller implements Initializable {
     private boolean dataInputValid;
     private boolean addOperationStatus;
     private Activity newActivity;
-    
     @FXML private TextField tittleTextField;
     @FXML private TextArea descriptionTextArea;
     @FXML private DatePicker deadlineDatePicker = new DatePicker();
@@ -49,37 +49,36 @@ public class AddActivityController extends Controller implements Initializable {
     }
 
     public void showStage() {
-        loadFXMLFile(getClass().getResource("/org/gui/auth/users/professor/activity/createactivity/AddActivityVista.fxml"), this);
+        loadFXMLFile( getClass().getResource("/org/gui/auth/users/professor/activity/createactivity/AddActivityVista.fxml"), this );
         stage.show();
     }
 
     @FXML
     void addButtonPressed(ActionEvent event) {
-        if(deadlineDatePicker.getValue() != null){
+        if( deadlineDatePicker.getValue() != null ){
             if ( compareDates( deadlineDatePicker.getValue()+"-"+hourSpinner.getValue()+"-"+minuteSpinner.getValue()+"-"+secondSpinner.getValue() ) ) {
                 if (dataInputValid) {
                     addOperationStatus = false;
                     newActivity = new Activity();
                     newActivity.setName(tittleTextField.getText());
-                    newActivity.setDescription(descriptionTextArea.getText());
+                    newActivity.setDescription( descriptionTextArea.getText() );
                     newActivity.setDeadline( deadlineDatePicker.getValue()+"-"+hourSpinner.getValue()+"-"+minuteSpinner.getValue()+"-"+secondSpinner.getValue() );
                     newActivity.setProfessor( (Professor) Auth.getInstance().getCurrentUser() );
-                    System.out.println(newActivity);
                     ActivityDAO activityDAO = new ActivityDAO();
                     try {
                         newActivity.setId(activityDAO.addActivity(newActivity));
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    } catch (SQLException sqlException) {
+                        OperationAlert.showLostConnectionAlert();
+                        Logger.getLogger( AddActivityController.class.getName() ).log(Level.WARNING, null, sqlException);                    }
                     closeStage(event);
                 }else{
-                    systemLabel.setText("Los campos marcados en rojo no contienen información valida");
+                    OperationAlert.showUnsuccessfullAlert("Información no valida", "En los campos mascados de color rojo no se ingreso informacion valida");
                 }
             }else{
-                systemLabel.setText("La fecha seleccionada no es valida");
+                OperationAlert.showUnsuccessfullAlert("Fecha invalida", "La fecha seleccionada no es valida");
             }
         }else{
-            systemLabel.setText("No se ha seleccionado una fecha");
+            OperationAlert.showUnsuccessfullAlert("fecha no seleccionada", "No has seleccionado una fecha para la actividad");
         }
     }
 
@@ -133,9 +132,8 @@ public class AddActivityController extends Controller implements Initializable {
     }
 
     private boolean compareDates(String date) {
-        String actualDate[] = String.valueOf(LocalDate.now()).split("-");
-        String actualHour[] = String.valueOf(LocalTime.now()).split(":");
-        System.out.println(LocalTime.now());
+        String actualDate[] = String.valueOf( LocalDate.now() ).split("-");
+        String actualHour[] = String.valueOf( LocalTime.now() ).split(":");
         String splitDate[] = date.split("-");
         System.out.println(splitDate[5]);
         if ( Integer.parseInt(actualDate[0]) > Integer.parseInt(splitDate[0]) ) {

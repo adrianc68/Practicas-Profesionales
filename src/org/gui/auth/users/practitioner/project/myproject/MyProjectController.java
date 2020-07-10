@@ -13,6 +13,7 @@ import org.domain.Practitioner;
 import org.domain.Project;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.users.practitioner.PractitionerController;
 import org.util.Auth;
 import java.net.URL;
 import java.sql.SQLException;
@@ -89,8 +90,9 @@ public class MyProjectController extends Controller implements Initializable {
         ProjectDAO projectDAO = new ProjectDAO();
         try {
             assignedProject = projectDAO.getAssignedProjectByPractitionerID( practitioner.getId() );
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqlException) {
+            OperationAlert.showLostConnectionAlert();
+            Logger.getLogger( MyProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
         }
         if( assignedProject != null){
             setProjectInformationToLabelsBySelectedProject( assignedProject );

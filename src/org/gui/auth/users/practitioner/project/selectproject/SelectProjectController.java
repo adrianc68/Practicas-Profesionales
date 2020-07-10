@@ -17,6 +17,7 @@ import org.domain.Practitioner;
 import org.domain.Project;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.users.practitioner.project.myproject.MyProjectController;
 import org.util.Auth;
 import org.util.CSSProperties;
 
@@ -99,13 +100,13 @@ public class SelectProjectController extends Controller implements Initializable
                 ProjectDAO projectDAO = new ProjectDAO();
                 for( Project projec : projectSelected) {
                     try {
-                        projectDAO.addSelectedProjectByPractitionerID( (((Practitioner) Auth.getInstance().getCurrentUser()).getId() ), projec.getId());
-                    } catch (SQLException e) {
-                        e.printStackTrace();
+                        projectDAO.addSelectedProjectByPractitionerID( ( ( (Practitioner) Auth.getInstance().getCurrentUser() ).getId() ), projec.getId() );
+                    } catch (SQLException sqlException) {
+                        OperationAlert.showLostConnectionAlert();
+                        Logger.getLogger( SelectProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
                     }
                 }
-                Practitioner practitioner = ((Practitioner) Auth.getInstance().getCurrentUser());
-                practitioner.setSelectedProjects(projectSelected);
+                OperationAlert.showSuccessfullAlert("Registro exitoso", "Tus opciones de proyecto se han guardado en el sistema");
                 stage.close();
             }
         }
@@ -133,7 +134,7 @@ public class SelectProjectController extends Controller implements Initializable
     }
 
     private void setTableComponents() {
-        projectNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        projectNameColumn.setCellValueFactory( new PropertyValueFactory<>("name") );
         setListenerToProjectTable();
     }
 
