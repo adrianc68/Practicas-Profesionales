@@ -14,7 +14,7 @@ public class GetProjectTest {
     public void getSelectedProjectsByPractitionerID() throws SQLException {
         int idPractitioner = 8;
         List<Project> selectedProject = new ProjectDAO().getSelectedProjectsByPractitionerID(idPractitioner);
-        int expected = 1;
+        int expected = 3;
         int actual = selectedProject.size();
         assertEquals(expected,actual);
     }

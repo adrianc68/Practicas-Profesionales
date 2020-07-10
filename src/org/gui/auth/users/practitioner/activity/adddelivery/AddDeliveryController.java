@@ -114,7 +114,7 @@ public class AddDeliveryController extends ValidatorController implements Initia
         fileChooser.setTitle("Selecciona el archivo a subir");
         selectedFile = fileChooser.showOpenDialog(stage);
         if(selectedFile != null ) {
-            fileDirectory = practitioner.getName() + ":" + activity.getName() + ":" + activity.getId() + ":" + selectedFile.getName();
+            fileDirectory = practitioner.getName() + "_" + activity.getName() + "_" + activity.getId() + "_" + selectedFile.getName();
             pathTextField.setText( selectedFile.getAbsolutePath() );
         }
     }

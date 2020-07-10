@@ -131,8 +131,8 @@ public class DeliveryDAO implements IDeliveryDAO {
                 delivery.setScore( resultSet.getFloat("DEl.score") );
                 delivery.setId( resultSet.getInt("DEL.id_delivery") );
                 delivery.setDocumentPath( resultSet.getString("DEL.file_path") );
-                conn.commit();
             }
+            conn.commit();
         } catch (SQLException sqlException) {
             throw sqlException;
         }

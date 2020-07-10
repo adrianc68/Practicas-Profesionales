@@ -5,28 +5,30 @@ import org.domain.Activity;
 import org.junit.Test;
 import java.sql.SQLException;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GetAllActivitiesTest {
     @Test
     public void getAllActivitiesFromLastCourse() throws SQLException {
         List<Activity> activityList = new ActivityDAO().getAllActivitiesFromLastCourse();
-        int expected = 2;
+        int expected = 3;
         int actual = activityList.size();
         assertEquals(expected, actual);
     }
 
     @Test
     public void getAllActivitiesByProfessorID() throws SQLException {
-        List<Activity> activityList = new ActivityDAO().getAllActivitiesByProfessorID(5);
-        int expected = 2;
+        int idProfessor = 5;
+        List<Activity> activityList = new ActivityDAO().getAllActivitiesByProfessorID(idProfessor);
+        int expected = 3;
         int actual = activityList.size();
         assertEquals(expected, actual);
     }
 
     @Test
     public void getAllActivitiesByNoExistingProfessorID() throws SQLException {
-        List<Activity> activityList = new ActivityDAO().getAllActivitiesByProfessorID(49);
+        int idProfessor = 493489534;
+        List<Activity> activityList = new ActivityDAO().getAllActivitiesByProfessorID(idProfessor);
         int expected = 0;
         int actual = activityList.size();
         assertEquals(expected, actual);

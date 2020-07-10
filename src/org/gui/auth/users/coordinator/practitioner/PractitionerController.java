@@ -21,10 +21,10 @@ import org.domain.Practitioner;
 import org.domain.Project;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.resources.card.PractitionerCard;
 import org.gui.auth.users.coordinator.practitioner.addpractitioner.AddPractitionerController;
 import org.gui.auth.users.coordinator.practitioner.assignprofessor.AssignProfessorController;
 import org.gui.auth.users.coordinator.practitioner.assignproject.AssignProjectController;
-import org.gui.auth.resources.card.PractitionerCard;
 import org.gui.auth.users.coordinator.practitioner.assignproject.assignother.AssignOtherProject;
 import org.gui.auth.users.coordinator.practitioner.removepractitioner.RemovePractitionerController;
 

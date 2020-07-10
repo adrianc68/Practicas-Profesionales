@@ -13,7 +13,8 @@ public class GetDeliveryTest {
 
     @Test
     public void getAllDeliveriesByActivity() throws SQLException {
-        List<Delivery> deliveryList = new DeliveryDAO().getAllDeliveriesByActivity(9);
+        int idActivity = 9;
+        List<Delivery> deliveryList = new DeliveryDAO().getAllDeliveriesByActivity(idActivity);
         int expected = 1;
         int actual = deliveryList.size();
         assertEquals(expected, actual);
@@ -21,7 +22,8 @@ public class GetDeliveryTest {
 
     @Test
     public void getAllDeliveriesByNoExistingActivity() throws SQLException {
-        List<Delivery> deliveryList = new DeliveryDAO().getAllDeliveriesByActivity(999);
+        int idActivity = 999;
+        List<Delivery> deliveryList = new DeliveryDAO().getAllDeliveriesByActivity(idActivity);
         int expected = 0;
         int actual = deliveryList.size();
         assertEquals(expected, actual);
@@ -29,7 +31,8 @@ public class GetDeliveryTest {
 
     @Test
     public void getAllDeliveriesByPractitionerID() throws SQLException {
-        List<Delivery> deliveryList = new DeliveryDAO().getAllDeliveriesByPractitionerID(9);
+        int idPractitioner = 9;
+        List<Delivery> deliveryList = new DeliveryDAO().getAllDeliveriesByPractitionerID(idPractitioner);
         int expected = 1;
         int actual = deliveryList.size();
         assertEquals(expected, actual);
@@ -37,7 +40,8 @@ public class GetDeliveryTest {
 
     @Test
     public void getAllDeliveriesByNoExistingPractitionerID() throws SQLException {
-        List<Delivery> deliveryList = new DeliveryDAO().getAllDeliveriesByPractitionerID(49);
+        int idPractitioner = 4999999;
+        List<Delivery> deliveryList = new DeliveryDAO().getAllDeliveriesByPractitionerID(idPractitioner);
         int expected = 0;
         int actual = deliveryList.size();
         assertEquals(expected, actual);
@@ -53,7 +57,7 @@ public class GetDeliveryTest {
 
     @Test
     public void getDeliveryByNoexistingActivityAndPractitioner() throws SQLException {
-        int idPractitioner = 999;
+        int idPractitioner = 9999;
         int idActivity = 9999;
         Delivery delivery = new DeliveryDAO().getDeliveryByActivityAndPractitioner(idActivity, idPractitioner);
         assertNull(delivery);

@@ -13,7 +13,7 @@ public class PDFViewerTest {
         assertNotNull(jPanel);
     }
 
-    @Test
+    @Test(timeout=15000)
     public void getJPanelByNoExistingPDF() {
         PDFViewer pdfViewer = new PDFViewer("f");
         JPanel jPanel = pdfViewer.getJPanelPDF();
