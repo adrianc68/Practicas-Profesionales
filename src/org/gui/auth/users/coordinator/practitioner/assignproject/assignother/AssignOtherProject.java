@@ -15,8 +15,6 @@ import org.domain.Project;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.gui.auth.resources.card.ProjectCard;
-import org.gui.auth.users.administrator.update.remove.RemoveObjectController;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -55,7 +53,7 @@ public class AssignOtherProject extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         setProjectsFromDatabaseToScrollPane();
     }
 

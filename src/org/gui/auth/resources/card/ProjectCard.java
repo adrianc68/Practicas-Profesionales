@@ -4,12 +4,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.domain.Project;
-import org.util.CSSProperties;
 
-public class ProjectCard extends VBox {
+public class ProjectCard extends Card {
     private final int CARD_HEIGHT = 121;
     private final int CARD_WIDTH = 278;
     private final int FONT_SIZE = 16;
@@ -59,13 +57,6 @@ public class ProjectCard extends VBox {
         getChildren().add(nameProject);
         getChildren().add(companyName);
         setStyleClass();
-    }
-
-    private void setStyleClass() {
-        getStylesheets().clear();
-        getStyleClass().clear();
-        getStylesheets().add(getClass().getResource("../" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-        getStyleClass().add("card");
     }
 
 }

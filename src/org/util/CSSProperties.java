@@ -34,7 +34,7 @@ public class CSSProperties {
      */
     public static boolean writeThemeProperties(Theme theme) {
         boolean result = false;
-        try (OutputStream output = new FileOutputStream(PROPERTIES_PATH)) {
+        try (OutputStream output = new FileOutputStream(PROPERTIES_PATH) ) {
             Properties properties = readProperties();
             properties.setProperty( "selected.theme", theme.name() ) ;
             properties.store(output, null);
@@ -54,7 +54,7 @@ public class CSSProperties {
      */
     public static boolean readConfiguredAppProperties() {
         Properties properties = readProperties();
-        return Boolean.valueOf( properties.getProperty("first.open") );
+        return Boolean.parseBoolean( properties.getProperty("first.open") );
     }
 
     /***

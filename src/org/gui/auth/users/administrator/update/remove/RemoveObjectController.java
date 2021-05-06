@@ -18,7 +18,6 @@ import org.domain.Person;
 import org.domain.Professor;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -36,7 +35,7 @@ public class RemoveObjectController extends Controller implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
+        setStyleClass(rootStage);
         statusRemoveOperation = false;
         if(object != null) {
             // T-O Ternary Operator Here!

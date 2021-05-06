@@ -13,3 +13,5 @@ El proyecto fue desarrollado para la experiencia educativa de Principios de Cons
 - JavaMail
 - FontAwesomeFX8.9
 - MysqlConnector8.0.18
+- Commons-net3-6
+- IcePDF

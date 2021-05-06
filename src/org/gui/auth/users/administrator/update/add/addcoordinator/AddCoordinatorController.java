@@ -21,7 +21,6 @@ import org.domain.Person;
 import org.gui.ValidatorController;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
-import org.util.CSSProperties;
 import org.util.Cryptography;
 import org.util.Validator;
 import java.net.URL;
@@ -52,7 +51,7 @@ public class AddCoordinatorController extends ValidatorController implements Ini
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme()).toExternalForm());
+        setStyleClass(rootStage);
         addOperationStatus = false;
         initValidatorToTextFields();
     }
@@ -83,7 +82,7 @@ public class AddCoordinatorController extends ValidatorController implements Ini
     }
 
     @FXML
-    void saveButtonPressed(ActionEvent event) {
+    protected void saveButtonPressed(ActionEvent event) {
         if (verifyInputData() ) {
             addCoordinator();
             if (addOperationStatus) {

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootStage" onMouseDragged="#stageDragged" onMousePressed="#stagePressed" prefHeight="729.0" prefWidth="605.0" styleClass="background" stylesheets="@../../../../resources/stylesheet/whitetheme/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="525.0" prefWidth="591.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="66.0" prefWidth="427.0">
+               <children>
+                  <ImageView fitHeight="52.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../resources/images/logouv.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets top="15.0" />
+               </padding>
+            </VBox>
+            <VBox prefHeight="533.0" prefWidth="533.0" spacing="10.0" styleClass="contentForm">
+               <children>
+                  <VBox prefHeight="44.0" prefWidth="619.0" spacing="10.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="37.0" prefWidth="422.0" styleClass="firstLevelLabel" text="Registrar actividad" textAlignment="CENTER">
+                           <font>
+                              <Font name="Gill Sans" size="31.0" />
+                           </font>
+                        </Label>
+                        <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="62.0" prefWidth="414.0" styleClass="thirdLevelLabel" text="Debes ingresar información de la actividad para que pueda ser visualizada por los practicantes del sistema y puedan realizarla" textAlignment="CENTER" wrapText="true" />
+                        <Label styleClass="firstLevelLabel" text="Información de actividad">
+                           <font>
+                              <Font name="Open Sans Light" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_LEFT" prefHeight="57.0" spacing="5.0">
+                     <children>
+                        <Label styleClass="formLabel" text="TITULO">
+                           <graphic>
+                              <MaterialDesignIconView fx:id="checkIconTitle" glyphName="CHECK" size="15" />
+                           </graphic>
+                        </Label>
+                        <TextField fx:id="titleTextField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" promptText="e.g Actividad 1" styleClass="textfield">
+                           <tooltip>
+                              <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                           </tooltip>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="99.0" prefWidth="463.0" spacing="5.0">
+                     <children>
+                        <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="234.0" styleClass="formLabel" text="DESCRIPCIÓN GENERAL" wrapText="true">
+                           <graphic>
+                              <MaterialDesignIconView fx:id="checkIconDescription" glyphName="CHECK" size="15" />
+                           </graphic>
+                        </Label>
+                        <TextArea fx:id="descriptionTextArea" prefHeight="121.0" prefWidth="463.0" promptText="e.g Descripción" styleClass="textArea" wrapText="true">
+                           <tooltip>
+                              <Tooltip id="tooltip" maxWidth="200.0" text="No debe contener carácteres extraños por ejemplo: !&quot;$%&amp;. Ni un espacio en blanco al final." textAlignment="JUSTIFY" wrapText="true" />
+                           </tooltip>
+                        </TextArea>
+                     </children>
+                  </VBox>
+                  <Label styleClass="firstLevelLabel" text="Información de fechas">
+                     <font>
+                        <Font name="Open Sans Light" size="20.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                     <children>
+                        <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="56.0" prefWidth="202.0" spacing="5.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="234.0" styleClass="formLabel" text="FECHA LÍMITE DE ENTREGA" wrapText="true">
+                                 <graphic>
+                                    <MaterialDesignIconView fx:id="checkIconDateTime" glyphName="CHECK" size="15" />
+                                 </graphic>
+                              </Label>
+                              <DatePicker fx:id="deadlineDatePicker" editable="false" prefHeight="35.0" prefWidth="463.0" promptText="Selecciona la fecha" showWeekNumbers="true" styleClass="date-picker" />
+                           </children>
+                        </VBox>
+                        <VBox maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="202.0" spacing="5.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="234.0" styleClass="formLabel" text="HORARIO LÍMITE DE ENTREGA" wrapText="true">
+                                 <graphic>
+                                    <MaterialDesignIconView fx:id="checkIconSchedule" glyphName="CHECK" size="15" styleClass="correctlyTextField" />
+                                 </graphic>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Spinner id="spinner" fx:id="hourSpinner" prefHeight="38.0" prefWidth="71.0">
+                                       <tooltip>
+                                          <Tooltip text="Horas" />
+                                       </tooltip></Spinner>
+                                    <Spinner id="spinner" fx:id="minuteSpinner" prefHeight="36.0" prefWidth="71.0">
+                                       <tooltip>
+                                          <Tooltip text="Minutos" />
+                                       </tooltip></Spinner>
+                                    <Spinner id="spinner" fx:id="secondSpinner" prefHeight="39.0" prefWidth="71.0">
+                                       <tooltip>
+                                          <Tooltip text="Segundos" />
+                                       </tooltip></Spinner>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Label fx:id="systemLabel" alignment="BOTTOM_CENTER" prefHeight="17.0" prefWidth="490.0" styleClass="systemLabel" textAlignment="CENTER" wrapText="true" />
+               </children>
+               <padding>
+                  <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="80.0" prefWidth="427.0" spacing="10.0">
+               <children>
+                  <Button maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#addButtonPressed" prefHeight="42.0" prefWidth="484.0" styleClass="firstLevelButton" text="Registrar" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="21.0" styleClass="withoutOutLineButton" text="Cancelar">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="35.0" right="35.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

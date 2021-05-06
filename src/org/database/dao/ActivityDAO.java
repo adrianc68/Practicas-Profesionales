@@ -35,10 +35,10 @@ public class ActivityDAO implements IActivityDAO {
             conn.setAutoCommit(false);
             String statement = "INSERT INTO Activity(name, description, deadline, id_professor) VALUES (?,?,?,?)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
-            preparedStatement.setString(1, activity.getName());
-            preparedStatement.setString(2, activity.getDescription());
-            preparedStatement.setDate(3, activity.getDeadline());
-            preparedStatement.setInt(4, activity.getProfessor().getId());
+            preparedStatement.setString(1, activity.getName() );
+            preparedStatement.setString(2, activity.getDescription() );
+            preparedStatement.setString(3, activity.getDeadline().toString() );
+            preparedStatement.setInt(4, activity.getProfessor().getId() ) ;
             preparedStatement.executeUpdate();
             statement = "SELECT LAST_INSERT_ID()";
             preparedStatement = conn.prepareStatement(statement);
@@ -87,15 +87,15 @@ public class ActivityDAO implements IActivityDAO {
     public List<Activity> getAllActivitiesFromLastCourse() throws SQLException {
         List<Activity> activities = new ArrayList<>();
         try(Connection conn = database.getConnection() ) {
-            String statement = "SELECT ACT.id_activity, ACT.name, ACT.description, ACT.deadline FROM activity AS ACT INNER JOIN professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN person AS PER ON PER.id_person = PROF.id_person INNER JOIN course AS COUR ON COUR.id_course = PER.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
+            String statement = "SELECT ACT.id_activity, ACT.name, ACT.description, ACT.deadline FROM activity AS ACT INNER JOIN Professor AS PROF ON ACT.id_professor = PROF.id_person INNER JOIN Person AS PER ON PER.id_person = PROF.id_person INNER JOIN Course AS COUR ON COUR.id_course = PER.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             ResultSet resultSet = preparedStatement.executeQuery();
             while( resultSet.next() ) {
                 Activity activity = new Activity();
-                activity.setName(resultSet.getString("ACT.name"));
-                activity.setDescription(resultSet.getString("ACT.description"));
-                activity.setDeadline(resultSet.getDate("ACT.deadline"));
-                activity.setId((resultSet.getInt("ACT.id_activity")));
+                activity.setName(resultSet.getString( "ACT.name") );
+                activity.setDescription(resultSet.getString( "ACT.description") );
+                activity.setDeadline( resultSet.getString( "ACT.deadline") );
+                activity.setId( ( resultSet.getInt("ACT.id_activity") ) );
                 activity.setDeliveries(null);
                 activity.setProfessor(null);
                 activities.add(activity);
@@ -121,13 +121,13 @@ public class ActivityDAO implements IActivityDAO {
             String statement = "SELECT ACT.id_activity, ACT.name, ACT.description, ACT.deadline FROM Activity AS ACT WHERE ACT.id_professor = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setInt(1, idProfessor );
-            ResultSet result = preparedStatement.executeQuery();
-            while( result.next() ) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while( resultSet.next() ) {
                 Activity activity = new Activity();
-                activity.setName(result.getString("ACT.name"));
-                activity.setDescription(result.getString("ACT.description"));
-                activity.setDeadline(result.getDate("ACT.deadline"));
-                activity.setId((result.getInt("ACT.id_activity")));
+                activity.setName( resultSet.getString("ACT.name") );
+                activity.setDescription( resultSet.getString("ACT.description") );
+                activity.setDeadline( resultSet.getString("ACT.deadline") );
+                activity.setId( ( resultSet.getInt("ACT.id_activity") ) );
                 activity.setDeliveries(null);
                 activity.setProfessor(null);
                 activities.add(activity);

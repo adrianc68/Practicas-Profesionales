@@ -18,7 +18,6 @@ import org.gui.auth.resources.card.ProjectCard;
 import org.gui.auth.users.coordinator.project.registerproject.RegisterProjectController;
 import org.gui.auth.users.coordinator.project.removeproject.RemoveProjectController;
 import org.gui.auth.users.coordinator.project.updateproject.UpdateProjectController;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -56,7 +55,7 @@ public class ProjectController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
+        setStyleClass(rootStage);
         setProjectsFromDatabaseToScrollPane();
     }
 
@@ -123,6 +122,15 @@ public class ProjectController extends Controller implements Initializable {
         }
     }
 
+    private void addProjectInACardToScrollPane(Project project) {
+        ProjectCard card = new ProjectCard(project);
+        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
+            selectedProjectCard = card;
+            setProjectInformationToLabelsBySelectedProject( selectedProjectCard.getProject() );
+        });
+        projectsPane.getChildren().add(card);
+    }
+
     private void setProjectsFromDatabaseToScrollPane() {
         List<Project> projects = null;
         try {
@@ -136,15 +144,6 @@ public class ProjectController extends Controller implements Initializable {
                 addProjectInACardToScrollPane(project);
             }
         }
-    }
-
-    private void addProjectInACardToScrollPane(Project project) {
-        ProjectCard card = new ProjectCard(project);
-        card.setOnMouseReleased( (MouseEvent mouseEvent) -> {
-            selectedProjectCard = card;
-            setProjectInformationToLabelsBySelectedProject( selectedProjectCard.getProject() );
-        });
-        projectsPane.getChildren().add(card);
     }
 
     private void clearLabels() {

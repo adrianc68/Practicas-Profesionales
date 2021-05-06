@@ -9,9 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.domain.Organization;
-import org.util.CSSProperties;
 
-public class OrganizationCard extends VBox{
+public class OrganizationCard extends Card {
     private final int CARD_HEIGHT = 305;
     private final int CARD_WIDTH = 235;
     private final int IMAGE_HEIGHT = 100;
@@ -108,13 +107,6 @@ public class OrganizationCard extends VBox{
         getChildren().add(companyDirectUsersLabel);
         getChildren().add(companySectorLabel);
         setStyleClass();
-    }
-    
-    private void setStyleClass() {
-        getStylesheets().clear();
-        getStyleClass().clear();
-        getStylesheets().add(getClass().getResource("../" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
-        getStyleClass().add("card");
     }
 
 }

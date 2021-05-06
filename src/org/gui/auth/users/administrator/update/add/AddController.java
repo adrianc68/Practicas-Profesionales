@@ -8,7 +8,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import org.gui.Controller;
-import org.util.CSSProperties;
 import java.net.URL;
 import java.util.ResourceBundle;
 import org.gui.auth.users.administrator.update.add.addcoordinator.AddCoordinatorController;
@@ -22,7 +21,7 @@ public class AddController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         addOperationStatus = false;
     }
 

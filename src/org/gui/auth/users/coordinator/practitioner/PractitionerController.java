@@ -21,13 +21,12 @@ import org.domain.Practitioner;
 import org.domain.Project;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.resources.card.PractitionerCard;
 import org.gui.auth.users.coordinator.practitioner.addpractitioner.AddPractitionerController;
 import org.gui.auth.users.coordinator.practitioner.assignprofessor.AssignProfessorController;
 import org.gui.auth.users.coordinator.practitioner.assignproject.AssignProjectController;
-import org.gui.auth.resources.card.PractitionerCard;
 import org.gui.auth.users.coordinator.practitioner.assignproject.assignother.AssignOtherProject;
 import org.gui.auth.users.coordinator.practitioner.removepractitioner.RemovePractitionerController;
-import org.util.CSSProperties;
 
 public class PractitionerController extends Controller implements Initializable {
     private PractitionerCard practitionerCardSelected;
@@ -37,9 +36,8 @@ public class PractitionerController extends Controller implements Initializable 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
         setPractitionerToScrollPaneFromDatabase();
-
     }
 
     public void showStage() {
@@ -139,9 +137,9 @@ public class PractitionerController extends Controller implements Initializable 
 
     private void setPractitionerToScrollPaneFromDatabase() {
         try {
-            List<Practitioner> practitioners = new PractitionerDAO().getAllPractitionersFromLastCourse();
-            if (practitioners != null) {
-                for (Practitioner practitioner : practitioners) {
+            List<Practitioner> practitionersList = new PractitionerDAO().getAllPractitionersFromLastCourse();
+            if (practitionersList != null) {
+                for (Practitioner practitioner : practitionersList) {
                     int idPractitioner = practitioner.getId();
                     practitioner.setProject( new ProjectDAO().getAssignedProjectByPractitionerID(idPractitioner) );
                     practitioner.setProfessor( new ProfessorDAO().getAssignedProfessorByPractitionerID(idPractitioner) );
@@ -152,18 +150,6 @@ public class PractitionerController extends Controller implements Initializable 
         } catch (SQLException sqlException) {
             OperationAlert.showLostConnectionAlert();
             Logger.getLogger( PractitionerController.class.getName() ).log(Level.WARNING, null, sqlException);
-        }
-    }
-
-    private void confirmationProject(Project projectToAssign, PractitionerCard card) {
-        AssignProjectController assignProjectController = new AssignProjectController();
-        assignProjectController.setProject(projectToAssign);
-        assignProjectController.setPractitioner( card.getPractitioner() );
-        assignProjectController.showStage();
-        if ( assignProjectController.getAssignationOperationStatus() ) {
-            card.getPractitioner().setProject(projectToAssign);
-            card.repaint();
-            card.addAssignButton();
         }
     }
 
@@ -179,5 +165,19 @@ public class PractitionerController extends Controller implements Initializable 
         });
         practitionersPane.getChildren().add(card);
     }
+
+    private void confirmationProject(Project projectToAssign, PractitionerCard card) {
+        AssignProjectController assignProjectController = new AssignProjectController();
+        assignProjectController.setProject(projectToAssign);
+        assignProjectController.setPractitioner( card.getPractitioner() );
+        assignProjectController.showStage();
+        if ( assignProjectController.getAssignationOperationStatus() ) {
+            card.getPractitioner().setProject(projectToAssign);
+            card.repaint();
+            card.addAssignButton();
+        }
+    }
+
+
 
 }

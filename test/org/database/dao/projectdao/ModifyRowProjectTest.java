@@ -1,6 +1,7 @@
 package org.database.dao.projectdao;
 
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
+import org.database.dao.ActivityDAO;
 import org.database.dao.ProjectDAO;
 import org.domain.ActivityState;
 import org.domain.Coordinator;
@@ -317,11 +318,12 @@ public class ModifyRowProjectTest {
     }
 
     @Test
-    public void addSelectedProjectByPractitionerID() throws SQLException {
+    public void addSelectedProjectByPractitionerID() {
         int idProjectSelected = 1;
         int idPractitioner = 8;
-        boolean isProjectSelected = new ProjectDAO().addSelectedProjectByPractitionerID(idPractitioner,idProjectSelected);
-        assertTrue(isProjectSelected);
+        Class<SQLException> expectedException = SQLException.class;
+        Class<SQLException> actualException = (Class<SQLException>) assertThrows( SQLException.class, () -> new ProjectDAO().addSelectedProjectByPractitionerID(idPractitioner,idProjectSelected) ).getClass();
+        assertEquals(expectedException, actualException);
     }
 
 }

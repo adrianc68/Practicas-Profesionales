@@ -74,7 +74,7 @@
             </VBox>
          </children>
       </VBox>
-      <Label layoutX="1.0" layoutY="30.0" prefHeight="30.0" prefWidth="175.0" styleClass="windowTitle" text="Actualizar proyecto">
+      <Label layoutY="30.0" prefHeight="30.0" prefWidth="175.0" styleClass="windowTitle" text="Actualizar proyecto">
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>

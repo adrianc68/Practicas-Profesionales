@@ -23,7 +23,8 @@ public class Mail {
     private String password;
 
     /***
-     * Mail constructor
+     * FTPConnection constructor
+     * iT initializes a map with properties files
      */
     public Mail() {
         MailProperties mailProperties = new MailProperties("mail.properties");

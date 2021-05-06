@@ -38,7 +38,7 @@ public class RegisterProjectController extends Controller implements Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
+        setStyleClass(rootStage);
         initScreens();
         firstLoaderRadioButton.fire();
         addOperationStatus = false;
@@ -90,9 +90,11 @@ public class RegisterProjectController extends Controller implements Initializab
     @FXML
     protected void nextButtonPressed(ActionEvent event) {
         if(registrationPane.getChildren().get(0) == thirdScreen) {
-            if(screenController.verifyInputData() ) {
+            if( screenController.verifyInputData() ) {
                 addProjectToDatabase();
-                closeButton.fire();
+                if( addOperationStatus) {
+                    stage.close();
+                }
             }
         } else if(registrationPane.getChildren().get(0) == secondScreen) {
             thirdLoaderRadioButton.fire();
@@ -123,24 +125,27 @@ public class RegisterProjectController extends Controller implements Initializab
         } catch (IOException e) {
             Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, e);
         }
+        String styleSheetPath = "/org/gui/auth/resources/" + CSSProperties.readTheme().getTheme() ;
         pane.getStylesheets().clear();
-        pane.getStylesheets().add( getClass().getResource("../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        pane.getStylesheets().add(styleSheetPath);
         return pane;
     }
 
     private void addProjectToDatabase() {
         newProject = screenController.getNewProject();
-        try {
-            newProject.setId( new ProjectDAO().addProject(newProject) );
-        } catch (SQLException sqlException) {
-            OperationAlert.showLostConnectionAlert();
-            Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
-        }
-        addOperationStatus = (newProject.getId() != 0);
-        if(addOperationStatus) {
-            String title = "Se agregó el proyecto.";
-            String contentText = "¡Se ha agregado al sistema el nuevo proyecto.";
-            OperationAlert.showSuccessfullAlert(title, contentText);
+        if( newProject.getOrganization() != null ) {
+            try {
+                newProject.setId( new ProjectDAO().addProject(newProject) );
+            } catch (SQLException sqlException) {
+                OperationAlert.showLostConnectionAlert();
+                Logger.getLogger( RegisterProjectController.class.getName() ).log(Level.WARNING, null, sqlException);
+            }
+            addOperationStatus = (newProject.getId() != 0);
+            if(addOperationStatus) {
+                String title = "Se agregó el proyecto.";
+                String contentText = "¡Se ha agregado al sistema el nuevo proyecto.";
+                OperationAlert.showSuccessfullAlert(title, contentText);
+            }
         }
     }
 

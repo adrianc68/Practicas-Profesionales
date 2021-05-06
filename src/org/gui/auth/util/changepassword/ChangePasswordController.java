@@ -14,7 +14,6 @@ import javafx.stage.Modality;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
-import org.util.CSSProperties;
 import org.util.Cryptography;
 import java.net.URL;
 import java.sql.SQLException;
@@ -32,7 +31,7 @@ public class ChangePasswordController extends Controller implements Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
     }
 
     public void showStage() {

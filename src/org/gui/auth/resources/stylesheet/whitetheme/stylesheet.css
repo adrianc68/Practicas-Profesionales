@@ -141,6 +141,39 @@
 }
 
 
+.cardDateContainer {
+  -fx-background-color:#DDDEE3;
+  -fx-background-radius:2px;
+  -fx-border-width:1 1 1 1;
+  -fx-border-color:#8a8a8a;
+  -fx-border-radius:0 2 2 0;
+}
+
+.cardFirstLevelLabel {
+  -fx-font-size:18px;
+  -fx-text-fill:#000000;
+  -fx-font-weight:bold;
+}
+
+.cardSecondLevelLabel {
+  -fx-font-size:14px;
+  -fx-text-fill:#000000;
+}
+
+.cardThirdLevelLabel {
+  -fx-text-fill:#636363;
+  -fx-font-size:12px;
+}
+
+.cardTopDescription {
+  -fx-background-color:#DDDEE3;
+  -fx-background-radius:2px;
+  -fx-border-width: 1 1 1 1;
+  -fx-border-color:#8a8a8a;
+  -fx-border-radius:2px;
+}
+
+
 /*
  TEXTFIELD
  The textfield doesn't have a specified order.
@@ -325,17 +358,26 @@
 */
 
 .windowTitle {
-  -fx-background-color:rgba(50, 50, 50, 0.9);
+  -fx-background-color:#F9F9F9;
   -fx-background-radius:0 3 3 0;
-  -fx-text-fill:#ffffff;
+  -fx-border-color:#323232;
+  -fx-border-radius:0 3 3 0;
+  -fx-border-width:0.5px;
+  -fx-text-fill:#323232;
   -fx-font-family:"Montserrat Light";
 }
+
+.spinner {
+
+}
+
+
 
 .background {
   -fx-background-color:#ffffff;
   -fx-background-radius:3px;
   -fx-border-radius: 3px;
-  -fx-border-color:#8a8a8a;
+  -fx-border-color:#323232;
   -fx-border-width:1 1 1 1;
 }
 

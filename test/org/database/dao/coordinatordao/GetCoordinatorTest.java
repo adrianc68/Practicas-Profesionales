@@ -23,4 +23,5 @@ public class GetCoordinatorTest {
         int actual = coordinatorList.size();
         assertEquals(expected,actual);
     }
+
 }

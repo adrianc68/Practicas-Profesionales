@@ -21,7 +21,6 @@ import org.domain.Professor;
 import org.gui.ValidatorController;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
-import org.util.CSSProperties;
 import org.util.Cryptography;
 import org.util.Validator;
 import java.net.URL;
@@ -53,7 +52,7 @@ public class AddProfessorController extends ValidatorController implements Initi
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm());
+        setStyleClass(rootStage);
         addOperationStatus = false;
         Person user = Auth.getInstance().getCurrentUser();
         if(user != null) {

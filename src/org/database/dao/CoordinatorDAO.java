@@ -95,7 +95,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
         List<Coordinator> coordinators = new ArrayList<>();
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
-            String statement = "SELECT CORD.id_person, CORD.cubicle, CORD.staff_number, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, PERSCORD.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Coordinator AS CORD INNER JOIN PERSON AS PERSCORD ON PERSCORD.id_person = CORD.id_person INNER JOIN COURSE AS COUR ON PERSCORD.id_course = COUR.id_course AND COUR.id_course = ?";
+            String statement = "SELECT CORD.id_person, CORD.cubicle, CORD.staff_number, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, PERSCORD.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Coordinator AS CORD INNER JOIN Person AS PERSCORD ON PERSCORD.id_person = CORD.id_person INNER JOIN Course AS COUR ON PERSCORD.id_course = COUR.id_course AND COUR.id_course = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setInt(1, idCourse);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -136,7 +136,7 @@ public class CoordinatorDAO implements ICoordinatorDAO{
         List<Coordinator> coordinators = new ArrayList<>();
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
-            String statement = "SELECT CORD.id_person, CORD.cubicle, CORD.staff_number, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, PERSCORD.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Coordinator AS CORD INNER JOIN PERSON AS PERSCORD ON PERSCORD.id_person = CORD.id_person INNER JOIN COURSE AS COUR ON PERSCORD.id_course = COUR.id_course";
+            String statement = "SELECT CORD.id_person, CORD.cubicle, CORD.staff_number, PERSCORD.name, PERSCORD.phoneNumber, PERSCORD.email, PERSCORD.activity_state, COUR.id_course, COUR.NRC, COUR.period, COUR.name FROM Coordinator AS CORD INNER JOIN Person AS PERSCORD ON PERSCORD.id_person = CORD.id_person INNER JOIN Course AS COUR ON PERSCORD.id_course = COUR.id_course";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             ResultSet resultSet = preparedStatement.executeQuery();
             while( resultSet.next() ) {

@@ -33,18 +33,19 @@ public class OrganizationDAO implements IOrganizationDAO {
         int idCompany;
         try(Connection conn = database.getConnection() ){
             conn.setAutoCommit(false);
-            String statement = "INSERT INTO Company(name, address, email, state, direct_users, indirect_users, sector, city, id_coordinator, id_course) values (?,?,?,?,?,?,?,?,?,?)";
+            String statement = "INSERT INTO Company(name, address, email, state, phoneNumber, direct_users, indirect_users, sector, city, id_coordinator, id_course) values (?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, organization.getName() );
             preparedStatement.setString(2, organization.getAddress() );
             preparedStatement.setString(3, organization.getEmail() );
             preparedStatement.setString(4, organization.getState() );
-            preparedStatement.setInt(5, organization.getDirectUsers() );
-            preparedStatement.setInt(6, organization.getIndirectUsers() );
-            preparedStatement.setString(7, organization.getSector().name() );
-            preparedStatement.setString(8, organization.getCity() );
-            preparedStatement.setInt(9, organization.getCoordinator().getId() );
-            preparedStatement.setInt(10, organization.getCourse().getId() );
+            preparedStatement.setString(5, organization.getPhoneNumber() );
+            preparedStatement.setInt(6, organization.getDirectUsers() );
+            preparedStatement.setInt(7, organization.getIndirectUsers() );
+            preparedStatement.setString(8, organization.getSector().name() );
+            preparedStatement.setString(9, organization.getCity() );
+            preparedStatement.setInt(10, organization.getCoordinator().getId() );
+            preparedStatement.setInt(11, organization.getCourse().getId() );
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.executeQuery("SELECT LAST_INSERT_ID()");
             resultSet.next();
@@ -94,10 +95,10 @@ public class OrganizationDAO implements IOrganizationDAO {
                 organization.setDirectUsers( resultSet.getInt("COMP.direct_users") );
                 organization.setIndirectUsers( resultSet.getInt("COMP.indirect_users") );
                 organization.setSector(Sector.valueOf( resultSet.getString("COMP.Sector").toUpperCase() ) );
+                organization.setPhoneNumber( resultSet.getString("COMP.phoneNumber") );
                 organization.setCity( resultSet.getString("COMP.city") );
                 organization.setCoordinator(coordinator);
                 organization.setCourse(course);
-                organization.setPhoneNumber( resultSet.getString("COMP.phoneNumber") );
                 organizations.add(organization);
             }
         } catch (SQLException sqlException) {

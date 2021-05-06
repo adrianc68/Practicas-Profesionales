@@ -4,15 +4,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import org.domain.Administrator;
 import org.domain.Coordinator;
 import org.domain.Person;
 import org.domain.Practitioner;
 import org.domain.Professor;
 import org.gui.Controller;
 import org.gui.auth.resources.alerts.OperationAlert;
+import org.gui.auth.users.professor.ProfessorController;
 import org.gui.auth.util.recoverpassword.RecoveryPasswordController;
 import org.util.Auth;
-import org.util.CSSProperties;
 import org.util.Cryptography;
 import java.net.URL;
 import java.sql.SQLException;
@@ -107,22 +108,25 @@ public class LoginController extends Controller implements Initializable {
         Person user = Auth.getInstance().getCurrentUser();
         if (user != null) {
             if (user instanceof Professor) {
-                System.out.println("Agregar ventana profesor");
+                ProfessorController professorController = new ProfessorController();
+                professorController.showStage();
             } else if (user instanceof Coordinator) {
                 CoordinatorController coordinatorController = new CoordinatorController();
                 coordinatorController.showStage();
             } else if (user instanceof Practitioner) {
                 PractitionerController practitionerController = new PractitionerController();
                 practitionerController.showStage();
-            } else {
+            } else if (user instanceof Administrator) {
                 AdministratorController administratorController = new AdministratorController();
                 administratorController.showStage();
+            } else {
+               systemLabel.setText("El usuario no tiene una cuenta de acceso asignada");
             }
         }
     }
 
     private void setStyleClass() {
-        setStyleClass(rootStage, getClass().getResource( "resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm() );
+        setStyleClass(rootStage);
     }
 
 }

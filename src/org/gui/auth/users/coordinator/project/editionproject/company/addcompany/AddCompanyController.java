@@ -18,7 +18,6 @@ import org.domain.Sector;
 import org.gui.ValidatorController;
 import org.gui.auth.resources.alerts.OperationAlert;
 import org.util.Auth;
-import org.util.CSSProperties;
 import org.util.Validator;
 import java.net.URL;
 import java.sql.SQLException;
@@ -57,7 +56,7 @@ public class AddCompanyController extends ValidatorController implements Initial
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setStyleClass(rootStage, getClass().getResource("../../../../../../resources/" + CSSProperties.readTheme().getTheme() ).toExternalForm()  );
+        setStyleClass(rootStage);
         addOperationStatus = false;
         initValidatorToTextFields();
         initChoiceBoxAndSetValidator();
@@ -98,8 +97,10 @@ public class AddCompanyController extends ValidatorController implements Initial
     @FXML
     protected void saveButtonPressed(ActionEvent event) {
         if( verifyInputData() ) {
-            stage.close();
             addOrganizationToDatabase();
+            if(addOperationStatus) {
+                stage.close();
+            }
         }
     }
 

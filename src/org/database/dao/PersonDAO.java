@@ -2,6 +2,7 @@ package org.database.dao;
 
 import org.database.Database;
 import org.domain.ActivityState;
+import org.domain.Administrator;
 import org.domain.Coordinator;
 import org.domain.Course;
 import org.domain.Person;
@@ -84,7 +85,7 @@ public class PersonDAO implements IPersonDAO {
     public Person getPersonByEmailAndPassword(String email, String password) throws SQLException {
         Person person = null;
         try( Connection conn = database.getConnection() ) {
-            String statement = "SELECT PERS.id_person, PERS.name, PERS.email, PERS.phoneNumber, PERS.activity_state, COUR.id_course, COUR.name, COUR.NRC, COUR.period, CORD.cubicle, CORD.staff_number, PROF.cubicle, PROF.staff_number, PRAC.enrollment FROM AccessAccount AS ACA INNER JOIN Person AS PERS ON ACA.id_user = PERS.id_person AND ACA.email = ? AND ACA.password = ? INNER JOIN Course AS COUR ON PERS.id_course =  COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course) LEFT JOIN Coordinator AS CORD ON PERS.id_person = CORD.id_person LEFT JOIN Professor AS PROF ON PERS.id_person = PROF.id_person LEFT JOIN Practitioner AS PRAC ON PERS.id_person = PRAC.id_person";
+            String statement = "SELECT PERS.id_person, PERS.name, PERS.email, PERS.phoneNumber, PERS.activity_state, COUR.id_course, COUR.name, COUR.NRC, COUR.period, CORD.cubicle, CORD.staff_number, PROF.cubicle, PROF.staff_number, PRAC.enrollment, ADM.staff_number FROM AccessAccount AS ACA INNER JOIN Person AS PERS ON ACA.id_user = PERS.id_person AND ACA.email = ? AND ACA.password = ? INNER JOIN Course AS COUR ON PERS.id_course =  COUR.id_course AND COUR.id_course = (SELECT max(id_course) FROM Course) LEFT JOIN Coordinator AS CORD ON PERS.id_person = CORD.id_person LEFT JOIN Professor AS PROF ON PERS.id_person = PROF.id_person LEFT JOIN Practitioner AS PRAC ON PERS.id_person = PRAC.id_person LEFT JOIN Administrator AS ADM ON PERS.id_person = ADM.id_person";
             PreparedStatement preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
@@ -117,7 +118,6 @@ public class PersonDAO implements IPersonDAO {
         return course;
     }
 
-    // BAD USER MANAGER ?
     private Person getInstanceOfResultSet(ResultSet resultSet) throws SQLException {
         Person person = new Person();
         if( resultSet.getString("CORD.cubicle") != null) {
@@ -134,6 +134,10 @@ public class PersonDAO implements IPersonDAO {
             Practitioner practitioner = new Practitioner();
             practitioner.setEnrollment( resultSet.getString("PRAC.enrollment") );
             person = practitioner;
+        } else if ( resultSet.getString("ADM.staff_number") != null ) {
+            Administrator administrator = new Administrator();
+            administrator.setStaffNumber( resultSet.getString("ADM.staff_number") );
+            person = administrator;
         }
         return person;
     }

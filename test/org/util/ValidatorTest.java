@@ -6,15 +6,15 @@ import static org.junit.Assert.assertEquals;
 public class ValidatorTest {
 
     @Test
-    public void doesStringMatchPattern() {
-        boolean expected = false;
+    public void doesStringMatchNamePattern() {
+        boolean expected = true;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.NAME_PATTERN);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void doesStringMatchPatternNumberPattern() {
+    public void doesStringMatchNumberPattern() {
         boolean expected = false;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.NUMBER_PATTERN);
@@ -22,7 +22,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternEmailPattern() {
+    public void doesStringMatchEmailPattern() {
         boolean expected = false;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.EMAIL_PATTERN);
@@ -30,7 +30,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternPhoneNumberPattern() {
+    public void doesStringMatchPhoneNumberPattern() {
         boolean expected = false;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.PHONE_NUMBER_PATTERN);
@@ -38,7 +38,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternStaffNumberPattern() {
+    public void doesStringMatchStaffNumberPattern() {
         boolean expected = true;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.STAFF_NUMBER_PATTERN);
@@ -46,7 +46,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternDurationPattern() {
+    public void doesStringMatchDurationPattern() {
         boolean expected = false;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.DURATION_PATTERN);
@@ -54,7 +54,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternNRCPattern() {
+    public void doesStringMatchNRCPattern() {
         boolean expected = false;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.NRC_PATTERN);
@@ -62,7 +62,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternSchedulePattern() {
+    public void doesStringMatchSchedulePattern() {
         boolean expected = true;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.SCHEDULE_PATTERN);
@@ -70,7 +70,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternLargeTextPattern() {
+    public void doesStringMatchLargeTextPattern() {
         boolean expected = true;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.LARGE_TEXT_PATTERN);
@@ -78,7 +78,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternAddressPattern() {
+    public void doesStringMatchAddressPattern() {
         boolean expected = true;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.ADDRESS_PATTERN);
@@ -86,7 +86,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternPeriodPattern() {
+    public void doesStringMatchPeriodPattern() {
         boolean expected = false;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.PERIOD_PATTERN);
@@ -94,7 +94,7 @@ public class ValidatorTest {
     }
 
     @Test
-    public void doesStringMatchPatternProjectAttributePattern() {
+    public void doesStringMatchProjectAttributePattern() {
         boolean expected = true;
         String text = "abcdefghijklmnopqrstuvwxyz";
         boolean actual = Validator.doesStringMatchPattern(text, Validator.PROJECT_MULTIVALUED_ATTRIBUTE_PATTERN);

@@ -17,7 +17,7 @@ public class GetRecoveryCodeTest {
     }
 
     @Test
-    public void getRecoveryCodeByUnexistingEmail() throws SQLException {
+    public void getRecoveryCodeByNoExistingEmail() throws SQLException {
         String recoveryCode;
         String email = "thisemaildoesntexit@hotmail.com";
         recoveryCode = new AccessAccountDAO().getRecoveryCodeByEmail(email);
